@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-  max-width: 1500px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 24px;
 }
@@ -14,10 +14,6 @@ body {
 header {
   text-align: center;
   margin-bottom: 24px;
-}
-
-header h1 {
-  margin-bottom: 6px;
 }
 
 header p {
@@ -29,21 +25,14 @@ header p {
   border-radius: 20px;
   padding: 24px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
 }
 
 .month-filter {
   display: flex;
   align-items: end;
   gap: 12px;
-}
-
-.month-filter label {
-  min-width: 70px;
-}
-
-.month-filter input {
-  max-width: 220px;
+  flex-wrap: wrap;
 }
 
 .dashboard {
@@ -57,7 +46,7 @@ header p {
   background: white;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
 }
 
 .dashboard-card span {
@@ -70,7 +59,7 @@ header p {
   font-size: 22px;
 }
 
-.dashboard-card.warning {
+.warning {
   background: #fff7e6;
 }
 
@@ -99,34 +88,17 @@ textarea {
   border-radius: 12px;
   font-size: 15px;
   box-sizing: border-box;
-  background: #fff;
 }
 
 textarea {
   min-height: 80px;
-  resize: vertical;
 }
 
-.checkbox-group {
-  display: flex;
-  align-items: center;
-}
-
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 26px;
-  font-weight: bold;
-}
-
-.checkbox-group input {
-  width: auto;
-}
-
-.button-area {
+.button-area,
+.list-header {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 button {
@@ -135,7 +107,7 @@ button {
   border-radius: 14px;
   background: #007aff;
   color: white;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -149,9 +121,12 @@ button:hover {
   background: #8e8e93;
 }
 
-#clearButton:hover,
-#showAllButton:hover {
-  background: #6e6e73;
+#csvButton {
+  background: #34c759;
+}
+
+#excelButton {
+  background: #5856d6;
 }
 
 .staff-summary {
@@ -166,32 +141,6 @@ button:hover {
   padding: 16px;
 }
 
-.staff-card span {
-  display: block;
-  color: #6e6e73;
-  margin-bottom: 6px;
-}
-
-.staff-card strong {
-  font-size: 22px;
-}
-
-.list-header {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.list-header h2 {
-  margin: 0;
-}
-
-#searchInput {
-  max-width: 360px;
-}
-
 .table-wrap {
   overflow-x: auto;
 }
@@ -199,7 +148,7 @@ button:hover {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1700px;
+  min-width: 1950px;
 }
 
 th,
@@ -213,11 +162,6 @@ td {
 
 th {
   background: #f5f5f7;
-  font-weight: bold;
-}
-
-td {
-  vertical-align: middle;
 }
 
 .action-buttons {
@@ -225,55 +169,27 @@ td {
   gap: 6px;
 }
 
-.edit-btn,
-.delete-btn {
-  padding: 8px 10px;
-  font-size: 13px;
-  border-radius: 10px;
-}
-
 .edit-btn {
   background: #34c759;
-}
-
-.edit-btn:hover {
-  background: #248a3d;
+  padding: 8px 10px;
 }
 
 .delete-btn {
   background: #ff3b30;
-}
-
-.delete-btn:hover {
-  background: #c12720;
+  padding: 8px 10px;
 }
 
 .status {
   padding: 6px 10px;
   border-radius: 999px;
-  font-size: 13px;
   font-weight: bold;
 }
 
-.status-申込 {
-  background: #e5e5ea;
-}
-
-.status-審査中 {
-  background: #fff3cd;
-}
-
-.status-契約予定 {
-  background: #dbeafe;
-}
-
-.status-契約済 {
-  background: #d1fae5;
-}
-
-.status-キャンセル {
-  background: #fee2e2;
-}
+.status-申込 { background: #e5e5ea; }
+.status-審査中 { background: #fff3cd; }
+.status-契約予定 { background: #dbeafe; }
+.status-契約済 { background: #d1fae5; }
+.status-キャンセル { background: #fee2e2; }
 
 .paid {
   color: #248a3d;
@@ -312,10 +228,5 @@ td {
   .list-header {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  #searchInput,
-  .month-filter input {
-    max-width: none;
   }
 }
