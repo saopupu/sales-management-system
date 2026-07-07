@@ -1,146 +1,152 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
-  font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
-  background: #f4f6f8;
-  color: #1f2937;
+  font-family: Arial, sans-serif;
+  background: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1700px;
   margin: 0 auto;
   padding: 24px;
 }
 
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+header {
+  text-align: center;
+  margin-bottom: 24px;
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 28px;
-}
-
-.app-header p {
-  margin: 6px 0 0;
-  color: #6b7280;
+header p {
+  color: #6e6e73;
 }
 
 .card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 22px;
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
 }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 20px;
+.month-filter {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
   margin-bottom: 20px;
 }
 
-.summary-card {
-  background: #ffffff;
-  border-radius: 18px;
+.dashboard-card {
+  background: white;
+  border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
 }
 
-.summary-card span {
+.dashboard-card span {
   display: block;
-  color: #6b7280;
-  font-size: 14px;
+  color: #6e6e73;
   margin-bottom: 8px;
 }
 
-.summary-card strong {
-  font-size: 26px;
-  color: #111827;
+.dashboard-card strong {
+  font-size: 22px;
 }
 
-.summary-card.warning strong {
-  color: #d97706;
+.warning {
+  background: #fff7e6;
 }
 
-.form-grid,
-.filter-grid {
+.form-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  gap: 16px;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group.full {
-  grid-column: 1 / -1;
+  margin-bottom: 16px;
 }
 
 label {
-  font-size: 13px;
-  font-weight: 700;
+  display: block;
+  font-weight: bold;
   margin-bottom: 6px;
-  color: #374151;
 }
 
 input,
 select,
 textarea {
-  border: 1px solid #d1d5db;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d2d2d7;
   border-radius: 12px;
-  padding: 11px 12px;
   font-size: 15px;
-  background: #ffffff;
+  box-sizing: border-box;
 }
 
 textarea {
-  min-height: 70px;
-  resize: vertical;
+  min-height: 80px;
 }
 
-.button-row {
+.tax-preview {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f5f5f7;
+  font-weight: bold;
+  color: #007aff;
+}
+
+.button-area,
+.list-header {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 18px;
+  gap: 12px;
+  align-items: center;
 }
 
 button {
+  padding: 14px 18px;
   border: none;
-  border-radius: 999px;
-  padding: 11px 18px;
-  font-weight: 700;
+  border-radius: 14px;
+  background: #007aff;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-button.primary {
-  background: #2563eb;
-  color: white;
+button:hover {
+  background: #005ecb;
 }
 
-button.secondary {
-  background: #e5e7eb;
-  color: #111827;
+#clearButton,
+#showAllButton {
+  background: #8e8e93;
 }
 
-button.danger {
-  background: #fee2e2;
-  color: #b91c1c;
+#csvButton {
+  background: #34c759;
+}
+
+#excelButton {
+  background: #5856d6;
+}
+
+.staff-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.staff-card {
+  background: #f5f5f7;
+  border-radius: 16px;
+  padding: 16px;
 }
 
 .table-wrap {
@@ -150,95 +156,20 @@ button.danger {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px;
+  min-width: 2150px;
 }
 
 th,
 td {
-  padding: 12px 10px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e5ea;
+  padding: 12px;
   text-align: left;
-  font-size: 14px;
   white-space: nowrap;
+  font-size: 14px;
 }
 
 th {
-  background: #f9fafb;
-  color: #374151;
-  font-weight: 800;
-}
-
-.staff-badge,
-.status-badge,
-.payment-badge,
-.contract-badge {
-  display: inline-block;
-  border-radius: 999px;
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.staff-矢部 {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.staff-早坂 {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-.staff-米山 {
-  background: #f3e8ff;
-  color: #7e22ce;
-}
-
-.staff-吉田 {
-  background: #ffedd5;
-  color: #c2410c;
-}
-
-.status-申込中 {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.status-審査通過 {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.status-契約済 {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.status-入居済 {
-  background: #ccfbf1;
-  color: #0f766e;
-}
-
-.status-キャンセル {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-.status-否決 {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-.contract-done,
-.payment-done {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.contract-wait,
-.payment-wait {
-  background: #fef3c7;
-  color: #92400e;
+  background: #f5f5f7;
 }
 
 .action-buttons {
@@ -246,23 +177,64 @@ th {
   gap: 6px;
 }
 
-.action-buttons button {
-  padding: 7px 11px;
-  font-size: 12px;
+.edit-btn {
+  background: #34c759;
+  padding: 8px 10px;
 }
 
-@media (max-width: 900px) {
-  .dashboard,
-  .form-grid,
-  .filter-grid {
-    grid-template-columns: 1fr;
+.delete-btn {
+  background: #ff3b30;
+  padding: 8px 10px;
+}
+
+.status {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+.status-申込 { background: #e5e5ea; }
+.status-審査中 { background: #fff3cd; }
+.status-契約予定 { background: #dbeafe; }
+.status-契約済 { background: #d1fae5; }
+.status-キャンセル { background: #fee2e2; }
+
+.paid {
+  color: #248a3d;
+  font-weight: bold;
+}
+
+.unpaid {
+  color: #c12720;
+  font-weight: bold;
+}
+
+@media (max-width: 1100px) {
+  .dashboard {
+    grid-template-columns: repeat(3, 1fr);
   }
 
+  .form-grid,
+  .staff-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
   .container {
     padding: 14px;
   }
 
-  .app-header h1 {
-    font-size: 22px;
+  .dashboard,
+  .form-grid,
+  .staff-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .button-area,
+  .month-filter,
+  .list-header {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
