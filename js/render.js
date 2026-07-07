@@ -138,12 +138,12 @@ function renderTable(data) {
       sale.brokerageTaxType === "taxIncluded" ? "税込入力" : "税抜入力";
 
     const tr = document.createElement("tr");
-
+tr.className = `case-row status-${sale.status || "申込"}`;
     tr.innerHTML = `
       <td>${sale.applyDate || ""}</td>
       <td>${sale.contractDate || ""}</td>
       <td>${sale.startDate || ""}</td>
-      <td>${sale.staff || ""}</td>
+      <td><span class="staff-badge staff-${sale.staff || ""}">${sale.staff || ""}</span></td>
       <td>${sale.customer || ""}</td>
       <td>${sale.phone || ""}</td>
       <td>${sale.property || ""}</td>
@@ -157,7 +157,7 @@ function renderTable(data) {
       <td>${formatYen(brokerageFeeTaxIncluded)}</td>
       <td>${feePaymentText}</td>
       <td>${sale.installment || "利用なし"}</td>
-      <td><span class="status status-${sale.status || "申込"}">${sale.status || ""}</span></td>
+     <td><span class="status-badge status-${sale.status || "申込"}">${sale.status || "申込"}</span></td>
       <td>${sale.memo || ""}</td>
       <td>
         <div class="action-buttons">

@@ -238,3 +238,98 @@ th {
     align-items: stretch;
   }
 }
+/* =========================
+   Version 2.5 色分け
+========================= */
+
+/* 担当者カラー */
+.staff-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.staff-yabe {
+  background: #e8f1ff;
+  color: #1d4ed8;
+}
+
+.staff-hayasaka {
+  background: #fff1e6;
+  color: #c2410c;
+}
+
+.staff-yoneyama {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.staff-yoshida {
+  background: #fdf2f8;
+  color: #be185d;
+}
+
+/* ステータスカラー */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-申込 {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.status-契約済み {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-入金済み {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* 行全体の色分け */
+.case-row.status-契約済み {
+  background: #eff6ff;
+}
+
+.case-row.status-入金済み {
+  background: #f0fdf4;
+}
+
+/* 入金済みを強調 */
+.case-row.status-入金済み {
+  border-left: 6px solid #22c55e;
+}
+
+/* 契約済みを強調 */
+.case-row.status-契約済み {
+  border-left: 6px solid #3b82f6;
+}
+/* Version 2.5 修正版：担当者カラー */
+.staff-矢部 {
+  background: #e8f1ff;
+  color: #1d4ed8;
+}
+
+.staff-早坂 {
+  background: #fff1e6;
+  color: #c2410c;
+}
+
+.staff-米山 {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.staff-吉田 {
+  background: #fdf2f8;
+  color: #be185d;
+}
