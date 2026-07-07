@@ -19,23 +19,67 @@ function getFilteredData() {
     }
 
     const targetText = `
-      ${sale.applyDate}
-      ${sale.contractDate}
-      ${sale.startDate}
-      ${sale.staff}
-      ${sale.customer}
-      ${sale.phone}
-      ${sale.property}
-      ${sale.company}
-      ${sale.installment}
-      ${sale.status}
-      ${sale.adPaymentDate}
-      ${sale.feePaymentDate}
-      ${sale.memo}
+      ${sale.applyDate || ""}
+      ${sale.contractDate || ""}
+      ${sale.startDate || ""}
+      ${sale.staff || ""}
+      ${sale.customer || ""}
+      ${sale.phone || ""}
+      ${sale.property || ""}
+      ${sale.company || ""}
+      ${sale.installment || ""}
+      ${sale.status || ""}
+      ${sale.adPaymentDate || ""}
+      ${sale.feePaymentDate || ""}
+      ${sale.memo || ""}
     `.toLowerCase();
 
     return targetText.includes(keyword);
   });
+}
+
+function isStatus(sale, statusName) {
+  const hasFeePayment = !!sale.feePaymentDate;
+  const hasAdPayment = !!sale.adPaymentDate;
+
+  if (statusName === "入金済み") {
+    return hasFeePayment || hasAdPayment;
+  }
+
+  if (statusName === "契約済み") {
+    return !hasFeePayment && !hasAdPayment &&
+      (sale.status === "契約済み" || sale.status === "契約済");
+  }
+
+  if (statusName === "申込") {
+    return !hasFeePayment && !hasAdPayment &&
+      (sale.status || "申込") === "申込";
+  }
+
+  return sale.status === statusName;
+}
+
+function getSaleTotal(sale) {
+  const fee = calculateBrokerageFee(
+    sale.brokerageFee,
+    sale.brokerageTaxType
+  );
+
+  const ad = Number(sale.ad) || 0;
+
+  return fee + ad;
+}
+
+function getTaxTypeText(taxType) {
+  if (taxType === "free") {
+    return "自由入力";
+  }
+
+  if (taxType === "taxIncluded") {
+    return "税込入力";
+  }
+
+  return "税抜入力";
 }
 
 function renderDashboard(data) {
@@ -46,18 +90,18 @@ function renderDashboard(data) {
   let unpaidAdCount = 0;
 
   data.forEach(function (sale) {
-    const brokerageFeeTaxIncluded = calculateBrokerageFee(
+    const fee = calculateBrokerageFee(
       sale.brokerageFee,
       sale.brokerageTaxType
     );
 
     const ad = Number(sale.ad) || 0;
 
-    totalBrokerageFee += brokerageFeeTaxIncluded;
+    totalBrokerageFee += fee;
     totalAd += ad;
-    totalSales += brokerageFeeTaxIncluded + ad;
+    totalSales += fee + ad;
 
-    if (brokerageFeeTaxIncluded > 0 && !sale.feePaymentDate) {
+    if (fee > 0 && !sale.feePaymentDate) {
       unpaidFeeCount++;
     }
 
@@ -66,12 +110,22 @@ function renderDashboard(data) {
     }
   });
 
+  const applyCount = data.filter(function (sale) {
+    return isStatus(sale, "申込");
+  }).length;
+
+  const contractCount = data.filter(function (sale) {
+    return isStatus(sale, "契約済み");
+  }).length;
+
   document.getElementById("totalSales").textContent = formatYen(totalSales);
   document.getElementById("totalFee").textContent = formatYen(totalBrokerageFee);
   document.getElementById("totalAd").textContent = formatYen(totalAd);
   document.getElementById("totalCount").textContent = data.length + "件";
   document.getElementById("unpaidFeeCount").textContent = unpaidFeeCount + "件";
   document.getElementById("unpaidAdCount").textContent = unpaidAdCount + "件";
+  document.getElementById("dashApplyCount").textContent = applyCount + "件";
+  document.getElementById("dashContractCount").textContent = contractCount + "件";
 }
 
 function renderStaffSummary(data) {
@@ -85,13 +139,7 @@ function renderStaffSummary(data) {
   };
 
   data.forEach(function (sale) {
-    const brokerageFeeTaxIncluded = calculateBrokerageFee(
-      sale.brokerageFee,
-      sale.brokerageTaxType
-    );
-
-    const ad = Number(sale.ad) || 0;
-    const rowTotal = brokerageFeeTaxIncluded + ad;
+    const rowTotal = getSaleTotal(sale);
 
     if (staffTotals[sale.staff] !== undefined) {
       staffTotals[sale.staff] += rowTotal;
@@ -112,6 +160,7 @@ function renderStaffSummary(data) {
     staffSummary.appendChild(div);
   }
 }
+
 function renderTable(data) {
   const salesTableBody = document.getElementById("salesTableBody");
   const allData = getSalesData();
@@ -134,11 +183,9 @@ function renderTable(data) {
       ? `<span class="paid">${sale.feePaymentDate}</span>`
       : `<span class="unpaid">未入金</span>`;
 
-    const taxTypeText =
-      sale.brokerageTaxType === "taxIncluded" ? "税込入力" : "税抜入力";
-
     const tr = document.createElement("tr");
-tr.className = `case-row status-${sale.status || "申込"}`;
+    tr.className = `case-row status-${sale.status || "申込"}`;
+
     tr.innerHTML = `
       <td>${sale.applyDate || ""}</td>
       <td>${sale.contractDate || ""}</td>
@@ -153,11 +200,11 @@ tr.className = `case-row status-${sale.status || "申込"}`;
       <td>${formatYen(sale.ad)}</td>
       <td>${adPaymentText}</td>
       <td>${formatYen(sale.brokerageFee)}</td>
-      <td>${taxTypeText}</td>
+      <td>${getTaxTypeText(sale.brokerageTaxType)}</td>
       <td>${formatYen(brokerageFeeTaxIncluded)}</td>
       <td>${feePaymentText}</td>
       <td>${sale.installment || "利用なし"}</td>
-     <td><span class="status-badge status-${sale.status || "申込"}">${sale.status || "申込"}</span></td>
+      <td><span class="status-badge status-${sale.status || "申込"}">${sale.status || "申込"}</span></td>
       <td>${sale.memo || ""}</td>
       <td>
         <div class="action-buttons">
@@ -170,6 +217,7 @@ tr.className = `case-row status-${sale.status || "申込"}`;
     salesTableBody.appendChild(tr);
   });
 }
+
 function editSale(index) {
   const sale = getSalesData()[index];
 

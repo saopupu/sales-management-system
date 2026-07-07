@@ -333,3 +333,126 @@ th {
   background: #fdf2f8;
   color: #be185d;
 }
+/* =========================
+   Version 2.6 優先度ライン
+========================= */
+
+.case-row {
+  border-left: 6px solid transparent;
+}
+
+.case-row.status-申込 {
+  border-left-color: #9ca3af;
+}
+
+.case-row.status-契約済み {
+  border-left-color: #3b82f6;
+}
+
+.case-row.status-入金済み {
+  border-left-color: #22c55e;
+}
+
+.case-row.status-キャンセル {
+  border-left-color: #ef4444;
+}
+/* =========================
+   Version 2.6 ダッシュボード
+========================= */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.dashboard-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.dashboard-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.dashboard {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  align-items: stretch;
+}
+
+.dashboard-card {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 16px;
+}
+
+.dashboard-label {
+  white-space: nowrap;
+}
+
+.dashboard-value {
+  white-space: nowrap;
+}
+/* Version 3.0 レイアウト修正 */
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.list-header h2 {
+  min-width: 160px;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.list-header input {
+  flex: 1;
+}
+
+.simple-dashboard {
+  display: flex;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.simple-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px 22px;
+  min-width: 150px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.simple-card span {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.simple-card strong {
+  font-size: 24px;
+  color: #111827;
+}
