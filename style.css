@@ -1,144 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f7;
-  color: #1d1d1f;
+  font-family: "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+  background: #f4f6f8;
+  color: #1f2937;
 }
 
 .container {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 24px;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 24px;
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-header p {
-  color: #6e6e73;
+.app-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.app-header p {
+  margin: 6px 0 0;
+  color: #6b7280;
 }
 
 .card {
-  background: white;
-  border-radius: 20px;
-  padding: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
   margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
-.month-filter {
-  display: flex;
-  align-items: end;
-  gap: 12px;
-  flex-wrap: wrap;
+.card h2 {
+  margin-top: 0;
+  font-size: 20px;
 }
 
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   margin-bottom: 20px;
 }
 
-.dashboard-card {
-  background: white;
-  border-radius: 20px;
+.summary-card {
+  background: #ffffff;
+  border-radius: 18px;
   padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
-.dashboard-card span {
+.summary-card span {
   display: block;
-  color: #6e6e73;
+  color: #6b7280;
+  font-size: 14px;
   margin-bottom: 8px;
 }
 
-.dashboard-card strong {
-  font-size: 22px;
+.summary-card strong {
+  font-size: 26px;
+  color: #111827;
 }
 
-.warning {
-  background: #fff7e6;
+.summary-card.warning strong {
+  color: #d97706;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d2d2d7;
-  border-radius: 12px;
-  font-size: 15px;
-  box-sizing: border-box;
-}
-
-textarea {
-  min-height: 80px;
-}
-
-.button-area,
-.list-header {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-button {
-  padding: 14px 18px;
-  border: none;
-  border-radius: 14px;
-  background: #007aff;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #005ecb;
-}
-
-#clearButton,
-#showAllButton {
-  background: #8e8e93;
-}
-
-#csvButton {
-  background: #34c759;
-}
-
-#excelButton {
-  background: #5856d6;
-}
-
-.staff-summary {
+.form-grid,
+.filter-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
 }
 
-.staff-card {
-  background: #f5f5f7;
-  border-radius: 16px;
-  padding: 16px;
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-size: 15px;
+  background: #ffffff;
+}
+
+textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 11px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.primary {
+  background: #2563eb;
+  color: white;
+}
+
+button.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+button.danger {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .table-wrap {
@@ -148,20 +150,95 @@ button:hover {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1950px;
+  min-width: 1000px;
 }
 
 th,
 td {
-  border-bottom: 1px solid #e5e5ea;
-  padding: 12px;
+  padding: 12px 10px;
+  border-bottom: 1px solid #e5e7eb;
   text-align: left;
-  white-space: nowrap;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 th {
-  background: #f5f5f7;
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 800;
+}
+
+.staff-badge,
+.status-badge,
+.payment-badge,
+.contract-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.staff-矢部 {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.staff-早坂 {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.staff-米山 {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.staff-吉田 {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.status-申込中 {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-審査通過 {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-契約済 {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-入居済 {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.status-キャンセル {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-否決 {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.contract-done,
+.payment-done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.contract-wait,
+.payment-wait {
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .action-buttons {
@@ -169,64 +246,23 @@ th {
   gap: 6px;
 }
 
-.edit-btn {
-  background: #34c759;
-  padding: 8px 10px;
+.action-buttons button {
+  padding: 7px 11px;
+  font-size: 12px;
 }
 
-.delete-btn {
-  background: #ff3b30;
-  padding: 8px 10px;
-}
-
-.status {
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: bold;
-}
-
-.status-申込 { background: #e5e5ea; }
-.status-審査中 { background: #fff3cd; }
-.status-契約予定 { background: #dbeafe; }
-.status-契約済 { background: #d1fae5; }
-.status-キャンセル { background: #fee2e2; }
-
-.paid {
-  color: #248a3d;
-  font-weight: bold;
-}
-
-.unpaid {
-  color: #c12720;
-  font-weight: bold;
-}
-
-@media (max-width: 1100px) {
-  .dashboard {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
+@media (max-width: 900px) {
+  .dashboard,
   .form-grid,
-  .staff-summary {
-    grid-template-columns: repeat(2, 1fr);
+  .filter-grid {
+    grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 600px) {
   .container {
     padding: 14px;
   }
 
-  .dashboard,
-  .form-grid,
-  .staff-summary {
-    grid-template-columns: 1fr;
-  }
-
-  .button-area,
-  .month-filter,
-  .list-header {
-    flex-direction: column;
-    align-items: stretch;
+  .app-header h1 {
+    font-size: 22px;
   }
 }
