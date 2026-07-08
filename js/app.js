@@ -3,6 +3,8 @@ const clearButton = document.getElementById("clearButton");
 const searchInput = document.getElementById("searchInput");
 const monthFilter = document.getElementById("monthFilter");
 const showAllButton = document.getElementById("showAllButton");
+const csvButton = document.getElementById("csvButton");
+const excelButton = document.getElementById("excelButton");
 
 function getCurrentMonth() {
   const today = new Date();
@@ -63,6 +65,14 @@ monthFilter.addEventListener("change", render);
 showAllButton.addEventListener("click", function () {
   monthFilter.value = "";
   render();
+});
+
+csvButton.addEventListener("click", function () {
+  exportCSV();
+});
+
+excelButton.addEventListener("click", function () {
+  exportExcel();
 });
 
 document.getElementById("brokerageFee").addEventListener("input", updateTaxPreview);

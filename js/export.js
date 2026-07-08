@@ -1,104 +1,146 @@
-const csvButton = document.getElementById("csvButton");
-const excelButton = document.getElementById("excelButton");
+function getExportTargetData() {
+  if (typeof getFilteredData === "function") {
+    return getFilteredData();
+  }
 
-csvButton.addEventListener("click", function () {
-  downloadCSV("sales-data.csv");
-});
+  return getSalesData();
+}
 
-excelButton.addEventListener("click", function () {
-  downloadCSV("sales-data-excel.csv");
-});
+function getExportBrokerageFee(sale) {
+  return calculateBrokerageFee(
+    sale.brokerageFee,
+    sale.brokerageTaxType
+  );
+}
 
-function downloadCSV(filename) {
-  const data = getFilteredData();
+function getExportAd(sale) {
+  return Number(sale.ad) || 0;
+}
+
+function makeExportRows(data) {
+  return data.map(function (sale) {
+    const brokerageFee = getExportBrokerageFee(sale);
+    const ad = getExportAd(sale);
+
+    return {
+      "物件名": sale.property || "",
+      "顧客名": sale.customer || "",
+      "管理会社": sale.company || "",
+      "審査": sale.status || "申込",
+      "分割": sale.installment || "利用なし",
+      "確認証": "",
+      "契約日": sale.contractDate || "",
+      "賃発日": sale.startDate || "",
+      "仲介手数料": brokerageFee,
+      "仲介入金日": sale.feePaymentDate || "",
+      "AD": ad,
+      "AD入金日": sale.adPaymentDate || "",
+      "売上": brokerageFee + ad,
+      "メモ": sale.memo || "",
+      "担当者": sale.staff || ""
+    };
+  });
+}
+
+function exportCSV() {
+  const data = getExportTargetData();
 
   if (data.length === 0) {
-    alert("出力するデータがありません。");
+    alert("出力するデータがありません");
     return;
   }
 
+  const rows = makeExportRows(data);
+
   const headers = [
-    "申込日",
-    "契約日",
-    "契約開始日",
-    "担当",
-    "お客様名",
-    "電話番号",
     "物件名",
+    "顧客名",
     "管理会社",
-    "家賃",
-    "管理費",
+    "審査",
+    "分割",
+    "確認証",
+    "契約日",
+    "賃発日",
+    "仲介手数料",
+    "仲介入金日",
     "AD",
     "AD入金日",
-    "仲介入力額",
-    "税区分",
-    "仲介税込",
-    "仲介入金日",
-    "合計売上",
-    "分割",
-    "状態",
-    "備考"
+    "売上",
+    "メモ",
+    "担当者"
   ];
 
-  const rows = data.map(function (sale) {
-    const brokerageTaxIncluded = calculateBrokerageFee(
-      sale.brokerageFee,
-      sale.brokerageTaxType
-    );
-
-    const ad = Number(sale.ad) || 0;
-
-    return [
-      sale.applyDate || "",
-      sale.contractDate || "",
-      sale.startDate || "",
-      sale.staff || "",
-      sale.customer || "",
-      sale.phone || "",
-      sale.property || "",
-      sale.company || "",
-      sale.rent || 0,
-      sale.managementFee || 0,
-      sale.ad || 0,
-      sale.adPaymentDate || "",
-      sale.brokerageFee || 0,
-      sale.brokerageTaxType === "taxIncluded" ? "税込入力" : "税抜入力",
-      brokerageTaxIncluded,
-      sale.feePaymentDate || "",
-      brokerageTaxIncluded + ad,
-      sale.installment || "利用なし",
-      sale.status || "",
-      sale.memo || ""
-    ];
-  });
-
-  let csvContent = "\uFEFF";
-  csvContent += headers.join(",") + "\n";
+  const csvRows = [];
+  csvRows.push(headers.join(","));
 
   rows.forEach(function (row) {
-    csvContent += row.map(csvEscape).join(",") + "\n";
+    const values = headers.map(function (header) {
+      const value = row[header] === undefined ? "" : row[header];
+      return `"${String(value).replace(/"/g, '""')}"`;
+    });
+
+    csvRows.push(values.join(","));
   });
+
+  const csvContent = "\uFEFF" + csvRows.join("\n");
 
   const blob = new Blob([csvContent], {
     type: "text/csv;charset=utf-8;"
   });
 
   const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
+  const selectedMonth = document.getElementById("monthFilter").value;
 
-  link.href = url;
-  link.download = filename;
+  link.href = URL.createObjectURL(blob);
+  link.download = selectedMonth
+    ? `売上一覧_${selectedMonth}.csv`
+    : "売上一覧_全期間.csv";
+
   link.click();
-
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(link.href);
 }
 
-function csvEscape(value) {
-  const text = String(value ?? "");
-
-  if (text.includes(",") || text.includes("\n") || text.includes('"')) {
-    return '"' + text.replace(/"/g, '""') + '"';
+function exportExcel() {
+  if (typeof XLSX === "undefined") {
+    alert("Excel出力の準備がまだできていません。先にCSV出力を使ってください。");
+    return;
   }
 
-  return text;
+  const data = getExportTargetData();
+
+  if (data.length === 0) {
+    alert("出力するデータがありません");
+    return;
+  }
+
+  const rows = makeExportRows(data);
+  const workbook = XLSX.utils.book_new();
+  const sheet = XLSX.utils.json_to_sheet(rows);
+
+  sheet["!cols"] = [
+    { wch: 24 },
+    { wch: 16 },
+    { wch: 22 },
+    { wch: 12 },
+    { wch: 14 },
+    { wch: 12 },
+    { wch: 12 },
+    { wch: 12 },
+    { wch: 14 },
+    { wch: 14 },
+    { wch: 12 },
+    { wch: 14 },
+    { wch: 14 },
+    { wch: 28 },
+    { wch: 12 }
+  ];
+
+  XLSX.utils.book_append_sheet(workbook, sheet, "売上一覧");
+
+  const selectedMonth = document.getElementById("monthFilter").value;
+
+  XLSX.writeFile(
+    workbook,
+    selectedMonth ? `売上一覧_${selectedMonth}.xlsx` : "売上一覧_全期間.xlsx"
+  );
 }
