@@ -2,13 +2,49 @@ function render() {
   const data = getFilteredData();
 
   renderDashboard(data);
-  renderStaffSummary(data);
+  renderStaffSummary();
   renderTable(data);
 }
 
+function getKeyword() {
+  return document.getElementById("searchInput").value.toLowerCase();
+}
+
+function getSelectedMonth() {
+  return document.getElementById("monthFilter").value;
+}
+
+function isSameMonth(dateText, selectedMonth) {
+  if (!selectedMonth) {
+    return true;
+  }
+
+  return dateText && dateText.startsWith(selectedMonth);
+}
+
+function matchesKeyword(sale, keyword) {
+  const targetText = `
+    ${sale.applyDate || ""}
+    ${sale.contractDate || ""}
+    ${sale.startDate || ""}
+    ${sale.staff || ""}
+    ${sale.customer || ""}
+    ${sale.phone || ""}
+    ${sale.property || ""}
+    ${sale.company || ""}
+    ${sale.installment || ""}
+    ${sale.status || ""}
+    ${sale.adPaymentDate || ""}
+    ${sale.feePaymentDate || ""}
+    ${sale.memo || ""}
+  `.toLowerCase();
+
+  return targetText.includes(keyword);
+}
+
 function getFilteredData() {
-  const keyword = document.getElementById("searchInput").value.toLowerCase();
-  const selectedMonth = document.getElementById("monthFilter").value;
+  const keyword = getKeyword();
+  const selectedMonth = getSelectedMonth();
   const data = getSalesData();
 
   return data.filter(function (sale) {
@@ -18,27 +54,20 @@ function getFilteredData() {
       return false;
     }
 
-    const targetText = `
-      ${sale.applyDate || ""}
-      ${sale.contractDate || ""}
-      ${sale.startDate || ""}
-      ${sale.staff || ""}
-      ${sale.customer || ""}
-      ${sale.phone || ""}
-      ${sale.property || ""}
-      ${sale.company || ""}
-      ${sale.installment || ""}
-      ${sale.status || ""}
-      ${sale.adPaymentDate || ""}
-      ${sale.feePaymentDate || ""}
-      ${sale.memo || ""}
-    `.toLowerCase();
-
-    return targetText.includes(keyword);
+    return matchesKeyword(sale, keyword);
   });
 }
 
+function setText(id, text) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = text;
+  }
+}
+
 function isStatus(sale, statusName) {
+  const status = sale.status || "申込";
   const hasFeePayment = !!sale.feePaymentDate;
   const hasAdPayment = !!sale.adPaymentDate;
 
@@ -47,16 +76,22 @@ function isStatus(sale, statusName) {
   }
 
   if (statusName === "契約済み") {
-    return !hasFeePayment && !hasAdPayment &&
-      (sale.status === "契約済み" || sale.status === "契約済");
+    return status === "契約済み" || status === "契約済";
   }
 
   if (statusName === "申込") {
-    return !hasFeePayment && !hasAdPayment &&
-      (sale.status || "申込") === "申込";
+    return status === "申込";
   }
 
-  return sale.status === statusName;
+  if (statusName === "審査落ち") {
+    return status === "審査落ち";
+  }
+
+  if (statusName === "キャンセル") {
+    return status === "キャンセル";
+  }
+
+  return status === statusName;
 }
 
 function getSaleTotal(sale) {
@@ -118,31 +153,79 @@ function renderDashboard(data) {
     return isStatus(sale, "契約済み");
   }).length;
 
-  document.getElementById("totalSales").textContent = formatYen(totalSales);
-  document.getElementById("totalFee").textContent = formatYen(totalBrokerageFee);
-  document.getElementById("totalAd").textContent = formatYen(totalAd);
-  document.getElementById("totalCount").textContent = data.length + "件";
-  document.getElementById("unpaidFeeCount").textContent = unpaidFeeCount + "件";
-  document.getElementById("unpaidAdCount").textContent = unpaidAdCount + "件";
-  document.getElementById("dashApplyCount").textContent = applyCount + "件";
-  document.getElementById("dashContractCount").textContent = contractCount + "件";
+  const rejectedCount = data.filter(function (sale) {
+    return isStatus(sale, "審査落ち");
+  }).length;
+
+  const cancelCount = data.filter(function (sale) {
+    return isStatus(sale, "キャンセル");
+  }).length;
+
+  setText("totalSales", formatYen(totalSales));
+  setText("totalFee", formatYen(totalBrokerageFee));
+  setText("totalAd", formatYen(totalAd));
+  setText("totalCount", data.length + "件");
+  setText("unpaidFeeCount", unpaidFeeCount + "件");
+  setText("unpaidAdCount", unpaidAdCount + "件");
+  setText("dashApplyCount", applyCount + "件");
+  setText("dashContractCount", contractCount + "件");
+  setText("dashRejectedCount", rejectedCount + "件");
+  setText("dashCancelCount", cancelCount + "件");
 }
 
-function renderStaffSummary(data) {
+function renderStaffSummary() {
   const staffSummary = document.getElementById("staffSummary");
+  const allData = getSalesData();
+  const selectedMonth = getSelectedMonth();
+  const keyword = getKeyword();
 
   const staffTotals = {
-    矢部: 0,
-    早坂: 0,
-    米山: 0,
-    吉田: 0
+    矢部: {
+      applicationBase: 0,
+      paymentBase: 0
+    },
+    早坂: {
+      applicationBase: 0,
+      paymentBase: 0
+    },
+    米山: {
+      applicationBase: 0,
+      paymentBase: 0
+    },
+    吉田: {
+      applicationBase: 0,
+      paymentBase: 0
+    }
   };
 
-  data.forEach(function (sale) {
-    const rowTotal = getSaleTotal(sale);
+  allData.forEach(function (sale) {
+    if (!matchesKeyword(sale, keyword)) {
+      return;
+    }
 
-    if (staffTotals[sale.staff] !== undefined) {
-      staffTotals[sale.staff] += rowTotal;
+    if (staffTotals[sale.staff] === undefined) {
+      return;
+    }
+
+    const fee = calculateBrokerageFee(
+      sale.brokerageFee,
+      sale.brokerageTaxType
+    );
+
+    const ad = Number(sale.ad) || 0;
+
+    const applicationMonthTarget = sale.applyDate || sale.contractDate || "";
+
+    if (isSameMonth(applicationMonthTarget, selectedMonth)) {
+      staffTotals[sale.staff].applicationBase += fee + ad;
+    }
+
+    if (fee > 0 && isSameMonth(sale.feePaymentDate, selectedMonth)) {
+      staffTotals[sale.staff].paymentBase += fee;
+    }
+
+    if (ad > 0 && isSameMonth(sale.adPaymentDate, selectedMonth)) {
+      staffTotals[sale.staff].paymentBase += ad;
     }
   });
 
@@ -154,7 +237,10 @@ function renderStaffSummary(data) {
 
     div.innerHTML = `
       <span>${staff}</span>
-      <strong>${formatYen(staffTotals[staff])}</strong>
+      <strong>${formatYen(staffTotals[staff].applicationBase)}</strong>
+      <small>申込ベース</small>
+      <strong>${formatYen(staffTotals[staff].paymentBase)}</strong>
+      <small>入金ベース</small>
     `;
 
     staffSummary.appendChild(div);
@@ -183,8 +269,10 @@ function renderTable(data) {
       ? `<span class="paid">${sale.feePaymentDate}</span>`
       : `<span class="unpaid">未入金</span>`;
 
+    const status = sale.status || "申込";
+
     const tr = document.createElement("tr");
-    tr.className = `case-row status-${sale.status || "申込"}`;
+    tr.className = `case-row status-${status}`;
 
     tr.innerHTML = `
       <td>${sale.applyDate || ""}</td>
@@ -204,7 +292,7 @@ function renderTable(data) {
       <td>${formatYen(brokerageFeeTaxIncluded)}</td>
       <td>${feePaymentText}</td>
       <td>${sale.installment || "利用なし"}</td>
-      <td><span class="status-badge status-${sale.status || "申込"}">${sale.status || "申込"}</span></td>
+      <td><span class="status-badge status-${status}">${status}</span></td>
       <td>${sale.memo || ""}</td>
       <td>
         <div class="action-buttons">

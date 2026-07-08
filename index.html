@@ -11,7 +11,7 @@
   <div class="container">
     <header>
       <h1>🏢 姫なび賃貸 業務管理システム</h1>
-      <p>Version 4.0｜申込・売上・入金・税込管理</p>
+      <p>Version 4.1｜申込・売上・入金・税込管理</p>
     </header>
 
     <section class="month-filter card">
@@ -27,22 +27,27 @@
         <span>合計売上 税込</span>
         <strong id="totalSales">0円</strong>
       </div>
+
       <div class="dashboard-card">
         <span>仲介手数料 税込</span>
         <strong id="totalFee">0円</strong>
       </div>
+
       <div class="dashboard-card">
         <span>AD合計</span>
         <strong id="totalAd">0円</strong>
       </div>
+
       <div class="dashboard-card">
         <span>申込件数</span>
         <strong id="totalCount">0件</strong>
       </div>
+
       <div class="dashboard-card warning">
         <span>仲介未入金</span>
         <strong id="unpaidFeeCount">0件</strong>
       </div>
+
       <div class="dashboard-card warning">
         <span>AD未入金</span>
         <strong id="unpaidAdCount">0件</strong>
@@ -54,9 +59,20 @@
         <span>申込</span>
         <strong id="dashApplyCount">0件</strong>
       </div>
+
       <div class="simple-card">
         <span>契約済み</span>
         <strong id="dashContractCount">0件</strong>
+      </div>
+
+      <div class="simple-card">
+        <span>審査落ち</span>
+        <strong id="dashRejectedCount">0件</strong>
+      </div>
+
+      <div class="simple-card">
+        <span>キャンセル</span>
+        <strong id="dashCancelCount">0件</strong>
       </div>
     </section>
 
@@ -173,6 +189,7 @@
               <option value="審査中">審査中</option>
               <option value="契約予定">契約予定</option>
               <option value="契約済">契約済</option>
+              <option value="審査落ち">審査落ち</option>
               <option value="キャンセル">キャンセル</option>
             </select>
           </div>
@@ -227,6 +244,7 @@
               <th>操作</th>
             </tr>
           </thead>
+
           <tbody id="salesTableBody"></tbody>
         </table>
       </div>
