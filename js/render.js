@@ -15,12 +15,26 @@ function getSelectedMonth() {
   return document.getElementById("monthFilter").value;
 }
 
-function isSameMonth(dateText, selectedMonth) {
-  if (!selectedMonth) {
-    return true;
-  }
+/* =========================
+   月判定
+========================= */
 
-  return dateText && dateText.startsWith(selectedMonth);
+// 案件一覧・契約件数用：契約日ベース
+function getCaseMonth(sale) {
+  const date = sale.contractDate || "";
+  return date ? date.slice(0, 7) : "";
+}
+
+// 仲介手数料売上用：仲介手数料入金日ベース
+function getFeePaymentMonth(sale) {
+  const date = sale.feePaymentDate || "";
+  return date ? date.slice(0, 7) : "";
+}
+
+// AD売上用：AD入金日ベース
+function getAdPaymentMonth(sale) {
+  const date = sale.adPaymentDate || "";
+  return date ? date.slice(0, 7) : "";
 }
 
 function matchesKeyword(sale, keyword) {
@@ -43,15 +57,16 @@ function matchesKeyword(sale, keyword) {
   return targetText.includes(keyword);
 }
 
+// 案件一覧は契約日ベースで絞り込み
 function getFilteredData() {
   const keyword = getKeyword();
   const selectedMonth = getSelectedMonth();
   const data = getSalesData();
 
   return data.filter(function (sale) {
-    const monthTarget = sale.contractDate || sale.applyDate || "";
+    const caseMonth = getCaseMonth(sale);
 
-    if (selectedMonth && !monthTarget.startsWith(selectedMonth)) {
+    if (selectedMonth && caseMonth !== selectedMonth) {
       return false;
     }
 
@@ -93,22 +108,60 @@ function getAd(sale) {
   return Number(sale.ad) || 0;
 }
 
+// 申込・契約ベースの売上見込み
 function getSaleTotal(sale) {
   return getBrokerageFee(sale) + getAd(sale);
 }
 
-function getPaymentTotal(sale) {
+// 選択月の入金売上
+function getMonthlyPaymentTotal(sale, selectedMonth) {
   let total = 0;
 
-  if (sale.feePaymentDate) {
+  if (!selectedMonth) {
+    if (sale.feePaymentDate) {
+      total += getBrokerageFee(sale);
+    }
+
+    if (sale.adPaymentDate) {
+      total += getAd(sale);
+    }
+
+    return total;
+  }
+
+  if (getFeePaymentMonth(sale) === selectedMonth) {
     total += getBrokerageFee(sale);
   }
 
-  if (sale.adPaymentDate) {
+  if (getAdPaymentMonth(sale) === selectedMonth) {
     total += getAd(sale);
   }
 
   return total;
+}
+
+function getMonthlyFeePayment(sale, selectedMonth) {
+  if (!sale.feePaymentDate) {
+    return 0;
+  }
+
+  if (!selectedMonth || getFeePaymentMonth(sale) === selectedMonth) {
+    return getBrokerageFee(sale);
+  }
+
+  return 0;
+}
+
+function getMonthlyAdPayment(sale, selectedMonth) {
+  if (!sale.adPaymentDate) {
+    return 0;
+  }
+
+  if (!selectedMonth || getAdPaymentMonth(sale) === selectedMonth) {
+    return getAd(sale);
+  }
+
+  return 0;
 }
 
 function getTaxTypeText(taxType) {
@@ -164,7 +217,13 @@ function createStaffData() {
   };
 }
 
+/* =========================
+   ダッシュボード
+========================= */
+
 function renderDashboard(data) {
+  const selectedMonth = getSelectedMonth();
+
   let totalBrokerageFee = 0;
   let totalAd = 0;
   let totalSales = 0;
@@ -175,9 +234,10 @@ function renderDashboard(data) {
     const fee = getBrokerageFee(sale);
     const ad = getAd(sale);
 
-    totalBrokerageFee += fee;
-    totalAd += ad;
-    totalSales += fee + ad;
+    // 売上は入金日ベース
+    totalBrokerageFee += getMonthlyFeePayment(sale, selectedMonth);
+    totalAd += getMonthlyAdPayment(sale, selectedMonth);
+    totalSales += getMonthlyPaymentTotal(sale, selectedMonth);
 
     if (fee > 0 && !sale.feePaymentDate) {
       unpaidFeeCount++;
@@ -217,6 +277,8 @@ function renderDashboard(data) {
 }
 
 function renderBossDashboard(data) {
+  const selectedMonth = getSelectedMonth();
+
   let applicationSales = 0;
   let paymentSales = 0;
   let unpaidFeeCount = 0;
@@ -228,8 +290,11 @@ function renderBossDashboard(data) {
     const fee = getBrokerageFee(sale);
     const ad = getAd(sale);
 
+    // 申込売上は表示中の契約案件ベース
     applicationSales += fee + ad;
-    paymentSales += getPaymentTotal(sale);
+
+    // 入金売上は入金日ベース
+    paymentSales += getMonthlyPaymentTotal(sale, selectedMonth);
 
     if (fee > 0 && !sale.feePaymentDate) {
       unpaidFeeCount++;
@@ -272,6 +337,7 @@ function renderBossDashboard(data) {
 
 function renderStaffRanking(data) {
   const rankingArea = document.getElementById("staffRanking");
+  const selectedMonth = getSelectedMonth();
 
   if (!rankingArea) {
     return;
@@ -284,11 +350,12 @@ function renderStaffRanking(data) {
       return;
     }
 
-    staffTotals[sale.staff].applicationSales += getSaleTotal(sale);
+    // ランキングは入金売上ベース
+    staffTotals[sale.staff].paymentSales += getMonthlyPaymentTotal(sale, selectedMonth);
   });
 
   const ranking = Object.keys(staffTotals).sort(function (a, b) {
-    return staffTotals[b].applicationSales - staffTotals[a].applicationSales;
+    return staffTotals[b].paymentSales - staffTotals[a].paymentSales;
   });
 
   let html = "";
@@ -299,7 +366,7 @@ function renderStaffRanking(data) {
     html += `
       <div class="ranking-row">
         <span>${medal} ${staff}</span>
-        <strong>${formatYen(staffTotals[staff].applicationSales)}</strong>
+        <strong>${formatYen(staffTotals[staff].paymentSales)}</strong>
       </div>
     `;
   });
@@ -307,18 +374,22 @@ function renderStaffRanking(data) {
   rankingArea.innerHTML = html;
 }
 
+/* =========================
+   担当者別集計
+========================= */
+
 function renderStaffSummary(data) {
   const staffSummary = document.getElementById("staffSummary");
   const staffTotals = createStaffData();
+  const selectedMonth = getSelectedMonth();
 
   data.forEach(function (sale) {
     if (!staffTotals[sale.staff]) {
       return;
     }
 
-    const fee = getBrokerageFee(sale);
-    const ad = getAd(sale);
-    const total = fee + ad;
+    const total = getSaleTotal(sale);
+    const paymentTotal = getMonthlyPaymentTotal(sale, selectedMonth);
 
     if (isStatus(sale, "申込")) {
       staffTotals[sale.staff].applyCount++;
@@ -336,17 +407,31 @@ function renderStaffSummary(data) {
       staffTotals[sale.staff].cancelCount++;
     }
 
+    // 申込売上は表示中の契約案件ベース
     staffTotals[sale.staff].applicationSales += total;
-    staffTotals[sale.staff].paymentSales += getPaymentTotal(sale);
-    staffTotals[sale.staff].unpaidAmount += total - getPaymentTotal(sale);
+
+    // 入金売上は入金日ベース
+    staffTotals[sale.staff].paymentSales += paymentTotal;
+
+    // 未入金額
+    if (!sale.feePaymentDate) {
+      staffTotals[sale.staff].unpaidAmount += getBrokerageFee(sale);
+    }
+
+    if (!sale.adPaymentDate) {
+      staffTotals[sale.staff].unpaidAmount += getAd(sale);
+    }
   });
 
   staffSummary.innerHTML = "";
 
   for (const staff in staffTotals) {
     const item = staffTotals[staff];
-    const rate = item.applyCount + item.contractCount > 0
-      ? Math.round((item.contractCount / (item.applyCount + item.contractCount)) * 100)
+    const totalCases =
+      item.applyCount + item.contractCount + item.rejectedCount + item.cancelCount;
+
+    const rate = totalCases > 0
+      ? Math.round((item.contractCount / totalCases) * 100)
       : 0;
 
     const div = document.createElement("div");
@@ -380,6 +465,10 @@ function renderStaffSummary(data) {
     staffSummary.appendChild(div);
   }
 }
+
+/* =========================
+   案件一覧
+========================= */
 
 function renderTable(data) {
   const salesTableBody = document.getElementById("salesTableBody");
@@ -435,6 +524,10 @@ function renderTable(data) {
     salesTableBody.appendChild(tr);
   });
 }
+
+/* =========================
+   編集・削除
+========================= */
 
 function editSale(index) {
   const sale = getSalesData()[index];
