@@ -25,6 +25,97 @@ function getExportMonth(date) {
   return date ? date.slice(0, 7) : "";
 }
 
+// 申込日を基準に、対象月の申込み案件を取得
+function getExportApplicationData(selectedMonth) {
+  const allData = getSalesData();
+
+  if (!selectedMonth) {
+    return allData;
+  }
+
+  return allData.filter(function (sale) {
+    return getExportMonth(sale.applyDate) === selectedMonth;
+  });
+}
+
+// 契約済み判定
+function isExportContractStatus(sale) {
+  const status = sale.status || "申込";
+
+  return status === "契約済" ||
+    status === "契約済み";
+}
+
+// 割合計算
+function calculateExportRate(numerator, denominator) {
+  if (!denominator) {
+    return 0;
+  }
+
+  return Math.round(
+    (numerator / denominator) * 1000
+  ) / 10;
+}
+
+// 保存済みの月末実績を取得
+function getExportMonthlyPerformance(selectedMonth) {
+  const defaultData = {
+    inquiryCount: 0,
+
+    assignedCounts: {
+      矢部: 0,
+      早坂: 0,
+      米山: 0,
+      吉田: 0
+    }
+  };
+
+  if (!selectedMonth) {
+    return defaultData;
+  }
+
+  try {
+    const saved = localStorage.getItem(
+      "himenaviMonthlyPerformance"
+    );
+
+    const allPerformance =
+      saved ? JSON.parse(saved) : {};
+
+    const monthData =
+      allPerformance[selectedMonth] || {};
+
+    const assignedCounts =
+      monthData.assignedCounts || {};
+
+    return {
+      inquiryCount:
+        Number(monthData.inquiryCount) || 0,
+
+      assignedCounts: {
+        矢部:
+          Number(assignedCounts.矢部) || 0,
+
+        早坂:
+          Number(assignedCounts.早坂) || 0,
+
+        米山:
+          Number(assignedCounts.米山) || 0,
+
+        吉田:
+          Number(assignedCounts.吉田) || 0
+      }
+    };
+  } catch (error) {
+    console.error(
+      "月末実績データの読み込みに失敗しました。",
+      error
+    );
+
+    return defaultData;
+  }
+}
+
 function getExportFeePayment(sale, selectedMonth) {
   if (!sale.feePaymentDate) {
     return 0;
@@ -134,57 +225,138 @@ function makeSummaryRows(data) {
 }
 
 function makeStaffSummaryRows(data) {
-  const selectedMonth = getExportSelectedMonth();
+  const selectedMonth =
+    getExportSelectedMonth();
+
+  const applicationData =
+    getExportApplicationData(selectedMonth);
+
+  const performance =
+    getExportMonthlyPerformance(selectedMonth);
 
   const staffTotals = {
-    矢部: { count: 0, contractCount: 0, applicationSales: 0, feePaymentSales: 0, adPaymentSales: 0, unpaid: 0 },
-    早坂: { count: 0, contractCount: 0, applicationSales: 0, feePaymentSales: 0, adPaymentSales: 0, unpaid: 0 },
-    米山: { count: 0, contractCount: 0, applicationSales: 0, feePaymentSales: 0, adPaymentSales: 0, unpaid: 0 },
-    吉田: { count: 0, contractCount: 0, applicationSales: 0, feePaymentSales: 0, adPaymentSales: 0, unpaid: 0 }
+    矢部: {
+      applicationCount: 0,
+      contractCount: 0,
+      applicationSales: 0,
+      feePaymentSales: 0,
+      adPaymentSales: 0,
+      unpaid: 0
+    },
+
+    早坂: {
+      applicationCount: 0,
+      contractCount: 0,
+      applicationSales: 0,
+      feePaymentSales: 0,
+      adPaymentSales: 0,
+      unpaid: 0
+    },
+
+    米山: {
+      applicationCount: 0,
+      contractCount: 0,
+      applicationSales: 0,
+      feePaymentSales: 0,
+      adPaymentSales: 0,
+      unpaid: 0
+    },
+
+    吉田: {
+      applicationCount: 0,
+      contractCount: 0,
+      applicationSales: 0,
+      feePaymentSales: 0,
+      adPaymentSales: 0,
+      unpaid: 0
+    }
   };
 
+  // 申込み人数・契約人数は申込日ベース
+  applicationData.forEach(function (sale) {
+    if (!staffTotals[sale.staff]) {
+      return;
+    }
+
+    staffTotals[sale.staff].applicationCount++;
+
+    if (isExportContractStatus(sale)) {
+      staffTotals[sale.staff].contractCount++;
+    }
+  });
+
+  // 売上・未入金は表示対象案件から集計
   data.forEach(function (sale) {
     if (!staffTotals[sale.staff]) {
       return;
     }
 
-    const brokerageFee = getExportBrokerageFee(sale);
-    const ad = getExportAd(sale);
-    const status = sale.status || "申込";
+    const brokerageFee =
+      getExportBrokerageFee(sale);
 
-    staffTotals[sale.staff].count++;
+    const ad =
+      getExportAd(sale);
 
-    if (status === "契約済" || status === "契約済み") {
-      staffTotals[sale.staff].contractCount++;
-    }
+    staffTotals[sale.staff].applicationSales +=
+      brokerageFee + ad;
 
-    staffTotals[sale.staff].applicationSales += brokerageFee + ad;
-    staffTotals[sale.staff].feePaymentSales += getExportFeePayment(sale, selectedMonth);
-    staffTotals[sale.staff].adPaymentSales += getExportAdPayment(sale, selectedMonth);
+    staffTotals[sale.staff].feePaymentSales +=
+      getExportFeePayment(
+        sale,
+        selectedMonth
+      );
+
+    staffTotals[sale.staff].adPaymentSales +=
+      getExportAdPayment(
+        sale,
+        selectedMonth
+      );
 
     if (!sale.feePaymentDate) {
-      staffTotals[sale.staff].unpaid += brokerageFee;
+      staffTotals[sale.staff].unpaid +=
+        brokerageFee;
     }
 
     if (!sale.adPaymentDate) {
-      staffTotals[sale.staff].unpaid += ad;
+      staffTotals[sale.staff].unpaid +=
+        ad;
     }
   });
 
-  return Object.keys(staffTotals).map(function (staff) {
-    const item = staffTotals[staff];
+  return Object.keys(staffTotals).map(
+    function (staff) {
+      const item = staffTotals[staff];
 
-    return {
-      "担当者": staff,
-      "案件数": item.count,
-      "契約件数": item.contractCount,
-      "申込売上": item.applicationSales,
-      "仲介入金売上": item.feePaymentSales,
-      "AD入金売上": item.adPaymentSales,
-      "入金売上合計": item.feePaymentSales + item.adPaymentSales,
-      "未入金合計": item.unpaid
-    };
-  });
+      const contractRate =
+        calculateExportRate(
+          item.contractCount,
+          item.applicationCount
+        );
+
+      return {
+        "担当者": staff,
+        "振り分け人数":
+          performance.assignedCounts[staff],
+        "申込み人数":
+          item.applicationCount,
+        "契約人数":
+          item.contractCount,
+        "成約率":
+          contractRate + "%",
+        "申込売上":
+          item.applicationSales,
+        "仲介入金売上":
+          item.feePaymentSales,
+        "AD入金売上":
+          item.adPaymentSales,
+        "入金売上合計":
+          item.feePaymentSales +
+          item.adPaymentSales,
+        "未入金合計":
+          item.unpaid
+      };
+    }
+  );
 }
 
 function exportCSV() {

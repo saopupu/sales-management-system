@@ -400,3 +400,299 @@ tr:hover {
     border-color:#F97316;
     background:linear-gradient(180deg,#FFF7ED,#FFFFFF);
 }
+/* =========================
+   月末実績集計
+========================= */
+
+.monthly-performance-card {
+  margin-top: 24px;
+}
+
+.monthly-performance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.monthly-performance-header h2 {
+  margin-bottom: 8px;
+}
+
+.monthly-performance-header > strong {
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #eef4ff;
+  color: #2563eb;
+  white-space: nowrap;
+}
+
+.section-description {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.monthly-performance-notice {
+  padding: 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  text-align: center;
+}
+
+.monthly-performance-content h3 {
+  margin-top: 24px;
+  margin-bottom: 14px;
+}
+
+.monthly-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.monthly-performance-item {
+  min-height: 130px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.monthly-performance-item > span,
+.monthly-performance-item > label {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.monthly-performance-item > strong {
+  display: block;
+  margin-top: 8px;
+  color: #0f172a;
+  font-size: 28px;
+}
+
+.monthly-performance-item small {
+  display: block;
+  margin-top: 8px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.monthly-performance-item.rate-item {
+  background: linear-gradient(
+    135deg,
+    #eff6ff,
+    #ffffff
+  );
+  border-color: #bfdbfe;
+}
+
+.monthly-performance-item.rate-item strong {
+  color: #2563eb;
+}
+
+.number-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.number-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  background: #ffffff;
+}
+
+.number-input-wrap span {
+  color: #475569;
+  font-weight: 700;
+}
+
+.monthly-staff-title {
+  margin-top: 30px !important;
+}
+
+.monthly-staff-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+}
+
+.monthly-staff-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.monthly-staff-table th {
+  padding: 14px 12px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 13px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.monthly-staff-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.monthly-staff-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-number-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-number-input input {
+  width: 120px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.table-number-input span {
+  color: #64748b;
+}
+
+.monthly-performance-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+#saveMonthlyPerformanceButton {
+  padding: 13px 22px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+}
+
+#saveMonthlyPerformanceButton:hover {
+  transform: translateY(-1px);
+  background: #1d4ed8;
+}
+
+#monthlyPerformanceSaveMessage {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+
+/* =========================
+   担当者別カード改善
+========================= */
+
+.staff-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.staff-card {
+  border-radius: 18px;
+}
+
+.staff-card > span {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.staff-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.staff-mini-grid p {
+  margin: 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(248, 250, 252, 0.9);
+  color: #64748b;
+  font-size: 13px;
+}
+
+.staff-mini-grid strong {
+  display: inline-block;
+  margin-top: 4px;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.staff-card hr {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+.staff-card > small {
+  display: block;
+  margin-top: 10px;
+  color: #64748b;
+}
+
+.staff-card > strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 21px;
+}
+
+
+/* =========================
+   スマホ・小さい画面
+========================= */
+
+@media (max-width: 900px) {
+  .monthly-performance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .staff-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .monthly-performance-header {
+    flex-direction: column;
+  }
+
+  .monthly-performance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-mini-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
