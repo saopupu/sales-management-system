@@ -4,6 +4,7 @@ function render() {
   renderDashboard(data);
   renderBossDashboard(data);
   renderStaffSummary(data);
+  renderMonthlyPerformance();
   renderTable(data);
 }
 
@@ -14,7 +15,90 @@ function getKeyword() {
 function getSelectedMonth() {
   return document.getElementById("monthFilter").value;
 }
+// 申込み人数・成約率用：申込日ベース
+function getApplicationMonth(sale) {
+  const date = sale.applyDate || "";
+  return date ? date.slice(0, 7) : "";
+}
 
+// 選択月に申込みされた案件を取得
+function getMonthlyApplicationData(selectedMonth) {
+  const allData = getSalesData();
+
+  if (!selectedMonth) {
+    return allData;
+  }
+
+  return allData.filter(function (sale) {
+    return getApplicationMonth(sale) === selectedMonth;
+  });
+}
+
+// パーセント計算
+function calculateRate(numerator, denominator) {
+  if (!denominator) {
+    return 0;
+  }
+
+  return Math.round((numerator / denominator) * 1000) / 10;
+}
+
+/* =========================
+   月末実績データ
+========================= */
+
+const MONTHLY_PERFORMANCE_STORAGE_KEY = "himenaviMonthlyPerformance";
+
+function getDefaultMonthlyPerformance() {
+  return {
+    inquiryCount: 0,
+    assignedCounts: {
+      矢部: 0,
+      早坂: 0,
+      米山: 0,
+      吉田: 0
+    }
+  };
+}
+
+function getAllMonthlyPerformance() {
+  try {
+    const saved = localStorage.getItem(
+      MONTHLY_PERFORMANCE_STORAGE_KEY
+    );
+
+    return saved ? JSON.parse(saved) : {};
+  } catch (error) {
+    console.error(
+      "月末実績データの読み込みに失敗しました。",
+      error
+    );
+
+    return {};
+  }
+}
+
+function getMonthlyPerformance(month) {
+  const defaultData = getDefaultMonthlyPerformance();
+
+  if (!month) {
+    return defaultData;
+  }
+
+  const allPerformance = getAllMonthlyPerformance();
+  const saved = allPerformance[month] || {};
+
+  return {
+    inquiryCount: Number(saved.inquiryCount) || 0,
+
+    assignedCounts: {
+      矢部: Number(saved.assignedCounts?.矢部) || 0,
+      早坂: Number(saved.assignedCounts?.早坂) || 0,
+      米山: Number(saved.assignedCounts?.米山) || 0,
+      吉田: Number(saved.assignedCounts?.吉田) || 0
+    }
+  };
+}
 /* =========================
    月判定
 ========================= */
@@ -281,8 +365,10 @@ function renderBossDashboard(data) {
 
   let applicationSales = 0;
   let paymentSales = 0;
+
   let unpaidFeeCount = 0;
   let unpaidFeeAmount = 0;
+
   let unpaidAdCount = 0;
   let unpaidAdAmount = 0;
 
@@ -290,11 +376,14 @@ function renderBossDashboard(data) {
     const fee = getBrokerageFee(sale);
     const ad = getAd(sale);
 
-    // 申込売上は表示中の契約案件ベース
+    // 申込売上は表示中の案件ベース
     applicationSales += fee + ad;
 
     // 入金売上は入金日ベース
-    paymentSales += getMonthlyPaymentTotal(sale, selectedMonth);
+    paymentSales += getMonthlyPaymentTotal(
+      sale,
+      selectedMonth
+    );
 
     if (fee > 0 && !sale.feePaymentDate) {
       unpaidFeeCount++;
@@ -307,30 +396,85 @@ function renderBossDashboard(data) {
     }
   });
 
-  const applyCount = data.filter(function (sale) {
-    return isStatus(sale, "申込");
-  }).length;
+  /*
+   * 申込み人数と成約率は申込日ベースで集計します。
+   * 契約済みや審査落ちへ変更しても、
+   * 申込み人数から消えません。
+   */
+  const monthlyApplicationData =
+    getMonthlyApplicationData(selectedMonth);
 
-  const contractCount = data.filter(function (sale) {
-    return isStatus(sale, "契約済み");
-  }).length;
+  const applyCount =
+    monthlyApplicationData.length;
 
-  const rejectedCount = data.filter(function (sale) {
-    return isStatus(sale, "審査落ち");
-  }).length;
+  const contractCount =
+    monthlyApplicationData.filter(function (sale) {
+      return isContractStatus(sale);
+    }).length;
 
-  const cancelCount = data.filter(function (sale) {
-    return isStatus(sale, "キャンセル");
-  }).length;
+  const rejectedCount =
+    monthlyApplicationData.filter(function (sale) {
+      return isStatus(sale, "審査落ち");
+    }).length;
 
-  setText("bossApplicationSales", formatYen(applicationSales));
-  setText("bossPaymentSales", formatYen(paymentSales));
-  setText("bossApplyCount", applyCount + "件");
-  setText("bossContractCount", contractCount + "件");
-  setText("bossRejectedCount", rejectedCount + "件");
-  setText("bossCancelCount", cancelCount + "件");
-  setText("bossUnpaidFee", unpaidFeeCount + "件 / " + formatYen(unpaidFeeAmount));
-  setText("bossUnpaidAd", unpaidAdCount + "件 / " + formatYen(unpaidAdAmount));
+  const cancelCount =
+    monthlyApplicationData.filter(function (sale) {
+      return isStatus(sale, "キャンセル");
+    }).length;
+
+  const contractRate = calculateRate(
+    contractCount,
+    applyCount
+  );
+
+  setText(
+    "bossApplicationSales",
+    formatYen(applicationSales)
+  );
+
+  setText(
+    "bossPaymentSales",
+    formatYen(paymentSales)
+  );
+
+  setText(
+    "bossApplyCount",
+    applyCount + "件"
+  );
+
+  setText(
+    "bossContractCount",
+    contractCount + "件"
+  );
+
+  setText(
+    "bossContractRate",
+    contractRate + "%"
+  );
+
+  setText(
+    "bossRejectedCount",
+    rejectedCount + "件"
+  );
+
+  setText(
+    "bossCancelCount",
+    cancelCount + "件"
+  );
+
+  setText(
+    "bossUnpaidFee",
+    unpaidFeeCount +
+      "件 / " +
+      formatYen(unpaidFeeAmount)
+  );
+
+  setText(
+    "bossUnpaidAd",
+    unpaidAdCount +
+      "件 / " +
+      formatYen(unpaidAdAmount)
+  );
 
   renderStaffRanking(data);
 }
@@ -379,23 +523,38 @@ function renderStaffRanking(data) {
 ========================= */
 
 function renderStaffSummary(data) {
-  const staffSummary = document.getElementById("staffSummary");
-  const staffTotals = createStaffData();
+  const staffSummary =
+    document.getElementById("staffSummary");
+
+  if (!staffSummary) {
+    return;
+  }
+
   const selectedMonth = getSelectedMonth();
 
-  data.forEach(function (sale) {
+  // 申込日を基準にした、その月の申込み案件
+  const applicationData =
+    getMonthlyApplicationData(selectedMonth);
+
+  const staffTotals = createStaffData();
+
+  // 保存済みの振り分け人数
+  const monthlyPerformance =
+    getMonthlyPerformance(selectedMonth);
+
+  /*
+   * 申込み人数・契約人数・審査落ち・キャンセルは、
+   * ステータスではなく申込日を基準に対象月を決めます。
+   */
+  applicationData.forEach(function (sale) {
     if (!staffTotals[sale.staff]) {
       return;
     }
 
-    const total = getSaleTotal(sale);
-    const paymentTotal = getMonthlyPaymentTotal(sale, selectedMonth);
+    // 申込日がある案件は、現在のステータスに関係なく申込み人数に含める
+    staffTotals[sale.staff].applyCount++;
 
-    if (isStatus(sale, "申込")) {
-      staffTotals[sale.staff].applyCount++;
-    }
-
-    if (isStatus(sale, "契約済み")) {
+    if (isContractStatus(sale)) {
       staffTotals[sale.staff].contractCount++;
     }
 
@@ -406,20 +565,34 @@ function renderStaffSummary(data) {
     if (isStatus(sale, "キャンセル")) {
       staffTotals[sale.staff].cancelCount++;
     }
+  });
 
-    // 申込売上は表示中の契約案件ベース
-    staffTotals[sale.staff].applicationSales += total;
+  /*
+   * 売上と未入金額は、今までどおり
+   * 画面に表示されている案件を使って集計します。
+   */
+  data.forEach(function (sale) {
+    if (!staffTotals[sale.staff]) {
+      return;
+    }
 
-    // 入金売上は入金日ベース
-    staffTotals[sale.staff].paymentSales += paymentTotal;
+    staffTotals[sale.staff].applicationSales +=
+      getSaleTotal(sale);
 
-    // 未入金額
+    staffTotals[sale.staff].paymentSales +=
+      getMonthlyPaymentTotal(
+        sale,
+        selectedMonth
+      );
+
     if (!sale.feePaymentDate) {
-      staffTotals[sale.staff].unpaidAmount += getBrokerageFee(sale);
+      staffTotals[sale.staff].unpaidAmount +=
+        getBrokerageFee(sale);
     }
 
     if (!sale.adPaymentDate) {
-      staffTotals[sale.staff].unpaidAmount += getAd(sale);
+      staffTotals[sale.staff].unpaidAmount +=
+        getAd(sale);
     }
   });
 
@@ -427,45 +600,264 @@ function renderStaffSummary(data) {
 
   for (const staff in staffTotals) {
     const item = staffTotals[staff];
-    const totalCases =
-      item.applyCount + item.contractCount + item.rejectedCount + item.cancelCount;
 
-    const rate = totalCases > 0
-      ? Math.round((item.contractCount / totalCases) * 100)
-      : 0;
+    const rate = calculateRate(
+      item.contractCount,
+      item.applyCount
+    );
+
+    const assignedCount =
+      Number(
+        monthlyPerformance.assignedCounts[staff]
+      ) || 0;
 
     const div = document.createElement("div");
-    div.className = "staff-card";
+
+    div.className =
+      `staff-card staff-card-${staff}`;
 
     div.innerHTML = `
       <span>👤 ${staff}</span>
 
       <div class="staff-mini-grid">
-        <p>申込件数<br><strong>${item.applyCount}件</strong></p>
-        <p>契約件数<br><strong>${item.contractCount}件</strong></p>
-        <p>審査落ち<br><strong>${item.rejectedCount}件</strong></p>
-        <p>キャンセル<br><strong>${item.cancelCount}件</strong></p>
+
+        <p>
+          振り分け人数<br>
+          <strong>${assignedCount}人</strong>
+        </p>
+
+        <p>
+          申込み人数<br>
+          <strong>${item.applyCount}人</strong>
+        </p>
+
+        <p>
+          契約人数<br>
+          <strong>${item.contractCount}人</strong>
+        </p>
+
+        <p>
+          成約率<br>
+          <strong>${rate}%</strong>
+        </p>
+
+        <p>
+          審査落ち<br>
+          <strong>${item.rejectedCount}人</strong>
+        </p>
+
+        <p>
+          キャンセル<br>
+          <strong>${item.cancelCount}人</strong>
+        </p>
+
       </div>
 
       <hr>
 
       <small>申込売上</small>
-      <strong>${formatYen(item.applicationSales)}</strong>
+      <strong>
+        ${formatYen(item.applicationSales)}
+      </strong>
 
       <small>入金売上</small>
-      <strong>${formatYen(item.paymentSales)}</strong>
+      <strong>
+        ${formatYen(item.paymentSales)}
+      </strong>
 
       <small>未入金額</small>
-      <strong>${formatYen(item.unpaidAmount)}</strong>
-
-      <small>成約率</small>
-      <strong>${rate}%</strong>
+      <strong>
+        ${formatYen(item.unpaidAmount)}
+      </strong>
     `;
 
     staffSummary.appendChild(div);
   }
 }
+/* =========================
+   月末実績集計
+========================= */
 
+function getStaffElementSuffix(staff) {
+  const suffixMap = {
+    矢部: "Yabe",
+    早坂: "Hayasaka",
+    米山: "Yoneyama",
+    吉田: "Yoshida"
+  };
+
+  return suffixMap[staff] || "";
+}
+
+function setInputValue(id, value) {
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.value = value;
+  }
+}
+
+function renderMonthlyPerformance() {
+  const selectedMonth = getSelectedMonth();
+
+  const content =
+    document.getElementById("monthlyPerformanceContent");
+
+  const notice =
+    document.getElementById("monthlyPerformanceNotice");
+
+  if (!content) {
+    return;
+  }
+
+  // 全期間表示中
+  if (!selectedMonth) {
+    setText(
+      "monthlyPerformanceTitle",
+      "表示月を選択してください"
+    );
+
+    if (notice) {
+      notice.style.display = "block";
+      notice.textContent =
+        "月を選択すると入力・集計できます。";
+    }
+
+    content.style.display = "none";
+    return;
+  }
+
+  content.style.display = "block";
+
+  if (notice) {
+    notice.style.display = "none";
+  }
+
+  const yearMonth = selectedMonth.split("-");
+
+  setText(
+    "monthlyPerformanceTitle",
+    yearMonth[0] +
+      "年" +
+      Number(yearMonth[1]) +
+      "月"
+  );
+
+  const performance =
+    getMonthlyPerformance(selectedMonth);
+
+  setInputValue(
+    "monthlyInquiryCount",
+    performance.inquiryCount || ""
+  );
+
+  const applicationData =
+    getMonthlyApplicationData(selectedMonth);
+
+  const staffNames = [
+    "矢部",
+    "早坂",
+    "米山",
+    "吉田"
+  ];
+
+  let totalAssignedCount = 0;
+  let totalApplicationCount = 0;
+  let totalContractCount = 0;
+
+  staffNames.forEach(function (staff) {
+    const suffix =
+      getStaffElementSuffix(staff);
+
+    const staffApplications =
+      applicationData.filter(function (sale) {
+        return sale.staff === staff;
+      });
+
+    const applyCount =
+      staffApplications.length;
+
+    const contractCount =
+      staffApplications.filter(function (sale) {
+        return isContractStatus(sale);
+      }).length;
+
+    const contractRate =
+      calculateRate(
+        contractCount,
+        applyCount
+      );
+
+    const assignedCount =
+      Number(
+        performance.assignedCounts[staff]
+      ) || 0;
+
+    totalAssignedCount += assignedCount;
+    totalApplicationCount += applyCount;
+    totalContractCount += contractCount;
+
+    setInputValue(
+      "assignedCount" + suffix,
+      assignedCount || ""
+    );
+
+    setText(
+      "monthlyApplyCount" + suffix,
+      applyCount + "人"
+    );
+
+    setText(
+      "monthlyContractCount" + suffix,
+      contractCount + "人"
+    );
+
+    setText(
+      "monthlyContractRate" + suffix,
+      contractRate + "%"
+    );
+  });
+
+  const totalContractRate =
+    calculateRate(
+      totalContractCount,
+      totalApplicationCount
+    );
+
+  const inquiryCount =
+    Number(performance.inquiryCount) || 0;
+
+  const inquiryApplicationRate =
+    calculateRate(
+      totalApplicationCount,
+      inquiryCount
+    );
+
+  setText(
+    "monthlyTotalAssignedCount",
+    totalAssignedCount + "人"
+  );
+
+  setText(
+    "monthlyTotalApplicationCount",
+    totalApplicationCount + "人"
+  );
+
+  setText(
+    "monthlyTotalContractCount",
+    totalContractCount + "人"
+  );
+
+  setText(
+    "monthlyTotalContractRate",
+    totalContractRate + "%"
+  );
+
+  setText(
+    "monthlyInquiryApplicationRate",
+    inquiryApplicationRate + "%"
+  );
+}
 /* =========================
    案件一覧
 ========================= */

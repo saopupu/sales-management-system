@@ -1,311 +1,658 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>姫なび賃貸 業務管理システム</title>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <div class="container">
-    <header>
-      <h1>🏢 姫なび賃貸 業務管理システム</h1>
-      <p>Version 5.0｜社長ダッシュボード・担当者分析</p>
-    </header>
 
-    <section class="month-filter card">
-      <label>表示月</label>
-      <input type="month" id="monthFilter">
-      <button type="button" id="showAllButton">全期間表示</button>
-      <button type="button" id="csvButton">CSV出力</button>
-      <button type="button" id="excelButton">Excel出力</button>
-    </section>
+```
+<header>
+  <h1>🏢 姫なび賃貸 業務管理システム</h1>
+  <p>Version 5.1｜担当者分析・月末実績集計</p>
+</header>
 
-    <section class="card">
-      <h2>📊 社長ダッシュボード</h2>
+<!-- =========================
+     表示月・出力
+========================== -->
+<section class="month-filter card">
+  <label for="monthFilter">表示月</label>
 
-      <div class="dashboard">
-        <div class="dashboard-card">
-          <span>今月売上 申込ベース</span>
-          <strong id="bossApplicationSales">0円</strong>
-        </div>
+  <input type="month" id="monthFilter">
 
-        <div class="dashboard-card">
-          <span>今月売上 入金ベース</span>
-          <strong id="bossPaymentSales">0円</strong>
-        </div>
+  <button type="button" id="showAllButton">
+    全期間表示
+  </button>
 
-        <div class="dashboard-card">
-          <span>申込件数</span>
-          <strong id="bossApplyCount">0件</strong>
-        </div>
+  <button type="button" id="csvButton">
+    CSV出力
+  </button>
 
-        <div class="dashboard-card">
-          <span>契約件数</span>
-          <strong id="bossContractCount">0件</strong>
-        </div>
+  <button type="button" id="excelButton">
+    Excel出力
+  </button>
+</section>
 
-        <div class="dashboard-card warning">
-          <span>審査落ち</span>
-          <strong id="bossRejectedCount">0件</strong>
-        </div>
 
-        <div class="dashboard-card warning">
-          <span>キャンセル</span>
-          <strong id="bossCancelCount">0件</strong>
-        </div>
+<!-- =========================
+     社長ダッシュボード
+========================== -->
+<section class="card">
+  <h2>📊 社長ダッシュボード</h2>
 
-        <div class="dashboard-card warning">
-          <span>仲介未入金</span>
-          <strong id="bossUnpaidFee">0件 / 0円</strong>
-        </div>
+  <div class="dashboard">
 
-        <div class="dashboard-card warning">
-          <span>AD未入金</span>
-          <strong id="bossUnpaidAd">0件 / 0円</strong>
-        </div>
-      </div>
+    <div class="dashboard-card">
+      <span>今月売上 申込ベース</span>
+      <strong id="bossApplicationSales">0円</strong>
+    </div>
 
-      <div class="card" style="margin-top: 16px;">
-        <h3>🏆 担当者ランキング</h3>
-        <div id="staffRanking"></div>
-      </div>
-    </section>
+    <div class="dashboard-card">
+      <span>今月売上 入金ベース</span>
+      <strong id="bossPaymentSales">0円</strong>
+    </div>
 
-    <section class="dashboard">
-      <div class="dashboard-card">
-        <span>合計売上 税込</span>
-        <strong id="totalSales">0円</strong>
-      </div>
+    <div class="dashboard-card">
+      <span>申込み人数</span>
+      <strong id="bossApplyCount">0件</strong>
+    </div>
 
-      <div class="dashboard-card">
-        <span>仲介手数料 税込</span>
-        <strong id="totalFee">0円</strong>
-      </div>
+    <div class="dashboard-card">
+      <span>契約人数</span>
+      <strong id="bossContractCount">0件</strong>
+    </div>
 
-      <div class="dashboard-card">
-        <span>AD合計</span>
-        <strong id="totalAd">0円</strong>
-      </div>
+    <div class="dashboard-card">
+      <span>全体成約率</span>
+      <strong id="bossContractRate">0%</strong>
+    </div>
 
-      <div class="dashboard-card">
-        <span>申込件数</span>
-        <strong id="totalCount">0件</strong>
-      </div>
+    <div class="dashboard-card warning">
+      <span>審査落ち</span>
+      <strong id="bossRejectedCount">0件</strong>
+    </div>
 
-      <div class="dashboard-card warning">
-        <span>仲介未入金</span>
-        <strong id="unpaidFeeCount">0件</strong>
-      </div>
+    <div class="dashboard-card warning">
+      <span>キャンセル</span>
+      <strong id="bossCancelCount">0件</strong>
+    </div>
 
-      <div class="dashboard-card warning">
-        <span>AD未入金</span>
-        <strong id="unpaidAdCount">0件</strong>
-      </div>
-    </section>
+    <div class="dashboard-card warning">
+      <span>仲介未入金</span>
+      <strong id="bossUnpaidFee">0件 / 0円</strong>
+    </div>
 
-    <section class="simple-dashboard">
-      <div class="simple-card">
-        <span>申込</span>
-        <strong id="dashApplyCount">0件</strong>
-      </div>
+    <div class="dashboard-card warning">
+      <span>AD未入金</span>
+      <strong id="bossUnpaidAd">0件 / 0円</strong>
+    </div>
 
-      <div class="simple-card">
-        <span>契約済み</span>
-        <strong id="dashContractCount">0件</strong>
-      </div>
-
-      <div class="simple-card">
-        <span>審査落ち</span>
-        <strong id="dashRejectedCount">0件</strong>
-      </div>
-
-      <div class="simple-card">
-        <span>キャンセル</span>
-        <strong id="dashCancelCount">0件</strong>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>📝 申し込み入力</h2>
-
-      <form id="salesForm">
-        <input type="hidden" id="editIndex">
-
-        <div class="form-grid">
-          <div class="form-group">
-            <label>申込日</label>
-            <input type="date" id="applyDate" required>
-          </div>
-
-          <div class="form-group">
-            <label>契約日</label>
-            <input type="date" id="contractDate">
-          </div>
-
-          <div class="form-group">
-            <label>契約開始日</label>
-            <input type="date" id="startDate">
-          </div>
-
-          <div class="form-group">
-            <label>担当者</label>
-            <select id="staff" required>
-              <option value="">選択してください</option>
-              <option value="矢部">矢部</option>
-              <option value="早坂">早坂</option>
-              <option value="米山">米山</option>
-              <option value="吉田">吉田</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>お客様名</label>
-            <input type="text" id="customer" required>
-          </div>
-
-          <div class="form-group">
-            <label>電話番号</label>
-            <input type="tel" id="phone">
-          </div>
-
-          <div class="form-group">
-            <label>物件名</label>
-            <input type="text" id="property">
-          </div>
-
-          <div class="form-group">
-            <label>管理会社</label>
-            <input type="text" id="company">
-          </div>
-
-          <div class="form-group">
-            <label>家賃</label>
-            <input type="number" id="rent">
-          </div>
-
-          <div class="form-group">
-            <label>管理費</label>
-            <input type="number" id="managementFee">
-          </div>
-
-          <div class="form-group">
-            <label>AD ※内税</label>
-            <input type="number" id="ad">
-          </div>
-
-          <div class="form-group">
-            <label>AD入金日</label>
-            <input type="date" id="adPaymentDate">
-          </div>
-
-          <div class="form-group">
-            <label>仲介手数料</label>
-            <input type="number" id="brokerageFee">
-          </div>
-
-          <div class="form-group">
-            <label>仲介手数料の入力区分</label>
-            <select id="brokerageTaxType">
-              <option value="taxExcluded">税抜入力</option>
-              <option value="taxIncluded">税込入力</option>
-              <option value="free">自由入力（税反映なし）</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>仲介手数料 税込表示</label>
-            <div class="tax-preview" id="brokerageTaxPreview">0円</div>
-          </div>
-
-          <div class="form-group">
-            <label>仲介入金日</label>
-            <input type="date" id="feePaymentDate">
-          </div>
-
-          <div class="form-group">
-            <label>分割</label>
-            <select id="installment">
-              <option value="利用なし">利用なし</option>
-              <option value="ポケットカード">ポケットカード</option>
-              <option value="スムーズ">スムーズ</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>ステータス</label>
-            <select id="status">
-              <option value="申込">申込</option>
-              <option value="審査中">審査中</option>
-              <option value="契約予定">契約予定</option>
-              <option value="契約済">契約済</option>
-              <option value="審査落ち">審査落ち</option>
-              <option value="キャンセル">キャンセル</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>備考</label>
-          <textarea id="memo"></textarea>
-        </div>
-
-        <div class="button-area">
-          <button type="submit" id="submitButton">登録する</button>
-          <button type="button" id="clearButton">入力をクリア</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="card">
-      <div class="list-header">
-        <h2>📋 申し込み一覧</h2>
-        <input type="text" id="searchInput" placeholder="検索">
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>申込日</th>
-              <th>契約日</th>
-              <th>契約開始日</th>
-              <th>担当</th>
-              <th>お客様</th>
-              <th>電話番号</th>
-              <th>物件名</th>
-              <th>管理会社</th>
-              <th>家賃</th>
-              <th>管理費</th>
-              <th>AD</th>
-              <th>AD入金日</th>
-              <th>仲介入力額</th>
-              <th>税区分</th>
-              <th>仲介税込</th>
-              <th>仲介入金日</th>
-              <th>分割</th>
-              <th>状態</th>
-              <th>備考</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-
-          <tbody id="salesTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>👤 担当者別売上</h2>
-      <div id="staffSummary" class="staff-summary"></div>
-    </section>
   </div>
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <div class="card ranking-card">
+    <h3>🏆 担当者ランキング</h3>
+    <div id="staffRanking"></div>
+  </div>
+</section>
+
+
+<!-- =========================
+     入金ベース売上
+========================== -->
+<section class="dashboard">
+
+  <div class="dashboard-card">
+    <span>合計売上 税込</span>
+    <strong id="totalSales">0円</strong>
+  </div>
+
+  <div class="dashboard-card">
+    <span>仲介手数料 税込</span>
+    <strong id="totalFee">0円</strong>
+  </div>
+
+  <div class="dashboard-card">
+    <span>AD合計</span>
+    <strong id="totalAd">0円</strong>
+  </div>
+
+  <div class="dashboard-card">
+    <span>申込み人数</span>
+    <strong id="totalCount">0件</strong>
+  </div>
+
+  <div class="dashboard-card warning">
+    <span>仲介未入金</span>
+    <strong id="unpaidFeeCount">0件</strong>
+  </div>
+
+  <div class="dashboard-card warning">
+    <span>AD未入金</span>
+    <strong id="unpaidAdCount">0件</strong>
+  </div>
+
+</section>
+
+
+<!-- =========================
+     ステータス件数
+========================== -->
+<section class="simple-dashboard">
+
+  <div class="simple-card">
+    <span>申込・進行中</span>
+    <strong id="dashApplyCount">0件</strong>
+  </div>
+
+  <div class="simple-card">
+    <span>契約済み</span>
+    <strong id="dashContractCount">0件</strong>
+  </div>
+
+  <div class="simple-card">
+    <span>審査落ち</span>
+    <strong id="dashRejectedCount">0件</strong>
+  </div>
+
+  <div class="simple-card">
+    <span>キャンセル</span>
+    <strong id="dashCancelCount">0件</strong>
+  </div>
+
+</section>
+
+
+<!-- =========================
+     申し込み入力
+========================== -->
+<section class="card">
+  <h2>📝 申し込み入力</h2>
+
+  <form id="salesForm">
+
+    <input type="hidden" id="editIndex">
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="applyDate">申込日</label>
+        <input type="date" id="applyDate" required>
+      </div>
+
+      <div class="form-group">
+        <label for="contractDate">契約日</label>
+        <input type="date" id="contractDate">
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">契約開始日</label>
+        <input type="date" id="startDate">
+      </div>
+
+      <div class="form-group">
+        <label for="staff">担当者</label>
+
+        <select id="staff" required>
+          <option value="">選択してください</option>
+          <option value="矢部">矢部</option>
+          <option value="早坂">早坂</option>
+          <option value="米山">米山</option>
+          <option value="吉田">吉田</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="customer">お客様名</label>
+        <input type="text" id="customer" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">電話番号</label>
+        <input type="tel" id="phone">
+      </div>
+
+      <div class="form-group">
+        <label for="property">物件名</label>
+        <input type="text" id="property">
+      </div>
+
+      <div class="form-group">
+        <label for="company">管理会社</label>
+        <input type="text" id="company">
+      </div>
+
+      <div class="form-group">
+        <label for="rent">家賃</label>
+        <input type="number" id="rent" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="managementFee">管理費</label>
+        <input type="number" id="managementFee" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="ad">AD ※内税</label>
+        <input type="number" id="ad" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="adPaymentDate">AD入金日</label>
+        <input type="date" id="adPaymentDate">
+      </div>
+
+      <div class="form-group">
+        <label for="brokerageFee">仲介手数料</label>
+        <input type="number" id="brokerageFee" min="0">
+      </div>
+
+      <div class="form-group">
+        <label for="brokerageTaxType">
+          仲介手数料の入力区分
+        </label>
+
+        <select id="brokerageTaxType">
+          <option value="taxExcluded">税抜入力</option>
+          <option value="taxIncluded">税込入力</option>
+          <option value="free">自由入力（税反映なし）</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>仲介手数料 税込表示</label>
+        <div class="tax-preview" id="brokerageTaxPreview">
+          0円
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="feePaymentDate">仲介入金日</label>
+        <input type="date" id="feePaymentDate">
+      </div>
+
+      <div class="form-group">
+        <label for="installment">分割</label>
+
+        <select id="installment">
+          <option value="利用なし">利用なし</option>
+          <option value="ポケットカード">ポケットカード</option>
+          <option value="スムーズ">スムーズ</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="status">ステータス</label>
+
+        <select id="status">
+          <option value="申込">申込</option>
+          <option value="審査中">審査中</option>
+          <option value="契約予定">契約予定</option>
+          <option value="契約済">契約済</option>
+          <option value="審査落ち">審査落ち</option>
+          <option value="キャンセル">キャンセル</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label for="memo">備考</label>
+      <textarea id="memo"></textarea>
+    </div>
+
+    <div class="button-area">
+
+      <button type="submit" id="submitButton">
+        登録する
+      </button>
+
+      <button type="button" id="clearButton">
+        入力をクリア
+      </button>
+
+    </div>
+  </form>
+</section>
+
+
+<!-- =========================
+     申し込み一覧
+========================== -->
+<section class="card">
+
+  <div class="list-header">
+    <h2>📋 申し込み一覧</h2>
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="お客様名・物件名・管理会社などで検索"
+    >
+  </div>
+
+  <div class="table-wrap">
+    <table>
+
+      <thead>
+        <tr>
+          <th>申込日</th>
+          <th>契約日</th>
+          <th>契約開始日</th>
+          <th>担当</th>
+          <th>お客様</th>
+          <th>電話番号</th>
+          <th>物件名</th>
+          <th>管理会社</th>
+          <th>家賃</th>
+          <th>管理費</th>
+          <th>AD</th>
+          <th>AD入金日</th>
+          <th>仲介入力額</th>
+          <th>税区分</th>
+          <th>仲介税込</th>
+          <th>仲介入金日</th>
+          <th>分割</th>
+          <th>状態</th>
+          <th>備考</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+
+      <tbody id="salesTableBody"></tbody>
+
+    </table>
+  </div>
+</section>
+
+
+<!-- =========================
+     担当者別売上・成約分析
+========================== -->
+<section class="card">
+
+  <div class="section-title-area">
+    <div>
+      <h2>👤 担当者別売上・成約分析</h2>
+      <p class="section-description">
+        振り分け人数は手入力、申込み人数・契約人数・成約率は自動集計されます。
+      </p>
+    </div>
+  </div>
+
+  <div id="staffSummary" class="staff-summary"></div>
+
+</section>
+
+
+<!-- =========================
+     月末実績集計
+========================== -->
+<section class="card monthly-performance-card" id="monthlyPerformanceSection">
+
+  <div class="monthly-performance-header">
+
+    <div>
+      <h2>📈 月末実績集計</h2>
+
+      <p class="section-description">
+        表示月ごとに反響人数と担当者への振り分け人数を保存します。
+      </p>
+    </div>
+
+    <strong id="monthlyPerformanceTitle">
+      表示月を選択してください
+    </strong>
+
+  </div>
+
+  <div
+    id="monthlyPerformanceNotice"
+    class="monthly-performance-notice"
+  >
+    月を選択すると入力・集計できます。
+  </div>
+
+
+  <!-- 全体実績 -->
+  <div
+    id="monthlyPerformanceContent"
+    class="monthly-performance-content"
+  >
+
+    <h3>会社全体</h3>
+
+    <div class="monthly-performance-grid">
+
+      <div class="monthly-performance-item input-item">
+        <label for="monthlyInquiryCount">
+          反響人数
+        </label>
+
+        <div class="number-input-wrap">
+          <input
+            type="number"
+            id="monthlyInquiryCount"
+            min="0"
+            step="1"
+            placeholder="0"
+          >
+          <span>人</span>
+        </div>
+
+        <small>手入力</small>
+      </div>
+
+      <div class="monthly-performance-item">
+        <span>振り分け人数合計</span>
+        <strong id="monthlyTotalAssignedCount">0人</strong>
+        <small>担当者別入力の合計</small>
+      </div>
+
+      <div class="monthly-performance-item">
+        <span>申込み人数</span>
+        <strong id="monthlyTotalApplicationCount">0人</strong>
+        <small>申込日から自動集計</small>
+      </div>
+
+      <div class="monthly-performance-item">
+        <span>契約人数</span>
+        <strong id="monthlyTotalContractCount">0人</strong>
+        <small>契約済みを自動集計</small>
+      </div>
+
+      <div class="monthly-performance-item rate-item">
+        <span>全体成約率</span>
+        <strong id="monthlyTotalContractRate">0%</strong>
+        <small>契約人数 ÷ 申込み人数</small>
+      </div>
+
+      <div class="monthly-performance-item rate-item">
+        <span>反響からの申込率</span>
+        <strong id="monthlyInquiryApplicationRate">0%</strong>
+        <small>申込み人数 ÷ 反響人数</small>
+      </div>
+
+    </div>
+
+
+    <!-- 担当者別振り分け入力 -->
+    <h3 class="monthly-staff-title">
+      担当者別実績
+    </h3>
+
+    <div class="monthly-staff-table-wrap">
+
+      <table class="monthly-staff-table">
+
+        <thead>
+          <tr>
+            <th>担当者</th>
+            <th>振り分け人数</th>
+            <th>申込み人数</th>
+            <th>契約人数</th>
+            <th>成約率</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>
+              <span class="staff-badge staff-矢部">
+                矢部
+              </span>
+            </td>
+
+            <td>
+              <div class="table-number-input">
+                <input
+                  type="number"
+                  id="assignedCountYabe"
+                  data-staff="矢部"
+                  class="assigned-count-input"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                >
+                <span>人</span>
+              </div>
+            </td>
+
+            <td id="monthlyApplyCountYabe">0人</td>
+            <td id="monthlyContractCountYabe">0人</td>
+            <td id="monthlyContractRateYabe">0%</td>
+          </tr>
+
+
+          <tr>
+            <td>
+              <span class="staff-badge staff-早坂">
+                早坂
+              </span>
+            </td>
+
+            <td>
+              <div class="table-number-input">
+                <input
+                  type="number"
+                  id="assignedCountHayasaka"
+                  data-staff="早坂"
+                  class="assigned-count-input"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                >
+                <span>人</span>
+              </div>
+            </td>
+
+            <td id="monthlyApplyCountHayasaka">0人</td>
+            <td id="monthlyContractCountHayasaka">0人</td>
+            <td id="monthlyContractRateHayasaka">0%</td>
+          </tr>
+
+
+          <tr>
+            <td>
+              <span class="staff-badge staff-米山">
+                米山
+              </span>
+            </td>
+
+            <td>
+              <div class="table-number-input">
+                <input
+                  type="number"
+                  id="assignedCountYoneyama"
+                  data-staff="米山"
+                  class="assigned-count-input"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                >
+                <span>人</span>
+              </div>
+            </td>
+
+            <td id="monthlyApplyCountYoneyama">0人</td>
+            <td id="monthlyContractCountYoneyama">0人</td>
+            <td id="monthlyContractRateYoneyama">0%</td>
+          </tr>
+
+
+          <tr>
+            <td>
+              <span class="staff-badge staff-吉田">
+                吉田
+              </span>
+            </td>
+
+            <td>
+              <div class="table-number-input">
+                <input
+                  type="number"
+                  id="assignedCountYoshida"
+                  data-staff="吉田"
+                  class="assigned-count-input"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                >
+                <span>人</span>
+              </div>
+            </td>
+
+            <td id="monthlyApplyCountYoshida">0人</td>
+            <td id="monthlyContractCountYoshida">0人</td>
+            <td id="monthlyContractRateYoshida">0%</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="monthly-performance-actions">
+
+      <button
+        type="button"
+        id="saveMonthlyPerformanceButton"
+      >
+        月末実績を保存
+      </button>
+
+      <span id="monthlyPerformanceSaveMessage"></span>
+
+    </div>
+
+  </div>
+</section>
+```
+
+  </div>
+
+  <!-- Excel出力ライブラリ -->
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+  <!-- 自作JavaScript -->
+
   <script src="js/storage.js"></script>
+
   <script src="js/tax.js"></script>
+
   <script src="js/export.js"></script>
+
   <script src="js/render.js"></script>
+
   <script src="js/app.js"></script>
+
 </body>
 </html>

@@ -89,3 +89,82 @@ function updateTaxPreview() {
 
 updateTaxPreview();
 render();
+/* =========================
+   月末実績の保存ボタン
+========================= */
+
+function getNumberInputValue(id) {
+  const element = document.getElementById(id);
+
+  if (!element) {
+    return 0;
+  }
+
+  return Number(element.value) || 0;
+}
+
+function saveMonthlyPerformanceFromForm() {
+  const selectedMonth =
+    document.getElementById("monthFilter").value;
+
+  if (!selectedMonth) {
+    alert("表示月を選択してください。");
+    return;
+  }
+
+  const inquiryCount =
+    getNumberInputValue("monthlyInquiryCount");
+
+  const assignedCounts = {
+    矢部:
+      getNumberInputValue("assignedCountYabe"),
+
+    早坂:
+      getNumberInputValue("assignedCountHayasaka"),
+
+    米山:
+      getNumberInputValue("assignedCountYoneyama"),
+
+    吉田:
+      getNumberInputValue("assignedCountYoshida")
+  };
+
+  const saved =
+    saveMonthlyPerformanceData(
+      selectedMonth,
+      inquiryCount,
+      assignedCounts
+    );
+
+  if (!saved) {
+    return;
+  }
+
+  const message =
+    document.getElementById(
+      "monthlyPerformanceSaveMessage"
+    );
+
+  if (message) {
+    message.textContent =
+      "保存しました";
+
+    setTimeout(function () {
+      message.textContent = "";
+    }, 3000);
+  }
+
+  render();
+}
+
+const saveMonthlyPerformanceButton =
+  document.getElementById(
+    "saveMonthlyPerformanceButton"
+  );
+
+if (saveMonthlyPerformanceButton) {
+  saveMonthlyPerformanceButton.addEventListener(
+    "click",
+    saveMonthlyPerformanceFromForm
+  );
+}

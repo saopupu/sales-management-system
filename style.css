@@ -327,3 +327,76 @@ tr:hover {
     flex-direction: column;
   }
 }
+/* =========================
+   担当者カラー
+========================= */
+
+.staff-badge{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+/* 矢部 */
+.staff-矢部{
+    background:#DBEAFE;
+    color:#2563EB;
+}
+
+/* 早坂 */
+.staff-早坂{
+    background:#DCFCE7;
+    color:#15803D;
+}
+
+/* 米山 */
+.staff-米山{
+    background:#EDE9FE;
+    color:#7C3AED;
+}
+
+/* 吉田 */
+.staff-吉田{
+    background:#FFEDD5;
+    color:#EA580C;
+}
+/* =========================
+   担当者カードカラー
+========================= */
+
+.staff-card{
+    border-radius:18px;
+    padding:18px;
+    border:2px solid #eee;
+    transition:.2s;
+}
+
+/* 矢部 */
+.staff-card-矢部{
+    border-color:#3B82F6;
+    background:linear-gradient(180deg,#EFF6FF,#FFFFFF);
+}
+
+/* 早坂 */
+.staff-card-早坂{
+    border-color:#22C55E;
+    background:linear-gradient(180deg,#F0FDF4,#FFFFFF);
+}
+
+/* 米山 */
+.staff-card-米山{
+    border-color:#8B5CF6;
+    background:linear-gradient(180deg,#F5F3FF,#FFFFFF);
+}
+
+/* 吉田 */
+.staff-card-吉田{
+    border-color:#F97316;
+    background:linear-gradient(180deg,#FFF7ED,#FFFFFF);
+}
