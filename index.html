@@ -176,29 +176,19 @@
   <h2>📝 申し込み入力</h2>
 
   <form id="salesForm">
-
     <input type="hidden" id="editIndex">
 
-    <div class="form-grid">
+    <!-- ① お客様・申込み情報 -->
+    <h3 class="form-section-title">お客様・申込み情報</h3>
 
+    <div class="form-grid">
       <div class="form-group">
         <label for="applyDate">申込日</label>
         <input type="date" id="applyDate" required>
       </div>
 
       <div class="form-group">
-        <label for="contractDate">契約日</label>
-        <input type="date" id="contractDate">
-      </div>
-
-      <div class="form-group">
-        <label for="startDate">契約開始日</label>
-        <input type="date" id="startDate">
-      </div>
-
-      <div class="form-group">
         <label for="staff">担当者</label>
-
         <select id="staff" required>
           <option value="">選択してください</option>
           <option value="矢部">矢部</option>
@@ -214,11 +204,6 @@
       </div>
 
       <div class="form-group">
-        <label for="phone">電話番号</label>
-        <input type="tel" id="phone">
-      </div>
-
-      <div class="form-group">
         <label for="property">物件名</label>
         <input type="text" id="property">
       </div>
@@ -227,7 +212,39 @@
         <label for="company">管理会社</label>
         <input type="text" id="company">
       </div>
+    </div>
 
+    <!-- ② 契約情報 -->
+    <h3 class="form-section-title">契約情報</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="contractDate">契約日</label>
+        <input type="date" id="contractDate">
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">契約開始日</label>
+        <input type="date" id="startDate">
+      </div>
+
+      <div class="form-group">
+        <label for="status">ステータス</label>
+        <select id="status">
+          <option value="申込">申込</option>
+          <option value="審査中">審査中</option>
+          <option value="契約予定">契約予定</option>
+          <option value="契約済">契約済</option>
+          <option value="審査落ち">審査落ち</option>
+          <option value="キャンセル">キャンセル</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ③ 売上情報 -->
+    <h3 class="form-section-title">売上情報</h3>
+
+    <div class="form-grid">
       <div class="form-group">
         <label for="rent">家賃</label>
         <input type="number" id="rent" min="0">
@@ -236,16 +253,6 @@
       <div class="form-group">
         <label for="managementFee">管理費</label>
         <input type="number" id="managementFee" min="0">
-      </div>
-
-      <div class="form-group">
-        <label for="ad">AD ※内税</label>
-        <input type="number" id="ad" min="0">
-      </div>
-
-      <div class="form-group">
-        <label for="adPaymentDate">AD入金日</label>
-        <input type="date" id="adPaymentDate">
       </div>
 
       <div class="form-group">
@@ -273,34 +280,37 @@
       </div>
 
       <div class="form-group">
-        <label for="feePaymentDate">仲介入金日</label>
-        <input type="date" id="feePaymentDate">
+        <label for="ad">AD ※内税</label>
+        <input type="number" id="ad" min="0">
       </div>
 
       <div class="form-group">
         <label for="installment">分割</label>
-
         <select id="installment">
           <option value="利用なし">利用なし</option>
           <option value="ポケットカード">ポケットカード</option>
           <option value="スムーズ">スムーズ</option>
         </select>
       </div>
+    </div>
 
+    <!-- ④ 入金情報 -->
+    <h3 class="form-section-title">入金情報</h3>
+
+    <div class="form-grid">
       <div class="form-group">
-        <label for="status">ステータス</label>
-
-        <select id="status">
-          <option value="申込">申込</option>
-          <option value="審査中">審査中</option>
-          <option value="契約予定">契約予定</option>
-          <option value="契約済">契約済</option>
-          <option value="審査落ち">審査落ち</option>
-          <option value="キャンセル">キャンセル</option>
-        </select>
+        <label for="feePaymentDate">仲介入金日</label>
+        <input type="date" id="feePaymentDate">
       </div>
 
+      <div class="form-group">
+        <label for="adPaymentDate">AD入金日</label>
+        <input type="date" id="adPaymentDate">
+      </div>
     </div>
+
+    <!--  備考 -->
+    <h3 class="form-section-title">⑤ 備考</h3>
 
     <div class="form-group">
       <label for="memo">備考</label>
@@ -308,7 +318,6 @@
     </div>
 
     <div class="button-area">
-
       <button type="submit" id="submitButton">
         登録する
       </button>
@@ -316,7 +325,6 @@
       <button type="button" id="clearButton">
         入力をクリア
       </button>
-
     </div>
   </form>
 </section>
@@ -347,7 +355,7 @@
           <th>契約開始日</th>
           <th>担当</th>
           <th>お客様</th>
-          <th>電話番号</th>
+          
           <th>物件名</th>
           <th>管理会社</th>
           <th>家賃</th>
@@ -494,10 +502,11 @@
         <thead>
           <tr>
             <th>担当者</th>
-            <th>振り分け人数</th>
-            <th>申込み人数</th>
-            <th>契約人数</th>
-            <th>成約率</th>
+<th>振り分け人数</th>
+<th>申込み人数</th>
+<th>契約人数</th>
+<th>反響成約率</th>
+<th>申込成約率</th>
           </tr>
         </thead>
 
@@ -526,8 +535,9 @@
             </td>
 
             <td id="monthlyApplyCountYabe">0人</td>
-            <td id="monthlyContractCountYabe">0人</td>
-            <td id="monthlyContractRateYabe">0%</td>
+<td id="monthlyContractCountYabe">0人</td>
+<td id="monthlyInquiryRateYabe">0%</td>
+<td id="monthlyContractRateYabe">0%</td>
           </tr>
 
 
@@ -553,9 +563,10 @@
               </div>
             </td>
 
-            <td id="monthlyApplyCountHayasaka">0人</td>
-            <td id="monthlyContractCountHayasaka">0人</td>
-            <td id="monthlyContractRateHayasaka">0%</td>
+           <td id="monthlyApplyCountHayasaka">0人</td>
+<td id="monthlyContractCountHayasaka">0人</td>
+<td id="monthlyInquiryRateHayasaka">0%</td>
+<td id="monthlyContractRateHayasaka">0%</td>
           </tr>
 
 
@@ -582,8 +593,9 @@
             </td>
 
             <td id="monthlyApplyCountYoneyama">0人</td>
-            <td id="monthlyContractCountYoneyama">0人</td>
-            <td id="monthlyContractRateYoneyama">0%</td>
+<td id="monthlyContractCountYoneyama">0人</td>
+<td id="monthlyInquiryRateYoneyama">0%</td>
+<td id="monthlyContractRateYoneyama">0%</td>
           </tr>
 
 
@@ -610,8 +622,9 @@
             </td>
 
             <td id="monthlyApplyCountYoshida">0人</td>
-            <td id="monthlyContractCountYoshida">0人</td>
-            <td id="monthlyContractRateYoshida">0%</td>
+<td id="monthlyContractCountYoshida">0人</td>
+<td id="monthlyInquiryRateYoshida">0%</td>
+<td id="monthlyContractRateYoshida">0%</td>
           </tr>
 
         </tbody>

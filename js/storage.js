@@ -49,6 +49,14 @@ function deleteSaleData(index) {
 }
 
 function syncToGoogleSheet() {
+  // Googleスプレッドシートへ送るのは契約済み案件だけ
+  const contractedSales = salesData.filter(function (sale) {
+    const status = sale.status || "";
+
+    return status === "契約済" ||
+      status === "契約済み";
+  });
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -57,10 +65,13 @@ function syncToGoogleSheet() {
     },
     body: JSON.stringify({
       action: "saveAll",
-      data: salesData
+      data: contractedSales
     })
   }).catch(function (error) {
-    console.error("Googleスプレッドシート同期エラー", error);
+    console.error(
+      "Googleスプレッドシート同期エラー",
+      error
+    );
   });
 }
 /* =========================

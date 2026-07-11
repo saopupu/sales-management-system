@@ -128,7 +128,7 @@ function matchesKeyword(sale, keyword) {
     ${sale.startDate || ""}
     ${sale.staff || ""}
     ${sale.customer || ""}
-    ${sale.phone || ""}
+    
     ${sale.property || ""}
     ${sale.company || ""}
     ${sale.installment || ""}
@@ -602,14 +602,19 @@ function renderStaffSummary(data) {
     const item = staffTotals[staff];
 
     const rate = calculateRate(
-      item.contractCount,
-      item.applyCount
-    );
+  item.contractCount,
+  item.applyCount
+);
 
-    const assignedCount =
-      Number(
-        monthlyPerformance.assignedCounts[staff]
-      ) || 0;
+const assignedCount =
+  Number(
+    monthlyPerformance.assignedCounts[staff]
+  ) || 0;
+
+const inquiryRate = calculateRate(
+  item.contractCount,
+  assignedCount
+);
 
     const div = document.createElement("div");
 
@@ -636,10 +641,15 @@ function renderStaffSummary(data) {
           <strong>${item.contractCount}人</strong>
         </p>
 
-        <p>
-          成約率<br>
-          <strong>${rate}%</strong>
-        </p>
+       <p>
+  反響成約率<br>
+  <strong>${inquiryRate}%</strong>
+</p>
+
+<p>
+  申込成約率<br>
+  <strong>${rate}%</strong>
+</p>
 
         <p>
           審査落ち<br>
@@ -774,24 +784,30 @@ function renderMonthlyPerformance() {
         return sale.staff === staff;
       });
 
-    const applyCount =
-      staffApplications.length;
+  const applyCount =
+  staffApplications.length;
 
-    const contractCount =
-      staffApplications.filter(function (sale) {
-        return isContractStatus(sale);
-      }).length;
+const contractCount =
+  staffApplications.filter(function (sale) {
+    return isContractStatus(sale);
+  }).length;
 
-    const contractRate =
-      calculateRate(
-        contractCount,
-        applyCount
-      );
+const assignedCount =
+  Number(
+    performance.assignedCounts[staff]
+  ) || 0;
 
-    const assignedCount =
-      Number(
-        performance.assignedCounts[staff]
-      ) || 0;
+const contractRate =
+  calculateRate(
+    contractCount,
+    applyCount
+  );
+
+const inquiryRate =
+  calculateRate(
+    contractCount,
+    assignedCount
+  );
 
     totalAssignedCount += assignedCount;
     totalApplicationCount += applyCount;
@@ -811,7 +827,10 @@ function renderMonthlyPerformance() {
       "monthlyContractCount" + suffix,
       contractCount + "人"
     );
-
+setText(
+  "monthlyInquiryRate" + suffix,
+  inquiryRate + "%"
+);
     setText(
       "monthlyContractRate" + suffix,
       contractRate + "%"
@@ -891,7 +910,7 @@ function renderTable(data) {
       <td>${sale.startDate || ""}</td>
       <td><span class="staff-badge staff-${sale.staff || ""}">${sale.staff || ""}</span></td>
       <td>${sale.customer || ""}</td>
-      <td>${sale.phone || ""}</td>
+     
       <td>${sale.property || ""}</td>
       <td>${sale.company || ""}</td>
       <td>${formatYen(sale.rent)}</td>
@@ -929,7 +948,7 @@ function editSale(index) {
   document.getElementById("startDate").value = sale.startDate || "";
   document.getElementById("staff").value = sale.staff || "";
   document.getElementById("customer").value = sale.customer || "";
-  document.getElementById("phone").value = sale.phone || "";
+  
   document.getElementById("property").value = sale.property || "";
   document.getElementById("company").value = sale.company || "";
   document.getElementById("rent").value = sale.rent || "";

@@ -345,8 +345,8 @@ tr:hover {
 
 /* 矢部 */
 .staff-矢部{
-    background:#DBEAFE;
-    color:#2563EB;
+    background: #fee2e2;
+    color: #dc2626;
 }
 
 /* 早坂 */
@@ -357,8 +357,8 @@ tr:hover {
 
 /* 米山 */
 .staff-米山{
-    background:#EDE9FE;
-    color:#7C3AED;
+    background: #dbeafe;
+    color: #2563eb;
 }
 
 /* 吉田 */
@@ -695,4 +695,484 @@ tr:hover {
   .staff-mini-grid {
     grid-template-columns: 1fr 1fr;
   }
+}
+/* ==================================================
+   申し込み入力フォーム｜Version 7 デザイン
+================================================== */
+
+#salesForm {
+  margin-top: 20px;
+}
+
+/* フォーム全体の見出し */
+#salesForm .form-section-title {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  margin: 22px 0 0;
+  padding: 14px 18px 8px;
+  border-width: 1px 1px 0;
+  border-style: solid;
+  border-radius: 16px 16px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+/* 各入力エリア */
+#salesForm .form-section-title + .form-grid {
+  margin-top: 0;
+  padding: 10px 16px 18px;
+  border-width: 0 1px 1px;
+  border-style: solid;
+  border-radius: 0 0 16px 16px;
+}
+
+/* ① お客様・申込み情報 */
+#salesForm .form-section-title:nth-of-type(1) {
+  border-color: #bfdbfe;
+  background: #f7faff;
+}
+
+#salesForm .form-section-title:nth-of-type(1) + .form-grid {
+  border-color: #bfdbfe;
+  background: #f7faff;
+}
+
+/* ② 契約情報 */
+#salesForm .form-section-title:nth-of-type(2) {
+  border-color: #bbf7d0;
+  background: #f6fdf9;
+}
+
+#salesForm .form-section-title:nth-of-type(2) + .form-grid {
+  border-color: #bbf7d0;
+  background: #f6fdf9;
+}
+
+/* ③ 売上情報 */
+#salesForm .form-section-title:nth-of-type(3) {
+  border-color: #fed7aa;
+  background: #fffaf4;
+}
+
+#salesForm .form-section-title:nth-of-type(3) + .form-grid {
+  border-color: #fed7aa;
+  background: #fffaf4;
+}
+
+/* ④ 入金情報 */
+#salesForm .form-section-title:nth-of-type(4) {
+  border-color: #ddd6fe;
+  background: #faf9ff;
+}
+
+#salesForm .form-section-title:nth-of-type(4) + .form-grid {
+  border-color: #ddd6fe;
+  background: #faf9ff;
+}
+
+/* ⑤ 備考 */
+#salesForm .form-section-title:nth-of-type(5) {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+
+/* ⑤の直後の備考欄 */
+#salesForm .form-section-title:nth-of-type(5) + .form-group {
+  margin-top: 0;
+  padding: 10px 16px 18px;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  background: #f8fafc;
+}
+
+
+/* ==================================================
+   セクション番号を丸型にする
+================================================== */
+
+#salesForm .form-section-title::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* HTMLに書いている①を見た目上隠さず、
+   丸番号は疑似要素で追加 */
+#salesForm .form-section-title:nth-of-type(1)::before {
+  content: "1";
+  background: #3b82f6;
+}
+
+#salesForm .form-section-title:nth-of-type(2)::before {
+  content: "2";
+  background: #10b981;
+}
+
+#salesForm .form-section-title:nth-of-type(3)::before {
+  content: "3";
+  background: #f59e0b;
+}
+
+#salesForm .form-section-title:nth-of-type(4)::before {
+  content: "4";
+  background: #6366f1;
+}
+
+#salesForm .form-section-title:nth-of-type(5)::before {
+  content: "5";
+  background: #64748b;
+}
+
+
+/* ==================================================
+   入力グリッド
+================================================== */
+
+#salesForm .form-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+
+/* ① お客様・申込み情報：5項目 */
+#salesForm .form-section-title:nth-of-type(1) + .form-grid .form-group {
+  grid-column: span 12;
+}
+
+@media (min-width: 1100px) {
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid .form-group {
+    grid-column: span 2;
+  }
+
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid .form-group:nth-child(3),
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid .form-group:nth-child(4),
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid .form-group:nth-child(5) {
+    grid-column: span 8 / span 2;
+  }
+}
+
+/* ①をきれいに5等分 */
+@media (min-width: 1100px) {
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid .form-group {
+    grid-column: auto;
+  }
+}
+
+/* ② 契約情報：3等分 */
+#salesForm .form-section-title:nth-of-type(2) + .form-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* ③ 売上情報：5列 */
+#salesForm .form-section-title:nth-of-type(3) + .form-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* ④ 入金情報：2等分 */
+#salesForm .form-section-title:nth-of-type(4) + .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+
+/* ==================================================
+   ラベル・入力欄
+================================================== */
+
+#salesForm .form-group {
+  min-width: 0;
+  margin: 0;
+}
+
+#salesForm .form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#salesForm input,
+#salesForm select,
+#salesForm textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #172033;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+#salesForm input,
+#salesForm select {
+  height: 50px;
+  padding: 0 15px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+#salesForm textarea {
+  min-height: 105px;
+  padding: 14px 15px;
+  border-radius: 12px;
+  resize: vertical;
+  font: inherit;
+  line-height: 1.6;
+}
+
+#salesForm input:hover,
+#salesForm select:hover,
+#salesForm textarea:hover {
+  border-color: #94a3b8;
+}
+
+#salesForm input:focus,
+#salesForm select:focus,
+#salesForm textarea:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+#salesForm input::placeholder,
+#salesForm textarea::placeholder {
+  color: #94a3b8;
+}
+
+
+/* ==================================================
+   仲介手数料 税込表示
+================================================== */
+
+#salesForm .tax-preview {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #eef0f4;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+
+
+/* ==================================================
+   ボタン
+================================================== */
+
+#salesForm .button-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+#salesForm .button-area button {
+  min-height: 48px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+#salesForm #submitButton {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #ffffff;
+  box-shadow: 0 9px 20px rgba(37, 99, 235, 0.25);
+}
+
+#salesForm #submitButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.32);
+}
+
+#salesForm #clearButton {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+}
+
+#salesForm #clearButton:hover {
+  transform: translateY(-1px);
+  background: #f8fafc;
+}
+
+
+/* ==================================================
+   申し込み入力カード本体
+================================================== */
+
+section.card:has(#salesForm) {
+  padding: 26px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.06),
+    0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+section.card:has(#salesForm) > h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+
+/* ==================================================
+   タブレット
+================================================== */
+
+@media (max-width: 1099px) {
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid,
+  #salesForm .form-section-title:nth-of-type(2) + .form-grid,
+  #salesForm .form-section-title:nth-of-type(3) + .form-grid,
+  #salesForm .form-section-title:nth-of-type(4) + .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 650px) {
+  section.card:has(#salesForm) {
+    padding: 18px 14px;
+  }
+
+  section.card:has(#salesForm) > h2 {
+    font-size: 22px;
+  }
+
+  #salesForm .form-section-title {
+    padding: 13px 13px 7px;
+    font-size: 16px;
+  }
+
+  #salesForm .form-section-title + .form-grid {
+    padding: 8px 12px 15px;
+  }
+
+  #salesForm .form-section-title:nth-of-type(1) + .form-grid,
+  #salesForm .form-section-title:nth-of-type(2) + .form-grid,
+  #salesForm .form-section-title:nth-of-type(3) + .form-grid,
+  #salesForm .form-section-title:nth-of-type(4) + .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #salesForm .button-area {
+    flex-direction: column;
+  }
+
+  #salesForm .button-area button {
+    width: 100%;
+  }
+}
+/* =========================
+   担当者別売上・成約分析の色
+========================= */
+
+/* 矢部：赤 */
+.staff-card-矢部 {
+  border-left: 6px solid #dc2626;
+  background: linear-gradient(
+    135deg,
+    #fff7f7,
+    #ffffff
+  );
+}
+
+.staff-card-矢部 > span {
+  color: #dc2626;
+}
+
+.staff-card-矢部 .staff-mini-grid p {
+  background: #fef2f2;
+}
+
+/* 早坂：緑 */
+.staff-card-早坂 {
+  border-left: 6px solid #16a34a;
+  background: linear-gradient(
+    135deg,
+    #f6fff8,
+    #ffffff
+  );
+}
+
+.staff-card-早坂 > span {
+  color: #16a34a;
+}
+
+.staff-card-早坂 .staff-mini-grid p {
+  background: #f0fdf4;
+}
+
+/* 米山：青 */
+.staff-card-米山 {
+  border-left: 6px solid #2563eb;
+  background: linear-gradient(
+    135deg,
+    #f5f9ff,
+    #ffffff
+  );
+}
+
+.staff-card-米山 > span {
+  color: #2563eb;
+}
+
+.staff-card-米山 .staff-mini-grid p {
+  background: #eff6ff;
+}
+
+/* 吉田：オレンジ */
+.staff-card-吉田 {
+  border-left: 6px solid #ea580c;
+  background: linear-gradient(
+    135deg,
+    #fffaf5,
+    #ffffff
+  );
+}
+
+.staff-card-吉田 > span {
+  color: #ea580c;
+}
+
+.staff-card-吉田 .staff-mini-grid p {
+  background: #fff7ed;
 }

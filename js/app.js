@@ -22,7 +22,7 @@ form.addEventListener("submit", function (event) {
     startDate: document.getElementById("startDate").value,
     staff: document.getElementById("staff").value,
     customer: document.getElementById("customer").value,
-    phone: document.getElementById("phone").value,
+   
     property: document.getElementById("property").value,
     company: document.getElementById("company").value,
     rent: Number(document.getElementById("rent").value) || 0,
