@@ -1,100 +1,347 @@
-const form = document.getElementById("salesForm");
-const clearButton = document.getElementById("clearButton");
-const searchInput = document.getElementById("searchInput");
-const monthFilter = document.getElementById("monthFilter");
-const showAllButton = document.getElementById("showAllButton");
-const csvButton = document.getElementById("csvButton");
-const excelButton = document.getElementById("excelButton");
+const form =
+  document.getElementById("salesForm");
+
+const clearButton =
+  document.getElementById("clearButton");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const monthFilter =
+  document.getElementById("monthFilter");
+
+const showAllButton =
+  document.getElementById("showAllButton");
+
+const csvButton =
+  document.getElementById("csvButton");
+
+const excelButton =
+  document.getElementById("excelButton");
+
+const submitButton =
+  document.getElementById("submitButton");
+
+const editIndexInput =
+  document.getElementById("editIndex");
+
+/*
+=========================================
+ 現在の月を取得
+=========================================
+*/
 
 function getCurrentMonth() {
   const today = new Date();
-  return today.toISOString().slice(0, 7);
+
+  return today
+    .toISOString()
+    .slice(0, 7);
 }
 
 monthFilter.value = getCurrentMonth();
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
+/*
+=========================================
+ 登録・編集
+=========================================
+*/
 
-  const sale = {
-    applyDate: document.getElementById("applyDate").value,
-    contractDate: document.getElementById("contractDate").value,
-    startDate: document.getElementById("startDate").value,
-    staff: document.getElementById("staff").value,
-    customer: document.getElementById("customer").value,
-   
-    property: document.getElementById("property").value,
-    company: document.getElementById("company").value,
-    rent: Number(document.getElementById("rent").value) || 0,
-    managementFee: Number(document.getElementById("managementFee").value) || 0,
-    ad: Number(document.getElementById("ad").value) || 0,
-    adPaymentDate: document.getElementById("adPaymentDate").value,
-    brokerageFee: Number(document.getElementById("brokerageFee").value) || 0,
-    brokerageTaxType: document.getElementById("brokerageTaxType").value,
-    feePaymentDate: document.getElementById("feePaymentDate").value,
-    installment: document.getElementById("installment").value,
-    status: document.getElementById("status").value,
-    memo: document.getElementById("memo").value
-  };
+form.addEventListener(
+  "submit",
+  async function (event) {
+    event.preventDefault();
 
-  const editIndex = document.getElementById("editIndex").value;
+    /*
+      二重クリック防止
+    */
 
-  if (editIndex === "") {
-    addSale(sale);
-  } else {
-    updateSale(editIndex, sale);
-    document.getElementById("editIndex").value = "";
-    document.getElementById("submitButton").textContent = "登録する";
+    submitButton.disabled = true;
+    submitButton.textContent = "保存中...";
+
+    const sale = {
+      applyDate:
+        document.getElementById(
+          "applyDate"
+        ).value,
+
+      contractDate:
+        document.getElementById(
+          "contractDate"
+        ).value,
+
+      startDate:
+        document.getElementById(
+          "startDate"
+        ).value,
+
+      staff:
+        document.getElementById(
+          "staff"
+        ).value,
+
+      customer:
+        document.getElementById(
+          "customer"
+        ).value,
+
+      property:
+        document.getElementById(
+          "property"
+        ).value,
+
+      company:
+        document.getElementById(
+          "company"
+        ).value,
+
+      rent:
+        Number(
+          document.getElementById(
+            "rent"
+          ).value
+        ) || 0,
+
+      managementFee:
+        Number(
+          document.getElementById(
+            "managementFee"
+          ).value
+        ) || 0,
+
+      ad:
+        Number(
+          document.getElementById(
+            "ad"
+          ).value
+        ) || 0,
+
+      adPaymentDate:
+        document.getElementById(
+          "adPaymentDate"
+        ).value,
+
+      brokerageFee:
+        Number(
+          document.getElementById(
+            "brokerageFee"
+          ).value
+        ) || 0,
+
+      brokerageTaxType:
+        document.getElementById(
+          "brokerageTaxType"
+        ).value,
+
+      feePaymentDate:
+        document.getElementById(
+          "feePaymentDate"
+        ).value,
+
+      installment:
+        document.getElementById(
+          "installment"
+        ).value,
+
+      status:
+        document.getElementById(
+          "status"
+        ).value,
+
+      memo:
+        document.getElementById(
+          "memo"
+        ).value
+    };
+
+    const editIndexValue =
+      editIndexInput.value;
+
+    let saved = false;
+
+    try {
+      if (editIndexValue === "") {
+        saved =
+          await addSale(sale);
+      } else {
+        const editIndex =
+          Number(editIndexValue);
+
+        saved =
+          await updateSale(
+            editIndex,
+            sale
+          );
+      }
+
+      /*
+        Supabase保存に成功した場合
+      */
+
+      if (saved) {
+        form.reset();
+
+        editIndexInput.value = "";
+
+        submitButton.textContent =
+          "登録する";
+
+        updateTaxPreview();
+
+        /*
+          Supabaseの最新データを再取得
+        */
+
+        await loadSalesDataFromSupabase();
+
+        render();
+      }
+    } catch (error) {
+      console.error(
+        "案件保存処理エラー",
+        error
+      );
+
+      alert(
+        "案件を保存できませんでした。"
+      );
+    } finally {
+      submitButton.disabled = false;
+
+      /*
+        編集中でなければ登録表示へ戻す
+      */
+
+      if (editIndexInput.value === "") {
+        submitButton.textContent =
+          "登録する";
+      } else {
+        submitButton.textContent =
+          "更新する";
+      }
+    }
   }
+);
 
-  form.reset();
-  updateTaxPreview();
-  render();
-});
+/*
+=========================================
+ 入力内容クリア
+=========================================
+*/
 
-clearButton.addEventListener("click", function () {
-  form.reset();
-  document.getElementById("editIndex").value = "";
-  document.getElementById("submitButton").textContent = "登録する";
-  updateTaxPreview();
-});
+clearButton.addEventListener(
+  "click",
+  function () {
+    form.reset();
 
-searchInput.addEventListener("input", render);
-monthFilter.addEventListener("change", render);
+    editIndexInput.value = "";
 
-showAllButton.addEventListener("click", function () {
-  monthFilter.value = "";
-  render();
-});
+    submitButton.textContent =
+      "登録する";
 
-csvButton.addEventListener("click", function () {
-  exportCSV();
-});
+    submitButton.disabled = false;
 
-excelButton.addEventListener("click", function () {
-  exportExcel();
-});
+    updateTaxPreview();
+  }
+);
 
-document.getElementById("brokerageFee").addEventListener("input", updateTaxPreview);
-document.getElementById("brokerageTaxType").addEventListener("change", updateTaxPreview);
+/*
+=========================================
+ 検索・月フィルター
+=========================================
+*/
+
+searchInput.addEventListener(
+  "input",
+  render
+);
+
+monthFilter.addEventListener(
+  "change",
+  render
+);
+
+showAllButton.addEventListener(
+  "click",
+  function () {
+    monthFilter.value = "";
+
+    render();
+  }
+);
+
+/*
+=========================================
+ CSV・Excel出力
+=========================================
+*/
+
+csvButton.addEventListener(
+  "click",
+  function () {
+    exportCSV();
+  }
+);
+
+excelButton.addEventListener(
+  "click",
+  function () {
+    exportExcel();
+  }
+);
+
+/*
+=========================================
+ 仲介手数料の税込プレビュー
+=========================================
+*/
+
+document
+  .getElementById("brokerageFee")
+  .addEventListener(
+    "input",
+    updateTaxPreview
+  );
+
+document
+  .getElementById("brokerageTaxType")
+  .addEventListener(
+    "change",
+    updateTaxPreview
+  );
 
 function updateTaxPreview() {
-  const amount = document.getElementById("brokerageFee").value;
-  const taxType = document.getElementById("brokerageTaxType").value;
-  const taxIncludedAmount = calculateBrokerageFee(amount, taxType);
+  const amount =
+    document.getElementById(
+      "brokerageFee"
+    ).value;
 
-  document.getElementById("brokerageTaxPreview").textContent =
+  const taxType =
+    document.getElementById(
+      "brokerageTaxType"
+    ).value;
+
+  const taxIncludedAmount =
+    calculateBrokerageFee(
+      amount,
+      taxType
+    );
+
+  document.getElementById(
+    "brokerageTaxPreview"
+  ).textContent =
     formatYen(taxIncludedAmount);
 }
 
-updateTaxPreview();
-render();
-/* =========================
-   月末実績の保存ボタン
-========================= */
+/*
+=========================================
+ 月末実績の保存
+=========================================
+*/
 
 function getNumberInputValue(id) {
-  const element = document.getElementById(id);
+  const element =
+    document.getElementById(id);
 
   if (!element) {
     return 0;
@@ -105,28 +352,41 @@ function getNumberInputValue(id) {
 
 function saveMonthlyPerformanceFromForm() {
   const selectedMonth =
-    document.getElementById("monthFilter").value;
+    monthFilter.value;
 
   if (!selectedMonth) {
-    alert("表示月を選択してください。");
+    alert(
+      "表示月を選択してください。"
+    );
+
     return;
   }
 
   const inquiryCount =
-    getNumberInputValue("monthlyInquiryCount");
+    getNumberInputValue(
+      "monthlyInquiryCount"
+    );
 
   const assignedCounts = {
     矢部:
-      getNumberInputValue("assignedCountYabe"),
+      getNumberInputValue(
+        "assignedCountYabe"
+      ),
 
     早坂:
-      getNumberInputValue("assignedCountHayasaka"),
+      getNumberInputValue(
+        "assignedCountHayasaka"
+      ),
 
     米山:
-      getNumberInputValue("assignedCountYoneyama"),
+      getNumberInputValue(
+        "assignedCountYoneyama"
+      ),
 
     吉田:
-      getNumberInputValue("assignedCountYoshida")
+      getNumberInputValue(
+        "assignedCountYoshida"
+      )
   };
 
   const saved =
@@ -163,8 +423,27 @@ const saveMonthlyPerformanceButton =
   );
 
 if (saveMonthlyPerformanceButton) {
-  saveMonthlyPerformanceButton.addEventListener(
-    "click",
-    saveMonthlyPerformanceFromForm
+  saveMonthlyPerformanceButton
+    .addEventListener(
+      "click",
+      saveMonthlyPerformanceFromForm
+    );
+}
+
+/*
+=========================================
+ アプリ起動
+=========================================
+*/
+
+updateTaxPreview();
+
+if (typeof initializeSalesData === "function") {
+  initializeSalesData();
+} else {
+  console.warn(
+    "initializeSalesDataが見つからないため、通常表示します。"
   );
+
+  render();
 }
