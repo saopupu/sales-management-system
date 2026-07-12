@@ -21,13 +21,68 @@ function getSalesData() {
   return salesData;
 }
 
-function addSale(sale) {
+async function addSale(sale) {
   if (!sale.id) {
     sale.id = createLocalCaseId();
   }
 
+  // 今までどおり画面とlocalStorageへ保存
   salesData.push(sale);
   saveData();
+
+  // Supabase用に列名を変換
+  const supabaseSale = {
+    apply_date: sale.applyDate || null,
+    contract_date: sale.contractDate || null,
+    start_date: sale.startDate || null,
+    staff: sale.staff || "",
+    customer: sale.customer || "",
+    phone: sale.phone || "",
+    property: sale.property || "",
+    company: sale.company || "",
+    rent: Number(sale.rent) || 0,
+    management_fee:
+      Number(sale.managementFee) || 0,
+    brokerage_fee:
+      Number(sale.brokerageFee) || 0,
+    brokerage_tax_type:
+      sale.brokerageTaxType || "",
+    ad: Number(sale.ad) || 0,
+    status: sale.status || "",
+    memo: sale.memo || "",
+    fee_payment_date:
+      sale.feePaymentDate || null,
+    ad_payment_date:
+      sale.adPaymentDate || null,
+    installment:
+      sale.installment || ""
+  };
+
+  try {
+  const { error } =
+    await supabaseClient
+      .from("sales_cases")
+      .insert([supabaseSale]);
+
+  if (error) {
+    throw error;
+  }
+
+  console.log("Supabaseにも保存できました");
+
+  return true;
+
+} catch (error) {
+  console.error(
+    "Supabase保存エラー",
+    error
+  );
+
+  alert(
+    "Supabaseへの保存には失敗しましたが、このパソコンには保存されています。"
+  );
+
+  return true;
 }
 
 function updateSale(index, sale) {
