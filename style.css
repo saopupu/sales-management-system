@@ -1176,3 +1176,13 @@ section.card:has(#salesForm) > h2 {
 .staff-card-吉田 .staff-mini-grid p {
   background: #fff7ed;
 }
+.login-screen[hidden],
+#appScreen[hidden] {
+  display: none !important;
+}
+
+.viewer-mode .admin-only,
+.viewer-mode .edit-btn,
+.viewer-mode .delete-btn {
+  display: none !important;
+}

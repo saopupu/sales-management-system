@@ -481,3 +481,15 @@ function saveMonthlyPerformanceData(
     return false;
   }
 }
+/*
+=========================================
+ ページ読み込み時にSupabaseから取得
+=========================================
+*/
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async function () {
+    await initializeSalesData();
+  }
+);

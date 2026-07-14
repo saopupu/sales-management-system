@@ -973,11 +973,21 @@ function editSale(index) {
   });
 }
 
-function deleteSale(index) {
-  const ok = confirm("このデータを削除しますか？");
+async function deleteSale(index) {
+  const ok = confirm(
+    "このデータを削除しますか？"
+  );
 
-  if (ok) {
-    deleteSaleData(index);
-    render();
+  if (!ok) {
+    return;
   }
+
+  const deleted =
+    await deleteSaleData(index);
+
+  if (!deleted) {
+    return;
+  }
+
+  render();
 }
