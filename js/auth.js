@@ -1,110 +1,47 @@
 /* =========================
-   ユーザー設定
+   ログインユーザー設定
 ========================= */
 
 const USER_SETTINGS = {
   "yoshida@ysr-rs.co.jp": {
     name: "吉田",
-    role: "admin"
+    role: "admin",
+    roleLabel: "管理者"
   },
 
   "yabe@ysr-rs.co.jp": {
     name: "矢部",
-    role: "admin"
+    role: "admin",
+    roleLabel: "管理者"
   },
 
   "hayasaka@ysr-rs.co.jp": {
     name: "早坂",
-    role: "viewer"
+    role: "viewer",
+    roleLabel: "閲覧"
   },
 
   "yoneyama@ysr-rs.co.jp": {
     name: "米山",
-    role: "viewer"
+    role: "viewer",
+    roleLabel: "閲覧"
   }
 };
 
-
-/* =========================
-   画面要素
-========================= */
-
-const loginScreen =
-  document.getElementById(
-    "loginScreen"
-  );
-
-const appScreen =
-  document.getElementById(
-    "appScreen"
-  );
-
-const loginForm =
-  document.getElementById(
-    "loginForm"
-  );
-
-const loginEmailInput =
-  document.getElementById(
-    "loginEmail"
-  );
-
-const loginPasswordInput =
-  document.getElementById(
-    "loginPassword"
-  );
-
-const loginButton =
-  document.getElementById(
-    "loginButton"
-  );
-
-const loginMessage =
-  document.getElementById(
-    "loginMessage"
-  );
-
-const logoutButton =
-  document.getElementById(
-    "logoutButton"
-  );
-
-const loginUserName =
-  document.getElementById(
-    "loginUserName"
-  );
-
-const loginUserRole =
-  document.getElementById(
-    "loginUserRole"
-  );
+let currentLoginUser = null;
 
 
 /* =========================
-   ログインメッセージ
-========================= */
-
-function showLoginMessage(
-  message
-) {
-  if (!loginMessage) {
-    return;
-  }
-
-  loginMessage.textContent =
-    message;
-}
-
-
-/* =========================
-   ユーザー情報取得
+   ユーザー情報を取得
 ========================= */
 
 function getUserSetting(
   email
 ) {
   const normalizedEmail =
-    String(email || "")
+    String(
+      email || ""
+    )
       .trim()
       .toLowerCase();
 
@@ -117,10 +54,50 @@ function getUserSetting(
 
 
 /* =========================
-   権限反映
+   管理者判定
 ========================= */
 
-function applyUserPermission(
+function isAdminUser() {
+  return Boolean(
+    currentLoginUser &&
+    currentLoginUser.role ===
+      "admin"
+  );
+}
+
+
+/* =========================
+   ログイン画面を表示
+========================= */
+
+function showLoginScreen() {
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const appScreen =
+    document.getElementById(
+      "appScreen"
+    );
+
+  if (loginScreen) {
+    loginScreen.hidden = false;
+  }
+
+  if (appScreen) {
+    appScreen.hidden = true;
+  }
+
+  currentLoginUser = null;
+}
+
+
+/* =========================
+   業務画面を表示
+========================= */
+
+function showAppScreen(
   user
 ) {
   const setting =
@@ -129,142 +106,113 @@ function applyUserPermission(
     );
 
   if (!setting) {
-    return false;
-  }
-
-  if (loginUserName) {
-    loginUserName.textContent =
-      setting.name;
-  }
-
-  if (
-    setting.role === "admin"
-  ) {
-    if (loginUserRole) {
-      loginUserRole.textContent =
-        "管理者";
-    }
-
-    document.body
-      .classList
-      .remove(
-        "viewer-mode"
-      );
-  } else {
-    if (loginUserRole) {
-      loginUserRole.textContent =
-        "閲覧";
-    }
-
-    document.body
-      .classList
-      .add(
-        "viewer-mode"
-      );
-  }
-
-  return true;
-}
-
-
-/* =========================
-   ログイン画面表示
-========================= */
-
-function showLoginScreen() {
-  if (loginScreen) {
-    loginScreen.hidden =
-      false;
-  }
-
-  if (appScreen) {
-    appScreen.hidden =
-      true;
-  }
-
-  document.body
-    .classList
-    .remove(
-      "viewer-mode"
+    alert(
+      "このメールアドレスには利用権限が設定されていません。"
     );
-}
 
-
-/* =========================
-   業務画面表示
-========================= */
-
-function showAppScreen() {
-  if (loginScreen) {
-    loginScreen.hidden =
-      true;
-  }
-
-  if (appScreen) {
-    appScreen.hidden =
-      false;
-  }
-}
-
-
-/* =========================
-   ログイン状態確認
-========================= */
-
-async function checkLogin() {
-  try {
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .auth
-        .getSession();
-
-    if (error) {
-      throw error;
-    }
-
-    const session =
-      data.session;
-
-    if (!session) {
-      showLoginScreen();
-      return;
-    }
-
-    const allowed =
-      applyUserPermission(
-        session.user
-      );
-
-    if (!allowed) {
-      await supabaseClient
-        .auth
-        .signOut();
-
-      showLoginScreen();
-
-      showLoginMessage(
-        "このアカウントには利用権限がありません。"
-      );
-
-      return;
-    }
-
-    showAppScreen();
-  } catch (error) {
-    console.error(
-      "ログイン状態確認エラー",
-      error
-    );
+    supabaseClient.auth
+      .signOut();
 
     showLoginScreen();
 
-    showLoginMessage(
-      "ログイン状態を確認できませんでした。"
-    );
+    return;
   }
+
+  currentLoginUser = {
+    id:
+      user.id,
+
+    email:
+      user.email,
+
+    ...setting
+  };
+
+  const loginScreen =
+    document.getElementById(
+      "loginScreen"
+    );
+
+  const appScreen =
+    document.getElementById(
+      "appScreen"
+    );
+
+  if (loginScreen) {
+    loginScreen.hidden = true;
+  }
+
+  if (appScreen) {
+    appScreen.hidden = false;
+  }
+
+  const userName =
+    document.getElementById(
+      "loginUserName"
+    );
+
+  const userRole =
+    document.getElementById(
+      "loginUserRole"
+    );
+
+  if (userName) {
+    userName.textContent =
+      currentLoginUser.name +
+      "さん";
+  }
+
+  if (userRole) {
+    userRole.textContent =
+      currentLoginUser.roleLabel;
+  }
+
+  /*
+    画面の権限を反映
+  */
+
+  applyUserPermissions();
+
+  /*
+    ログインユーザーに合わせて
+    アラームを再表示
+  */
+
+  if (
+    typeof refreshAlarm ===
+    "function"
+  ) {
+    refreshAlarm();
+  } else if (
+    typeof renderAlarm ===
+    "function"
+  ) {
+    renderAlarm();
+  }
+}
+
+
+/* =========================
+   権限を画面へ反映
+========================= */
+
+function applyUserPermissions() {
+  const adminOnlyElements =
+    document.querySelectorAll(
+      ".admin-only"
+    );
+
+  adminOnlyElements.forEach(
+    function (element) {
+      element.hidden =
+        !isAdminUser();
+    }
+  );
+
+  document.body.classList.toggle(
+    "viewer-mode",
+    !isAdminUser()
+  );
 }
 
 
@@ -272,56 +220,79 @@ async function checkLogin() {
    ログイン処理
 ========================= */
 
-async function loginUser(
-  email,
-  password
+async function handleLogin(
+  event
 ) {
-  const normalizedEmail =
-    String(email || "")
+  event.preventDefault();
+
+  const emailInput =
+    document.getElementById(
+      "loginEmail"
+    );
+
+  const passwordInput =
+    document.getElementById(
+      "loginPassword"
+    );
+
+  const loginButton =
+    document.getElementById(
+      "loginButton"
+    );
+
+  const loginMessage =
+    document.getElementById(
+      "loginMessage"
+    );
+
+  if (
+    !emailInput ||
+    !passwordInput ||
+    !loginButton ||
+    !loginMessage
+  ) {
+    console.error(
+      "ログイン画面の部品が見つかりません。"
+    );
+
+    return;
+  }
+
+  const email =
+    emailInput.value
       .trim()
       .toLowerCase();
 
-  if (
-    !normalizedEmail ||
-    !password
-  ) {
-    showLoginMessage(
-      "メールアドレスとパスワードを入力してください。"
-    );
-
-    return;
-  }
+  const password =
+    passwordInput.value;
 
   if (
     !getUserSetting(
-      normalizedEmail
+      email
     )
   ) {
-    showLoginMessage(
-      "このメールアドレスには利用権限がありません。"
-    );
+    loginMessage.textContent =
+      "登録されていないメールアドレスです。";
 
     return;
   }
 
-  loginButton.disabled =
-    true;
+  loginButton.disabled = true;
 
   loginButton.textContent =
     "ログイン中...";
 
-  showLoginMessage("");
+  loginMessage.textContent = "";
 
   try {
     const {
       data,
       error
     } =
-      await supabaseClient
-        .auth
+      await supabaseClient.auth
         .signInWithPassword({
           email:
-            normalizedEmail,
+            email,
 
           password:
             password
@@ -331,52 +302,29 @@ async function loginUser(
       throw error;
     }
 
-    const allowed =
-      applyUserPermission(
-        data.user
+    if (!data.user) {
+      throw new Error(
+        "ログインユーザーを取得できませんでした。"
       );
-
-    if (!allowed) {
-      await supabaseClient
-        .auth
-        .signOut();
-
-      showLoginMessage(
-        "このアカウントには利用権限がありません。"
-      );
-
-      return;
     }
 
-    loginForm.reset();
+    showAppScreen(
+      data.user
+    );
 
-    showAppScreen();
+    passwordInput.value = "";
 
-    if (
-      typeof loadSalesData ===
-      "function"
-    ) {
-      await loadSalesData();
-    }
-
-    if (
-      typeof render ===
-      "function"
-    ) {
-      render();
-    }
   } catch (error) {
     console.error(
       "ログインエラー",
       error
     );
 
-    showLoginMessage(
-      "メールアドレスまたはパスワードが違います。"
-    );
+    loginMessage.textContent =
+      "メールアドレスまたはパスワードが違います。";
+
   } finally {
-    loginButton.disabled =
-      false;
+    loginButton.disabled = false;
 
     loginButton.textContent =
       "ログイン";
@@ -388,99 +336,130 @@ async function loginUser(
    ログアウト処理
 ========================= */
 
-async function logoutUser() {
-  try {
-    const {
-      error
-    } =
-      await supabaseClient
-        .auth
-        .signOut();
+async function handleLogout() {
+  const confirmed =
+    confirm(
+      "ログアウトしますか？"
+    );
 
-    if (error) {
-      throw error;
-    }
+  if (!confirmed) {
+    return;
+  }
 
-    showLoginMessage("");
+  const {
+    error
+  } =
+    await supabaseClient.auth
+      .signOut();
 
-    showLoginScreen();
-  } catch (error) {
+  if (error) {
     console.error(
       "ログアウトエラー",
       error
     );
 
     alert(
-      "ログアウトできませんでした。"
+      "ログアウトに失敗しました。"
+    );
+
+    return;
+  }
+
+  showLoginScreen();
+}
+
+
+/* =========================
+   ログイン状態を確認
+========================= */
+
+async function initializeAuth() {
+  const loginForm =
+    document.getElementById(
+      "loginForm"
+    );
+
+  const logoutButton =
+    document.getElementById(
+      "logoutButton"
+    );
+
+  if (loginForm) {
+    loginForm.addEventListener(
+      "submit",
+      handleLogin
     );
   }
-}
 
+  if (logoutButton) {
+    logoutButton.addEventListener(
+      "click",
+      handleLogout
+    );
+  }
 
-/* =========================
-   イベント
-========================= */
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth
+      .getSession();
 
-if (loginForm) {
-  loginForm.addEventListener(
-    "submit",
-    async function (
-      event
-    ) {
-      event.preventDefault();
+  if (error) {
+    console.error(
+      "ログイン状態確認エラー",
+      error
+    );
 
-      await loginUser(
-        loginEmailInput.value,
-        loginPasswordInput.value
-      );
-    }
-  );
-}
+    showLoginScreen();
 
-if (logoutButton) {
-  logoutButton.addEventListener(
-    "click",
-    logoutUser
-  );
-}
+    return;
+  }
 
+  const user =
+    data.session?.user;
 
-/* =========================
-   ログイン状態監視
-========================= */
+  if (user) {
+    showAppScreen(
+      user
+    );
+  } else {
+    showLoginScreen();
+  }
 
-supabaseClient.auth
-  .onAuthStateChange(
-    function (
-      event,
-      session
-    ) {
-      if (
-        event === "SIGNED_OUT"
+  /*
+    ログイン状態の変化を監視
+  */
+
+  supabaseClient.auth
+    .onAuthStateChange(
+      function (
+        event,
+        session
       ) {
-        showLoginScreen();
-        return;
-      }
-
-      if (
-        session &&
-        session.user
-      ) {
-        const allowed =
-          applyUserPermission(
+        if (
+          event ===
+            "SIGNED_IN" &&
+          session?.user
+        ) {
+          showAppScreen(
             session.user
           );
+        }
 
-        if (allowed) {
-          showAppScreen();
+        if (
+          event ===
+          "SIGNED_OUT"
+        ) {
+          showLoginScreen();
         }
       }
-    }
-  );
+    );
+}
 
 
 /* =========================
-   初期確認
+   認証機能を開始
 ========================= */
 
-checkLogin();
+initializeAuth();

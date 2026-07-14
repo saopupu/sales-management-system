@@ -6,6 +6,7 @@ function render() {
   renderStaffSummary(data);
   renderMonthlyPerformance();
   renderTable(data);
+  renderAlarm();
 }
 
 function getKeyword() {

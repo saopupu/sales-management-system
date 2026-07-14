@@ -7,7 +7,15 @@ const clearButton =
   document.getElementById(
     "clearButton"
   );
+const generateTestDataButton =
+  document.getElementById(
+    "generateTestDataButton"
+  );
 
+const deleteTestDataButton =
+  document.getElementById(
+    "deleteTestDataButton"
+  );
 const searchInput =
   document.getElementById(
     "searchInput"
@@ -755,5 +763,21 @@ async function startApp() {
     );
   }
 }
+if (generateTestDataButton) {
 
+  generateTestDataButton.addEventListener(
+    "click",
+    generateTestData
+  );
+
+}
+
+if (deleteTestDataButton) {
+
+  deleteTestDataButton.addEventListener(
+    "click",
+    deleteAllTestData
+  );
+
+}
 startApp();

@@ -1186,3 +1186,80 @@ section.card:has(#salesForm) > h2 {
 .viewer-mode .delete-btn {
   display: none !important;
 }
+.viewer-mode #monthlyInquiryCount,
+.viewer-mode .assigned-count-input,
+.viewer-mode #saveMonthlyPerformanceButton {
+  display: none !important;
+}
+
+.viewer-mode .monthly-performance-item.input-item {
+  display: none !important;
+}
+/* =========================
+   アラーム
+========================= */
+
+#alarmCard {
+  overflow: hidden;
+}
+
+#alarmList {
+  display: grid;
+  gap: 12px;
+}
+
+.alarm-item {
+  padding: 15px 17px;
+  border-left: 6px solid #ff9800;
+  border-radius: 12px;
+  background: #fff8e8;
+  box-shadow:
+    0 2px 8px
+    rgba(0, 0, 0, 0.08);
+}
+
+.alarm-header {
+  margin-bottom: 8px;
+  font-size: 17px;
+}
+
+.alarm-body {
+  display: grid;
+  gap: 4px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.alarm-empty {
+  padding: 22px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  text-align: center;
+}
+
+.alarm-toggle-button {
+  width: 100%;
+  margin-top: 4px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.alarm-toggle-button:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 650px) {
+  .alarm-item {
+    padding: 14px;
+  }
+
+  .alarm-header {
+    font-size: 16px;
+  }
+}
