@@ -2620,3 +2620,848 @@ body {
     max-width: none;
   }
 }
+/* ==================================================
+   Version 9.0 Step 1
+   濃紺サイドバー・トップヘッダー
+================================================== */
+
+
+/* ==================================================
+   全体
+================================================== */
+
+body {
+  background: #f3f6fb;
+  color: #172033;
+}
+
+.main-content .container {
+  max-width: none;
+  padding: 0 24px 45px;
+}
+
+
+/* ==================================================
+   濃紺サイドバー
+================================================== */
+
+.sidebar {
+  width: 230px;
+  padding: 22px 12px;
+  border-right: none;
+  background:
+    linear-gradient(
+      180deg,
+      #082956 0%,
+      #061f42 55%,
+      #041a37 100%
+    );
+  box-shadow:
+    8px 0 30px
+    rgba(4, 26, 55, 0.14);
+}
+
+.main-content {
+  width: calc(100% - 230px);
+  margin-left: 230px;
+}
+
+
+/* ==================================================
+   サイドバー ロゴ
+================================================== */
+
+.sidebar-brand {
+  gap: 12px;
+  padding: 2px 10px 23px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+.sidebar-logo {
+  width: 45px;
+  height: 45px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: none;
+  font-size: 23px;
+}
+
+.sidebar-brand strong {
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.sidebar-brand span {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 10px;
+}
+
+
+/* ==================================================
+   サイドメニュー
+================================================== */
+
+.sidebar-nav {
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.sidebar-link {
+  min-height: 48px;
+  padding: 0 13px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.sidebar-link:hover {
+  color: #ffffff;
+  background:
+    rgba(255, 255, 255, 0.09);
+  transform: none;
+}
+
+.sidebar-link.active {
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      #1856a9,
+      #174996
+    );
+  box-shadow:
+    0 7px 18px
+    rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-link.active::before {
+  display: none;
+}
+
+.sidebar-icon {
+  width: 25px;
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.sidebar-footer {
+  padding: 18px 10px 3px;
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.sidebar-footer small {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+
+/* ==================================================
+   上部ヘッダー
+================================================== */
+
+.main-content header {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  min-height: 76px;
+  margin: 0 -24px 24px;
+  padding: 15px 25px;
+  border: none;
+  border-bottom: 1px solid #e3e9f1;
+  border-radius: 0;
+  background:
+    rgba(255, 255, 255, 0.97);
+  color: #102a56;
+  box-shadow:
+    0 3px 15px
+    rgba(15, 23, 42, 0.045);
+  backdrop-filter: blur(12px);
+}
+
+.main-content header h1 {
+  margin: 0 0 3px;
+  color: #0b2854;
+  font-size: 21px;
+  font-weight: 850;
+}
+
+.main-content header p {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+
+/* ==================================================
+   ログインユーザー
+================================================== */
+
+.login-user-area {
+  gap: 15px;
+}
+
+.login-user-area > div {
+  position: relative;
+  padding-left: 45px;
+}
+
+.login-user-area > div::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background: #eaf1fb;
+  color: #174996;
+  font-size: 17px;
+  content: "👤";
+  transform: translateY(-50%);
+}
+
+#loginUserName {
+  color: #102a56;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+#loginUserRole {
+  color: #64748b;
+  font-size: 10px;
+}
+
+#logoutButton {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #dbe3ed;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 12px;
+}
+
+
+/* ==================================================
+   カードを参考画像寄りに変更
+================================================== */
+
+.main-content .card {
+  border: 1px solid #e1e7ef;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 4px 15px
+    rgba(15, 23, 42, 0.045);
+}
+
+.main-content .card:hover {
+  transform: none;
+  box-shadow:
+    0 5px 18px
+    rgba(15, 23, 42, 0.06);
+}
+
+
+/* ==================================================
+   見出し
+================================================== */
+
+.main-content .card > h2,
+.main-content .list-header h2,
+.main-content .section-title-area h2,
+.main-content .monthly-performance-header h2 {
+  color: #102a56;
+  font-size: 19px;
+}
+
+.main-content .card > h2::after,
+.main-content .list-header h2::after,
+.main-content .section-title-area h2::after,
+.main-content .monthly-performance-header h2::after,
+.today-home-header h2::after {
+  background: #174996;
+}
+
+
+/* ==================================================
+   ボタンを濃紺系に統一
+================================================== */
+
+button,
+#saveMonthlyPerformanceButton,
+#salesForm #submitButton {
+  border-radius: 8px;
+}
+
+#salesForm #submitButton,
+#saveMonthlyPerformanceButton {
+  background:
+    linear-gradient(
+      135deg,
+      #123f7d,
+      #1856a9
+    );
+  box-shadow:
+    0 7px 16px
+    rgba(18, 63, 125, 0.22);
+}
+
+
+/* ==================================================
+   一覧表を参考画像寄りに変更
+================================================== */
+
+.table-wrap {
+  border-radius: 9px;
+}
+
+.table-wrap th {
+  background: #0d3265;
+  color: #ffffff;
+  font-weight: 750;
+}
+
+.table-wrap tbody tr:nth-child(even) {
+  background: #f8fafd;
+}
+
+.table-wrap tbody tr:hover {
+  background: #edf4ff;
+}
+
+
+/* ==================================================
+   表示月バー
+================================================== */
+
+.month-filter {
+  position: static;
+  margin-top: 0;
+  border-radius: 10px;
+  backdrop-filter: none;
+}
+
+.month-filter button:hover {
+  border-color: #9db6d6;
+  background: #edf4ff;
+  color: #174996;
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 760px) {
+  .sidebar {
+    width: 100%;
+    padding: 9px 10px;
+    background: #082956;
+  }
+
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .main-content .container {
+    padding: 0 13px 35px;
+  }
+
+  .main-content header {
+    margin: 0 -13px 15px;
+    padding: 14px 15px;
+  }
+
+  .sidebar-link {
+    min-height: 40px;
+    padding: 0 12px;
+  }
+}
+/* ==================================================
+   Version 9.1
+   一覧＋今日の予定 2カラムレイアウト
+================================================== */
+
+
+/* ==================================================
+   メイン画面をグリッド化
+================================================== */
+
+@media (min-width: 1200px) {
+  .main-content .container {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr)
+      330px;
+    gap: 22px;
+    align-items: start;
+  }
+
+  /*
+    原則として各セクションは
+    横幅いっぱいに表示
+  */
+
+  .main-content .container > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+
+  /* ==================================================
+     表示順
+  ================================================== */
+
+  .main-content header {
+    order: 1;
+  }
+
+  .month-filter {
+    order: 2;
+  }
+
+  #bossDashboardSection {
+    order: 3;
+  }
+
+  #bossDashboardSection + .dashboard {
+    order: 4;
+  }
+
+  .simple-dashboard {
+    order: 5;
+  }
+
+  #salesFormSection {
+    order: 6;
+  }
+
+  #salesListSection {
+    order: 7;
+  }
+
+  #alarmCard {
+    order: 7;
+  }
+
+  #staffAnalysisSection {
+    order: 8;
+  }
+
+  #monthlyPerformanceSection {
+    order: 9;
+  }
+
+
+  /* ==================================================
+     申し込み一覧を左側へ
+  ================================================== */
+
+  #salesListSection {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+
+
+  /* ==================================================
+     今日のホームを右側へ
+  ================================================== */
+
+  #alarmCard {
+    position: sticky;
+    top: 98px;
+    grid-column: 2;
+    margin-bottom: 0;
+    padding: 20px;
+  }
+
+
+  /* ==================================================
+     今日のホーム ヘッダー
+  ================================================== */
+
+  #alarmCard .today-home-header {
+    display: block;
+    margin-bottom: 17px;
+  }
+
+  #alarmCard .today-home-header h2 {
+    margin-bottom: 8px;
+    font-size: 18px;
+  }
+
+  #alarmCard .today-home-header p {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  #alarmCard .today-home-date {
+    display: inline-flex;
+    margin-top: 10px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+
+  /* ==================================================
+     今日の件数カードを縦並び
+  ================================================== */
+
+  #alarmCard .today-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  #alarmCard .today-summary-card {
+    min-height: 80px;
+    padding: 13px;
+    border-radius: 10px;
+  }
+
+  #alarmCard .today-summary-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    font-size: 20px;
+  }
+
+  #alarmCard .today-summary-content span {
+    font-size: 12px;
+  }
+
+  #alarmCard .today-summary-content strong {
+    font-size: 22px;
+  }
+
+  #alarmCard .today-summary-content small {
+    font-size: 10px;
+  }
+
+
+  /* ==================================================
+     今日契約・今日入居を縦並び
+  ================================================== */
+
+  #alarmCard .today-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  #alarmCard .today-detail-card {
+    border-radius: 10px;
+  }
+
+  #alarmCard .today-detail-header {
+    padding: 12px 13px;
+  }
+
+  #alarmCard .today-detail-header h3 {
+    font-size: 13px;
+  }
+
+  #alarmCard .today-detail-header span {
+    min-width: 34px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  #alarmCard .today-customer-list {
+    padding: 4px 13px;
+  }
+
+  #alarmCard .today-customer-item {
+    gap: 8px;
+    padding: 11px 0;
+  }
+
+  #alarmCard .today-customer-main strong {
+    font-size: 12px;
+  }
+
+  #alarmCard .today-customer-main span {
+    font-size: 10px;
+  }
+
+  #alarmCard .today-staff-badge {
+    padding: 4px 7px;
+    font-size: 9px;
+  }
+
+  #alarmCard .today-customer-empty {
+    padding: 20px 5px;
+    font-size: 11px;
+  }
+
+
+  /* ==================================================
+     申し込み一覧を広く使う
+  ================================================== */
+
+  #salesListSection {
+    padding: 20px;
+  }
+
+  #salesListSection .list-header {
+    align-items: center;
+  }
+
+  #salesListSection .list-header h2 {
+    font-size: 18px;
+  }
+
+  #salesListSection .list-header input {
+    max-width: 330px;
+  }
+
+  #salesListSection .table-wrap {
+    max-height: 720px;
+  }
+
+  #salesListSection table {
+    min-width: 1400px;
+  }
+
+
+  /* ==================================================
+     横並び部分の高さ調整
+  ================================================== */
+
+  #salesListSection,
+  #alarmCard {
+    align-self: stretch;
+  }
+}
+
+
+/* ==================================================
+   大きめ画面
+================================================== */
+
+@media (min-width: 1500px) {
+  .main-content .container {
+    grid-template-columns:
+      minmax(0, 1fr)
+      360px;
+    gap: 24px;
+  }
+}
+
+
+/* ==================================================
+   1200px未満は従来の縦並び
+================================================== */
+
+@media (max-width: 1199px) {
+  .main-content .container {
+    display: block;
+  }
+
+  #alarmCard {
+    position: static;
+  }
+}
+/* ==================================================
+   Version 9.1 修正
+   申し込み入力をダッシュボード画面から非表示
+================================================== */
+
+#salesFormSection {
+  display: none;
+}
+
+
+/* 申し込み一覧と今日のホームを上へ詰める */
+
+@media (min-width: 1200px) {
+  #salesListSection,
+  #alarmCard {
+    order: 6;
+  }
+}
+/* ==================================================
+   Version 10.0
+   画面切り替え式レイアウト
+================================================== */
+
+
+/* ==================================================
+   非表示画面
+================================================== */
+
+.system-view-hidden {
+  display: none !important;
+}
+
+
+/* ==================================================
+   以前の強制非表示を解除
+================================================== */
+
+#salesFormSection {
+  display: block;
+}
+
+#salesFormSection.system-view-hidden {
+  display: none !important;
+}
+
+
+/* ==================================================
+   画面切り替え後は
+   1カラムで表示
+================================================== */
+
+.main-content .container {
+  display: block;
+}
+
+#alarmCard,
+#bossDashboardSection,
+#paymentDashboardSection,
+#statusDashboardSection,
+#salesFormSection,
+#salesListSection,
+#staffAnalysisSection,
+#monthlyPerformanceSection {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+
+/* ==================================================
+   今日の予定を通常幅へ戻す
+================================================== */
+
+#alarmCard {
+  position: static;
+  padding: 22px;
+}
+
+#alarmCard .today-home-header {
+  display: flex;
+}
+
+#alarmCard .today-summary-grid {
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+}
+
+#alarmCard .today-detail-grid {
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+}
+
+
+/* ==================================================
+   サイドメニューボタン
+================================================== */
+
+.sidebar-link {
+  width: 100%;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+}
+
+.sidebar-link:hover {
+  box-shadow: none;
+}
+
+.sidebar-link.active {
+  background:
+    linear-gradient(
+      135deg,
+      #1856a9,
+      #174996
+    );
+}
+
+
+/* ==================================================
+   ホーム画面
+================================================== */
+
+#bossDashboardSection {
+  margin-top: 0;
+}
+
+#paymentDashboardSection,
+#statusDashboardSection {
+  margin-bottom: 22px;
+}
+
+
+/* ==================================================
+   申し込み一覧画面
+================================================== */
+
+#salesListSection {
+  min-height: calc(100vh - 130px);
+}
+
+#salesListSection .table-wrap {
+  max-height: calc(100vh - 260px);
+}
+
+
+/* ==================================================
+   新規申し込み画面
+================================================== */
+
+#salesFormSection {
+  max-width: 1500px;
+}
+
+
+/* ==================================================
+   分析画面
+================================================== */
+
+#staffAnalysisSection,
+#monthlyPerformanceSection {
+  max-width: 1500px;
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 760px) {
+  #alarmCard .today-home-header {
+    display: block;
+  }
+
+  #alarmCard .today-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #alarmCard .today-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #salesListSection {
+    min-height: auto;
+  }
+
+  #salesListSection .table-wrap {
+    max-height: none;
+  }
+}

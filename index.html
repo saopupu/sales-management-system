@@ -73,39 +73,45 @@
         </div>
       </div>
 
-      <nav class="sidebar-nav">
+   <nav class="sidebar-nav">
 
-        <a href="#alarmCard" class="sidebar-link active">
-          <span class="sidebar-icon">🏠</span>
-          <span>今日のホーム</span>
-        </a>
+  <button
+    type="button"
+    class="sidebar-link active"
+    data-view="home"
+  >
+    <span class="sidebar-icon">🏠</span>
+    <span>ダッシュボード</span>
+  </button>
 
-        <a href="#bossDashboardSection" class="sidebar-link">
-          <span class="sidebar-icon">📊</span>
-          <span>ダッシュボード</span>
-        </a>
+  <button
+    type="button"
+    class="sidebar-link admin-only"
+    data-view="form"
+  >
+    <span class="sidebar-icon">➕</span>
+    <span>新規案件</span>
+  </button>
 
-        <a href="#salesFormSection" class="sidebar-link admin-only">
-          <span class="sidebar-icon">➕</span>
-          <span>新規申し込み</span>
-        </a>
+  <button
+    type="button"
+    class="sidebar-link"
+    data-view="list"
+  >
+    <span class="sidebar-icon">📋</span>
+    <span>案件一覧</span>
+  </button>
 
-        <a href="#salesListSection" class="sidebar-link">
-          <span class="sidebar-icon">📋</span>
-          <span>申し込み一覧</span>
-        </a>
+  <button
+    type="button"
+    class="sidebar-link"
+    data-view="analysis"
+  >
+    <span class="sidebar-icon">📈</span>
+    <span>集計・分析</span>
+  </button>
 
-        <a href="#staffAnalysisSection" class="sidebar-link">
-          <span class="sidebar-icon">👤</span>
-          <span>担当者別実績</span>
-        </a>
-
-        <a href="#monthlyPerformanceSection" class="sidebar-link">
-          <span class="sidebar-icon">📈</span>
-          <span>月末実績</span>
-        </a>
-
-      </nav>
+</nav>
 
       <div class="sidebar-footer">
         <span>Version 8.0</span>
@@ -212,7 +218,7 @@
   class="card"
   id="bossDashboardSection"
 >
-  <h2>📊 社長ダッシュボード</h2>
+  <h2>📊 ダッシュボード</h2>
 
   <div class="dashboard">
 
@@ -273,7 +279,10 @@
 <!-- =========================
      入金ベース売上
 ========================== -->
-<section class="dashboard">
+<section
+  class="dashboard"
+  id="paymentDashboardSection"
+>
 
   <div class="dashboard-card">
     <span>合計売上 税込</span>
@@ -311,7 +320,10 @@
 <!-- =========================
      ステータス件数
 ========================== -->
-<section class="simple-dashboard">
+<section
+  class="simple-dashboard"
+  id="statusDashboardSection"
+>
 
   <div class="simple-card">
     <span>申込・進行中</span>
@@ -506,7 +518,7 @@
 >
 
   <div class="list-header">
-    <h2>📋 申し込み一覧</h2>
+    <h2>📋 案件一覧</h2>
     <input
       type="text"
       id="searchInput"
@@ -559,7 +571,7 @@
 
   <div class="section-title-area">
     <div>
-      <h2>👤 担当者別売上・成約分析</h2>
+      <h2>👤 担当者分析</h2>
       <p class="section-description">
         振り分け人数は手入力、申込み人数・契約人数・成約率は自動集計されます。
       </p>
@@ -579,7 +591,7 @@
   <div class="monthly-performance-header">
 
     <div>
-      <h2>📈 月末実績集計</h2>
+      <h2>📈 月次レポート</h2>
 
       <p class="section-description">
         表示月ごとに反響人数と担当者への振り分け人数を保存します。
@@ -846,6 +858,7 @@
 <script src="js/render.js"></script>
 <script src="js/testData.js"></script>
 <script src="js/alarm.js"></script>
+<script src="js/navigation.js"></script>
 <script src="js/app.js"></script>
 
 </body>
