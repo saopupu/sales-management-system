@@ -1,10 +1,6 @@
 /* =========================
-   アラーム機能
+   今日のホーム機能
 ========================= */
-
-const ALARM_INITIAL_LIMIT = 5;
-
-let alarmExpanded = false;
 
 
 /* =========================
@@ -26,321 +22,75 @@ function getAlarmToday() {
 
 
 /* =========================
-   日付文字列を安全に変換
+   今日の日付を
+   YYYY-MM-DD形式で取得
 ========================= */
 
-function parseAlarmDate(
-  dateText
-) {
-  if (!dateText) {
-    return null;
-  }
-
-  const parts =
-    String(dateText)
-      .split("-")
-      .map(Number);
-
-  if (
-    parts.length !== 3 ||
-    !parts[0] ||
-    !parts[1] ||
-    !parts[2]
-  ) {
-    return null;
-  }
-
-  const date =
-    new Date(
-      parts[0],
-      parts[1] - 1,
-      parts[2]
-    );
-
-  date.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
-  return date;
-}
-
-
-/* =========================
-   今日から何日後か計算
-========================= */
-
-function calculateAlarmDays(
-  dateText
-) {
-  const targetDate =
-    parseAlarmDate(
-      dateText
-    );
-
-  if (!targetDate) {
-    return null;
-  }
-
+function getTodayDateText() {
   const today =
     getAlarmToday();
 
-  return Math.round(
+  const year =
+    today.getFullYear();
+
+  const month =
+    String(
+      today.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+  const day =
+    String(
+      today.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+  );
+}
+
+
+/* =========================
+   今日の日付を
+   日本語で表示
+========================= */
+
+function getTodayDisplayText() {
+  const today =
+    getAlarmToday();
+
+  const weekNames = [
+    "日",
+    "月",
+    "火",
+    "水",
+    "木",
+    "金",
+    "土"
+  ];
+
+  return (
+    today.getFullYear() +
+    "年" +
     (
-      targetDate.getTime() -
-      today.getTime()
-    ) /
-    86400000
-  );
-}
-
-
-/* =========================
-   アラームデータを作成
-========================= */
-
-function createAlarmItem(
-  type,
-  sale,
-  days
-) {
-  return {
-    type:
-      type,
-
-    days:
-      days,
-
-    customer:
-      sale.customer ||
-      "お客様名未入力",
-
-    property:
-      sale.property ||
-      "物件名未入力",
-
-    staff:
-      sale.staff ||
-      "担当未入力",
-
-    date:
-      type === "contract"
-        ? sale.contractDate
-        : sale.startDate
-  };
-}
-
-
-/* =========================
-   ログインユーザーが
-   見られる案件か判定
-========================= */
-
-function canDisplayAlarmSale(
-  sale
-) {
-  /*
-    ログイン情報がまだない場合
-  */
-
-  if (
-    typeof currentLoginUser ===
-      "undefined" ||
-    !currentLoginUser
-  ) {
-    return false;
-  }
-
-  /*
-    吉田さんは
-    全員分を表示
-  */
-
-  if (
-    currentLoginUser.name ===
-    "吉田"
-  ) {
-    return true;
-  }
-
-  /*
-    その他のスタッフは
-    自分の案件だけ表示
-  */
-
-  return (
-    sale.staff ===
-    currentLoginUser.name
-  );
-}
-
-
-/* =========================
-   アラーム対象を取得
-========================= */
-
-function getAlarmData() {
-  const sales =
-    typeof getSalesData ===
-    "function"
-      ? getSalesData()
-      : [];
-
-  if (!Array.isArray(sales)) {
-    return [];
-  }
-
-  const alarms = [];
-
-  sales.forEach(
-    function (sale) {
-      if (!sale) {
-        return;
-      }
-
-      /*
-        ログインユーザーが
-        見られる案件だけにする
-      */
-
-      if (
-        !canDisplayAlarmSale(
-          sale
-        )
-      ) {
-        return;
-      }
-
-      /*
-        キャンセル・審査落ちは
-        アラーム対象外
-      */
-
-      if (
-        sale.status ===
-          "キャンセル" ||
-        sale.status ===
-          "審査落ち"
-      ) {
-        return;
-      }
-
-      /*
-        契約日のアラーム
-      */
-
-      const contractDays =
-        calculateAlarmDays(
-          sale.contractDate
-        );
-
-      if (
-        contractDays !== null &&
-        contractDays >= 0 &&
-        contractDays <= 3
-      ) {
-        alarms.push(
-          createAlarmItem(
-            "contract",
-            sale,
-            contractDays
-          )
-        );
-      }
-
-      /*
-        契約開始日・鍵引渡しの
-        アラーム
-      */
-
-      const startDays =
-        calculateAlarmDays(
-          sale.startDate
-        );
-
-      if (
-        startDays !== null &&
-        startDays >= 0 &&
-        startDays <= 3
-      ) {
-        alarms.push(
-          createAlarmItem(
-            "start",
-            sale,
-            startDays
-          )
-        );
-      }
-    }
-  );
-
-  /*
-    期限が近い順に並べる
-  */
-
-  alarms.sort(
-    function (a, b) {
-      if (
-        a.days !== b.days
-      ) {
-        return (
-          a.days - b.days
-        );
-      }
-
-      return String(
-        a.date || ""
-      ).localeCompare(
-        String(
-          b.date || ""
-        )
-      );
-    }
-  );
-
-  return alarms;
-}
-
-
-/* =========================
-   アラームタイトル
-========================= */
-
-function getAlarmTitle(
-  alarm
-) {
-  if (
-    alarm.type ===
-    "contract"
-  ) {
-    return "📄 契約";
-  }
-
-  return "🔑 鍵引渡し";
-}
-
-
-/* =========================
-   残り日数の表示
-========================= */
-
-function getAlarmDayText(
-  days
-) {
-  if (days === 0) {
-    return "今日";
-  }
-
-  if (days === 1) {
-    return "明日";
-  }
-
-  return (
-    "あと" +
-    days +
-    "日"
+      today.getMonth() + 1
+    ) +
+    "月" +
+    today.getDate() +
+    "日（" +
+    weekNames[
+      today.getDay()
+    ] +
+    "）"
   );
 }
 
@@ -380,83 +130,357 @@ function escapeAlarmHtml(
 
 
 /* =========================
-   アラームカードHTML
+   対象外ステータス判定
 ========================= */
 
-function createAlarmHtml(
-  alarm
+function isTodayHomeExcludedSale(
+  sale
 ) {
-  const title =
-    getAlarmTitle(
-      alarm
-    );
-
-  const dayText =
-    getAlarmDayText(
-      alarm.days
-    );
-
-  return `
-    <div class="alarm-item">
-
-      <div class="alarm-header">
-        <strong>
-          ${escapeAlarmHtml(title)}
-          ${escapeAlarmHtml(dayText)}
-        </strong>
-      </div>
-
-      <div class="alarm-body">
-
-        <div>
-          👤
-          ${escapeAlarmHtml(
-            alarm.customer
-          )}
-        </div>
-
-        <div>
-          🏢
-          ${escapeAlarmHtml(
-            alarm.property
-          )}
-        </div>
-
-        <div>
-          🙋
-          ${escapeAlarmHtml(
-            alarm.staff
-          )}
-        </div>
-
-        <div>
-          📅
-          ${escapeAlarmHtml(
-            alarm.date
-          )}
-        </div>
-
-      </div>
-
-    </div>
-  `;
+  return (
+    sale.status ===
+      "キャンセル" ||
+    sale.status ===
+      "審査落ち"
+  );
 }
 
 
 /* =========================
-   すべて表示・折りたたみ
+   ログインユーザーが
+   見られる案件か判定
 ========================= */
 
-function toggleAlarmDisplay() {
-  alarmExpanded =
-    !alarmExpanded;
+function canDisplayAlarmSale(
+  sale
+) {
+  if (
+    typeof currentLoginUser ===
+      "undefined" ||
+    !currentLoginUser
+  ) {
+    return false;
+  }
 
-  renderAlarm();
+  /*
+    吉田さんは
+    全員分を表示
+  */
+
+  if (
+    currentLoginUser.name ===
+    "吉田"
+  ) {
+    return true;
+  }
+
+  /*
+    その他は
+    自分の担当案件のみ
+  */
+
+  return (
+    sale.staff ===
+    currentLoginUser.name
+  );
 }
 
 
 /* =========================
-   アラーム表示
+   今日のホーム対象案件を取得
+========================= */
+
+function getTodayHomeSales() {
+  const sales =
+    typeof getSalesData ===
+    "function"
+      ? getSalesData()
+      : [];
+
+  if (
+    !Array.isArray(
+      sales
+    )
+  ) {
+    return [];
+  }
+
+  return sales.filter(
+    function (sale) {
+      if (!sale) {
+        return false;
+      }
+
+      if (
+        isTodayHomeExcludedSale(
+          sale
+        )
+      ) {
+        return false;
+      }
+
+      return canDisplayAlarmSale(
+        sale
+      );
+    }
+  );
+}
+
+
+/* =========================
+   今日契約のお客様
+========================= */
+
+function getTodayContractSales() {
+  const todayText =
+    getTodayDateText();
+
+  return getTodayHomeSales()
+    .filter(
+      function (sale) {
+        return (
+          sale.contractDate ===
+          todayText
+        );
+      }
+    )
+    .sort(
+      function (a, b) {
+        return String(
+          a.customer || ""
+        ).localeCompare(
+          String(
+            b.customer || ""
+          ),
+          "ja"
+        );
+      }
+    );
+}
+
+
+/* =========================
+   今日入居のお客様
+========================= */
+
+function getTodayStartSales() {
+  const todayText =
+    getTodayDateText();
+
+  return getTodayHomeSales()
+    .filter(
+      function (sale) {
+        return (
+          sale.startDate ===
+          todayText
+        );
+      }
+    )
+    .sort(
+      function (a, b) {
+        return String(
+          a.customer || ""
+        ).localeCompare(
+          String(
+            b.customer || ""
+          ),
+          "ja"
+        );
+      }
+    );
+}
+
+
+/* =========================
+   本日の担当案件を取得
+
+   今日契約または今日入居の
+   案件を重複なしで数える
+========================= */
+
+function getTodayAssignedSales() {
+  const contractSales =
+    getTodayContractSales();
+
+  const startSales =
+    getTodayStartSales();
+
+  const combinedSales = [
+    ...contractSales,
+    ...startSales
+  ];
+
+  return combinedSales.filter(
+    function (
+      sale,
+      index,
+      array
+    ) {
+      /*
+        SupabaseのIDがある場合は
+        IDで重複判定
+      */
+
+      if (sale.id) {
+        return (
+          array.findIndex(
+            function (item) {
+              return (
+                item.id ===
+                sale.id
+              );
+            }
+          ) === index
+        );
+      }
+
+      /*
+        IDがない場合は
+        お客様・物件・担当で判定
+      */
+
+      const saleKey = [
+        sale.customer || "",
+        sale.property || "",
+        sale.staff || ""
+      ].join("|");
+
+      return (
+        array.findIndex(
+          function (item) {
+            const itemKey = [
+              item.customer || "",
+              item.property || "",
+              item.staff || ""
+            ].join("|");
+
+            return (
+              itemKey ===
+              saleKey
+            );
+          }
+        ) === index
+      );
+    }
+  );
+}
+
+
+/* =========================
+   お客様一覧HTML
+========================= */
+
+function createTodayCustomerListHtml(
+  sales,
+  emptyMessage
+) {
+  if (
+    sales.length === 0
+  ) {
+    return `
+      <div class="today-customer-empty">
+        ${escapeAlarmHtml(
+          emptyMessage
+        )}
+      </div>
+    `;
+  }
+
+  return sales
+    .map(
+      function (sale) {
+        const customer =
+          sale.customer ||
+          "お客様名未入力";
+
+        const property =
+          sale.property ||
+          "物件名未入力";
+
+        const staff =
+          sale.staff ||
+          "担当未入力";
+
+        return `
+          <div class="today-customer-item">
+
+            <div class="today-customer-main">
+
+              <strong>
+                ${escapeAlarmHtml(
+                  customer
+                )} 様
+              </strong>
+
+              <span>
+                ${escapeAlarmHtml(
+                  property
+                )}
+              </span>
+
+            </div>
+
+            <span
+              class="today-staff-badge staff-${escapeAlarmHtml(
+                staff
+              )}"
+            >
+              ${escapeAlarmHtml(
+                staff
+              )}
+            </span>
+
+          </div>
+        `;
+      }
+    )
+    .join("");
+}
+
+
+/* =========================
+   挨拶文を表示
+========================= */
+
+function renderTodayHomeGreeting() {
+  const greeting =
+    document.getElementById(
+      "todayHomeGreeting"
+    );
+
+  const dateElement =
+    document.getElementById(
+      "todayHomeDate"
+    );
+
+  if (dateElement) {
+    dateElement.textContent =
+      getTodayDisplayText();
+  }
+
+  if (!greeting) {
+    return;
+  }
+
+  if (
+    typeof currentLoginUser ===
+      "undefined" ||
+    !currentLoginUser
+  ) {
+    greeting.textContent =
+      "今日の予定を読み込んでいます...";
+
+    return;
+  }
+
+  greeting.textContent =
+    "おはようございます、" +
+    currentLoginUser.name +
+    "さん。今日の予定を確認しましょう。";
+}
+
+
+/* =========================
+   今日のホームを表示
 ========================= */
 
 function renderAlarm() {
@@ -469,6 +493,8 @@ function renderAlarm() {
     return;
   }
 
+  renderTodayHomeGreeting();
+
   /*
     ログイン情報の準備前
   */
@@ -479,81 +505,163 @@ function renderAlarm() {
     !currentLoginUser
   ) {
     alarmList.innerHTML = `
-      <div class="alarm-empty">
-        アラームを読み込み中...
+      <div class="today-home-loading">
+        今日の予定を読み込んでいます...
       </div>
     `;
 
     return;
   }
 
-  const alarms =
-    getAlarmData();
+  const assignedSales =
+    getTodayAssignedSales();
 
-  if (
-    alarms.length === 0
-  ) {
-    alarmList.innerHTML = `
-      <div class="alarm-empty">
-        🎉 今日のアラームはありません
+  const contractSales =
+    getTodayContractSales();
+
+  const startSales =
+    getTodayStartSales();
+
+  const contractListHtml =
+    createTodayCustomerListHtml(
+      contractSales,
+      "今日契約のお客様はいません"
+    );
+
+  const startListHtml =
+    createTodayCustomerListHtml(
+      startSales,
+      "今日入居のお客様はいません"
+    );
+
+  alarmList.innerHTML = `
+    <div class="today-summary-grid">
+
+      <div class="today-summary-card today-assigned-card">
+
+        <div class="today-summary-icon">
+          📋
+        </div>
+
+        <div class="today-summary-content">
+
+          <span>
+            本日の担当案件
+          </span>
+
+          <strong>
+            ${assignedSales.length}件
+          </strong>
+
+          <small>
+            今日契約・今日入居の案件
+          </small>
+
+        </div>
+
       </div>
-    `;
 
-    return;
-  }
+      <div class="today-summary-card today-contract-card">
 
-  const displayAlarms =
-    alarmExpanded
-      ? alarms
-      : alarms.slice(
-          0,
-          ALARM_INITIAL_LIMIT
-        );
+        <div class="today-summary-icon">
+          📄
+        </div>
 
-  let html =
-    displayAlarms
-      .map(
-        createAlarmHtml
-      )
-      .join("");
+        <div class="today-summary-content">
 
-  if (
-    alarms.length >
-    ALARM_INITIAL_LIMIT
-  ) {
-    const hiddenCount =
-      alarms.length -
-      ALARM_INITIAL_LIMIT;
+          <span>
+            今日契約
+          </span>
 
-    const buttonText =
-      alarmExpanded
-        ? "折りたたむ"
-        : `すべて見る（残り${hiddenCount}件）`;
+          <strong>
+            ${contractSales.length}件
+          </strong>
 
-    html += `
-      <button
-        type="button"
-        class="alarm-toggle-button"
-        onclick="toggleAlarmDisplay()"
-      >
-        ${escapeAlarmHtml(
-          buttonText
-        )}
-      </button>
-    `;
-  }
+          <small>
+            契約日が今日の案件
+          </small>
 
-  alarmList.innerHTML =
-    html;
+        </div>
+
+      </div>
+
+      <div class="today-summary-card today-start-card">
+
+        <div class="today-summary-icon">
+          🔑
+        </div>
+
+        <div class="today-summary-content">
+
+          <span>
+            今日入居
+          </span>
+
+          <strong>
+            ${startSales.length}件
+          </strong>
+
+          <small>
+            契約開始日が今日の案件
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="today-detail-grid">
+
+      <section class="today-detail-card">
+
+        <div class="today-detail-header">
+
+          <h3>
+            📄 今日契約のお客様
+          </h3>
+
+          <span>
+            ${contractSales.length}件
+          </span>
+
+        </div>
+
+        <div class="today-customer-list">
+          ${contractListHtml}
+        </div>
+
+      </section>
+
+      <section class="today-detail-card">
+
+        <div class="today-detail-header">
+
+          <h3>
+            🔑 今日入居のお客様
+          </h3>
+
+          <span>
+            ${startSales.length}件
+          </span>
+
+        </div>
+
+        <div class="today-customer-list">
+          ${startListHtml}
+        </div>
+
+      </section>
+
+    </div>
+  `;
 }
 
 
 /* =========================
-   アラームを再読み込み
+   データ変更後に再表示
 ========================= */
 
 function refreshAlarm() {
-  alarmExpanded = false;
-
   renderAlarm();
 }

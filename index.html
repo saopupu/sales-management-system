@@ -53,7 +53,74 @@
        ログイン後の業務画面
   ========================== -->
   <div id="appScreen" hidden>
-  <div class="container">
+
+  <div class="app-layout">
+
+    <!-- =========================
+         左サイドメニュー
+    ========================== -->
+
+    <aside class="sidebar">
+
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">
+          🏢
+        </div>
+
+        <div>
+          <strong>姫なび賃貸</strong>
+          <span>業務管理システム</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+
+        <a href="#alarmCard" class="sidebar-link active">
+          <span class="sidebar-icon">🏠</span>
+          <span>今日のホーム</span>
+        </a>
+
+        <a href="#bossDashboardSection" class="sidebar-link">
+          <span class="sidebar-icon">📊</span>
+          <span>ダッシュボード</span>
+        </a>
+
+        <a href="#salesFormSection" class="sidebar-link admin-only">
+          <span class="sidebar-icon">➕</span>
+          <span>新規申し込み</span>
+        </a>
+
+        <a href="#salesListSection" class="sidebar-link">
+          <span class="sidebar-icon">📋</span>
+          <span>申し込み一覧</span>
+        </a>
+
+        <a href="#staffAnalysisSection" class="sidebar-link">
+          <span class="sidebar-icon">👤</span>
+          <span>担当者別実績</span>
+        </a>
+
+        <a href="#monthlyPerformanceSection" class="sidebar-link">
+          <span class="sidebar-icon">📈</span>
+          <span>月末実績</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Version 8.0</span>
+        <small>Himenavi System</small>
+      </div>
+
+    </aside>
+
+    <!-- =========================
+         右側メイン画面
+    ========================== -->
+
+    <main class="main-content">
+
+      <div class="container">
 
 
 <header>
@@ -108,9 +175,28 @@
 </button>
 </section>
 
-<section class="card" id="alarmCard">
+<!-- =========================
+     今日のホーム
+========================== -->
 
-  <h2>🔔 今日のアラーム</h2>
+<section class="card today-home-card" id="alarmCard">
+
+  <div class="today-home-header">
+    <div>
+      <h2>🏠 予定確認</h2>
+
+      <p id="todayHomeGreeting">
+        今日の予定を読み込んでいます...
+      </p>
+    </div>
+
+    <div
+      id="todayHomeDate"
+      class="today-home-date"
+    >
+      -
+    </div>
+  </div>
 
   <div id="alarmList">
 
@@ -122,7 +208,10 @@
 <!-- =========================
      社長ダッシュボード
 ========================== -->
-<section class="card">
+<section
+  class="card"
+  id="bossDashboardSection"
+>
   <h2>📊 社長ダッシュボード</h2>
 
   <div class="dashboard">
@@ -411,11 +500,13 @@
 <!-- =========================
      申し込み一覧
 ========================== -->
-<section class="card">
+<section
+  class="card"
+  id="salesListSection"
+>
 
   <div class="list-header">
     <h2>📋 申し込み一覧</h2>
-
     <input
       type="text"
       id="searchInput"
@@ -461,7 +552,10 @@
 <!-- =========================
      担当者別売上・成約分析
 ========================== -->
-<section class="card">
+<section
+  class="card"
+  id="staffAnalysisSection"
+>
 
   <div class="section-title-area">
     <div>
@@ -727,8 +821,15 @@
 </section>
 
 
+        </div>
+
+    </main>
+
   </div>
-  </div>
+
+</div>
+
+<!-- Excel出力ライブラリ -->
 
   <!-- Excel出力ライブラリ -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
