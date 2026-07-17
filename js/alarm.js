@@ -482,7 +482,193 @@ function renderTodayHomeGreeting() {
 /* =========================
    今日のホームを表示
 ========================= */
+/* =========================
+   近日アラームを取得
+   契約日・鍵渡し日の3日前から表示
+========================= */
 
+function getUpcomingAlarmItems() {
+  const today = getAlarmToday();
+  const alarmItems = [];
+
+  getTodayHomeSales().forEach(function (sale) {
+
+    /*
+      契約日アラーム
+    */
+
+    if (sale.contractDate) {
+      const contractDate =
+        new Date(sale.contractDate + "T00:00:00");
+
+      const contractDays =
+        Math.round(
+          (contractDate - today) /
+          (1000 * 60 * 60 * 24)
+        );
+
+      if (
+        contractDays >= 1 &&
+        contractDays <= 3
+      ) {
+        alarmItems.push({
+          type: "contract",
+          days: contractDays,
+          date: sale.contractDate,
+          customer:
+            sale.customer ||
+            "お客様名未入力",
+          property:
+            sale.property ||
+            "物件名未入力",
+          staff:
+            sale.staff ||
+            "担当未入力",
+          message:
+            contractDays === 1
+              ? "明日契約です"
+              : "契約まであと" +
+                contractDays +
+                "日です"
+        });
+      }
+    }
+
+    /*
+      鍵渡しアラーム
+      現在は契約開始日を鍵渡し日として使用
+    */
+
+    if (sale.startDate) {
+      const startDate =
+        new Date(sale.startDate + "T00:00:00");
+
+      const startDays =
+        Math.round(
+          (startDate - today) /
+          (1000 * 60 * 60 * 24)
+        );
+
+      if (
+        startDays >= 1 &&
+        startDays <= 3
+      ) {
+        alarmItems.push({
+          type: "key",
+          days: startDays,
+          date: sale.startDate,
+          customer:
+            sale.customer ||
+            "お客様名未入力",
+          property:
+            sale.property ||
+            "物件名未入力",
+          staff:
+            sale.staff ||
+            "担当未入力",
+          message:
+            startDays === 1
+              ? "明日鍵渡しです"
+              : "鍵渡しまであと" +
+                startDays +
+                "日です"
+        });
+      }
+    }
+  });
+
+  /*
+    日付が近い順に並べる
+  */
+
+  return alarmItems.sort(
+    function (a, b) {
+      if (a.days !== b.days) {
+        return a.days - b.days;
+      }
+
+      return a.type.localeCompare(
+        b.type
+      );
+    }
+  );
+}
+
+
+/* =========================
+   近日アラームHTML
+========================= */
+
+function createUpcomingAlarmHtml(
+  alarmItems
+) {
+  if (alarmItems.length === 0) {
+    return `
+      <div class="upcoming-alarm-empty">
+        3日以内の契約・鍵渡し予定はありません
+      </div>
+    `;
+  }
+
+  return alarmItems
+    .map(function (item) {
+      const icon =
+        item.type === "contract"
+          ? "📄"
+          : "🔑";
+
+      const typeClass =
+        item.type === "contract"
+          ? "upcoming-contract"
+          : "upcoming-key";
+
+      return `
+        <div class="upcoming-alarm-item ${typeClass}">
+
+          <div class="upcoming-alarm-icon">
+            ${icon}
+          </div>
+
+          <div class="upcoming-alarm-main">
+
+            <strong>
+              ${escapeAlarmHtml(
+                item.message
+              )}
+            </strong>
+
+            <span>
+              ${escapeAlarmHtml(
+                item.customer
+              )} 様
+            </span>
+
+            <small>
+              ${escapeAlarmHtml(
+                item.property
+              )}
+            </small>
+
+          </div>
+
+          <span
+            class="
+              today-staff-badge
+              staff-${escapeAlarmHtml(
+                item.staff
+              )}
+            "
+          >
+            ${escapeAlarmHtml(
+              item.staff
+            )}
+          </span>
+
+        </div>
+      `;
+    })
+    .join("");
+}
 function renderAlarm() {
   const alarmList =
     document.getElementById(
@@ -521,7 +707,13 @@ function renderAlarm() {
 
   const startSales =
     getTodayStartSales();
+const upcomingAlarmItems =
+  getUpcomingAlarmItems();
 
+const upcomingAlarmHtml =
+  createUpcomingAlarmHtml(
+    upcomingAlarmItems
+  );
   const contractListHtml =
     createTodayCustomerListHtml(
       contractSales,
@@ -609,7 +801,28 @@ function renderAlarm() {
 
       </div>
 
-    </div>
+        </div>
+
+    <section class="upcoming-alarm-section">
+
+      <div class="upcoming-alarm-header">
+
+        <div>
+          <h3>🔔 近日アラーム</h3>
+          <small>3日以内の契約・鍵渡し予定</small>
+        </div>
+
+        <span>
+          ${upcomingAlarmItems.length}件
+        </span>
+
+      </div>
+
+      <div class="upcoming-alarm-list">
+        ${upcomingAlarmHtml}
+      </div>
+
+    </section>
 
     <div class="today-detail-grid">
 

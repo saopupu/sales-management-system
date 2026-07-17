@@ -666,20 +666,20 @@ const inquiryRate = calculateRate(
 
       <hr>
 
-      <small>申込売上</small>
-      <strong>
-        ${formatYen(item.applicationSales)}
-      </strong>
+      <small>売上見込み</small>
+<strong>
+  ${formatYen(item.applicationSales)}
+</strong>
 
-      <small>入金売上</small>
-      <strong>
-        ${formatYen(item.paymentSales)}
-      </strong>
+<small>売上実績</small>
+<strong>
+  ${formatYen(item.paymentSales)}
+</strong>
 
-      <small>未入金額</small>
-      <strong>
-        ${formatYen(item.unpaidAmount)}
-      </strong>
+<small>未回収額</small>
+<strong>
+  ${formatYen(item.unpaidAmount)}
+</strong>
     `;
 
     staffSummary.appendChild(div);
@@ -882,109 +882,467 @@ setText(
    案件一覧
 ========================= */
 
-function renderTable(data) {
-  const salesTableBody = document.getElementById("salesTableBody");
-  const allData = getSalesData();
+function renderTable(
+  data
+) {
+  const salesTableBody =
+    document.getElementById(
+      "salesTableBody"
+    );
 
-  salesTableBody.innerHTML = "";
+  const allData =
+    getSalesData();
 
-  data.forEach(function (sale) {
-    const originalIndex = allData.indexOf(sale);
-    const brokerageFeeTaxIncluded = getBrokerageFee(sale);
+  if (!salesTableBody) {
+    return;
+  }
 
-    const adPaymentText = sale.adPaymentDate
-      ? `<span class="paid">${sale.adPaymentDate}</span>`
-      : `<span class="unpaid">未入金</span>`;
+  salesTableBody.innerHTML =
+    "";
 
-    const feePaymentText = sale.feePaymentDate
-      ? `<span class="paid">${sale.feePaymentDate}</span>`
-      : `<span class="unpaid">未入金</span>`;
+  data.forEach(
+    function (sale) {
+      const originalIndex =
+        allData.indexOf(
+          sale
+        );
 
-    const status = sale.status || "申込";
+      const brokerageFeeTaxIncluded =
+        getBrokerageFee(
+          sale
+        );
 
-    const tr = document.createElement("tr");
-    tr.className = `case-row status-${status}`;
+      const adPaymentText =
+        sale.adPaymentDate
+          ? `
+            <span class="paid">
+              ${sale.adPaymentDate}
+            </span>
+          `
+          : `
+            <span class="unpaid">
+              未入金
+            </span>
+          `;
 
-    tr.innerHTML = `
-      <td>${sale.applyDate || ""}</td>
-      <td>${sale.contractDate || ""}</td>
-      <td>${sale.startDate || ""}</td>
-      <td><span class="staff-badge staff-${sale.staff || ""}">${sale.staff || ""}</span></td>
-      <td>${sale.customer || ""}</td>
-     
-      <td>${sale.property || ""}</td>
-      <td>${sale.company || ""}</td>
-      <td>${formatYen(sale.rent)}</td>
-      <td>${formatYen(sale.managementFee)}</td>
-      <td>${formatYen(sale.ad)}</td>
-      <td>${adPaymentText}</td>
-      <td>${formatYen(sale.brokerageFee)}</td>
-      <td>${getTaxTypeText(sale.brokerageTaxType)}</td>
-      <td>${formatYen(brokerageFeeTaxIncluded)}</td>
-      <td>${feePaymentText}</td>
-      <td>${sale.installment || "利用なし"}</td>
-      <td><span class="status-badge status-${status}">${status}</span></td>
-      <td>${sale.memo || ""}</td>
-      <td>
-        <div class="action-buttons">
-          <button class="edit-btn" onclick="editSale(${originalIndex})">編集</button>
-          <button class="delete-btn" onclick="deleteSale(${originalIndex})">削除</button>
-        </div>
-      </td>
-    `;
+      const feePaymentText =
+        sale.feePaymentDate
+          ? `
+            <span class="paid">
+              ${sale.feePaymentDate}
+            </span>
+          `
+          : `
+            <span class="unpaid">
+              未入金
+            </span>
+          `;
 
-    salesTableBody.appendChild(tr);
-  });
+      const status =
+        sale.status ||
+        "申込";
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+      tr.className =
+        `case-row status-${status}`;
+
+      tr.innerHTML = `
+        <td>
+          ${sale.applyDate || ""}
+        </td>
+
+        <td>
+          ${sale.contractDate || ""}
+        </td>
+
+        <td>
+          ${sale.startDate || ""}
+        </td>
+
+        <td>
+          <span
+            class="
+              staff-badge
+              staff-${sale.staff || ""}
+            "
+          >
+            ${sale.staff || ""}
+          </span>
+        </td>
+
+        <td>
+          ${sale.customer || ""}
+        </td>
+
+        <td>
+          ${sale.property || ""}
+        </td>
+
+        <td>
+          ${sale.company || ""}
+        </td>
+
+        <td>
+          ${formatYen(
+            sale.rent
+          )}
+        </td>
+
+        <td>
+          ${formatYen(
+            sale.managementFee
+          )}
+        </td>
+
+        <td>
+          ${formatYen(
+            sale.ad
+          )}
+        </td>
+
+        <td>
+          ${adPaymentText}
+        </td>
+
+        <td>
+          ${formatYen(
+            sale.brokerageFee
+          )}
+        </td>
+
+        <td>
+          ${getTaxTypeText(
+            sale.brokerageTaxType
+          )}
+        </td>
+
+        <td>
+          ${formatYen(
+            brokerageFeeTaxIncluded
+          )}
+        </td>
+
+        <td>
+          ${feePaymentText}
+        </td>
+
+        <td>
+          ${sale.installment || "利用なし"}
+        </td>
+
+        <td>
+          <span
+            class="
+              status-badge
+              status-${status}
+            "
+          >
+            ${status}
+          </span>
+        </td>
+
+        <td>
+          ${sale.memo || ""}
+        </td>
+
+        <td>
+
+          <div class="case-menu-wrap">
+
+            <button
+              type="button"
+              class="case-menu-button"
+              aria-label="案件メニューを開く"
+              onclick="
+                toggleCaseMenu(
+                  event,
+                  ${originalIndex}
+                )
+              "
+            >
+              ⋮
+            </button>
+
+            <div
+  class="case-action-menu"
+  id="caseActionMenu-${originalIndex}"
+>
+
+              <button
+  type="button"
+  onclick="event.stopPropagation(); editSale(${originalIndex});"
+>
+  ✏️ 編集
+</button>
+
+              <button
+                type="button"
+                onclick="
+                  openBrokerageInvoice(
+                    ${originalIndex}
+                  );
+
+                  closeCaseMenus();
+                "
+              >
+                📄 仲介手数料請求書
+              </button>
+
+              <button
+                type="button"
+                onclick="
+                  openAdInvoice(
+                    ${originalIndex}
+                  );
+
+                  closeCaseMenus();
+                "
+              >
+                📄 AD請求書
+              </button>
+
+              <button
+                type="button"
+                class="danger"
+                onclick="
+                  deleteSale(
+                    ${originalIndex}
+                  );
+
+                  closeCaseMenus();
+                "
+              >
+                🗑 削除
+              </button>
+
+            </div>
+
+          </div>
+
+        </td>
+      `;
+
+      salesTableBody.appendChild(
+        tr
+      );
+    }
+  );
 }
+
 
 /* =========================
-   編集・削除
+   編集
 ========================= */
 
-function editSale(index) {
-  const sale = getSalesData()[index];
+/* =========================
+   編集
+========================= */
 
-  document.getElementById("applyDate").value = sale.applyDate || "";
-  document.getElementById("contractDate").value = sale.contractDate || "";
-  document.getElementById("startDate").value = sale.startDate || "";
-  document.getElementById("staff").value = sale.staff || "";
-  document.getElementById("customer").value = sale.customer || "";
-  
-  document.getElementById("property").value = sale.property || "";
-  document.getElementById("company").value = sale.company || "";
-  document.getElementById("rent").value = sale.rent || "";
-  document.getElementById("managementFee").value = sale.managementFee || "";
-  document.getElementById("ad").value = sale.ad || "";
-  document.getElementById("adPaymentDate").value = sale.adPaymentDate || "";
-  document.getElementById("brokerageFee").value = sale.brokerageFee || "";
-  document.getElementById("brokerageTaxType").value = sale.brokerageTaxType || "taxExcluded";
-  document.getElementById("feePaymentDate").value = sale.feePaymentDate || "";
-  document.getElementById("installment").value = sale.installment || "利用なし";
-  document.getElementById("status").value = sale.status || "申込";
-  document.getElementById("memo").value = sale.memo || "";
+function editSale(
+  index
+) {
+  const sale =
+    getSalesData()[index];
 
-  document.getElementById("editIndex").value = index;
-  document.getElementById("submitButton").textContent = "更新する";
+  if (!sale) {
+    alert(
+      "案件データを取得できませんでした。"
+    );
 
-  updateTaxPreview();
+    return;
+  }
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  /*
+    入力画面へ切り替える
+  */
+
+  if (
+    typeof showSystemView ===
+    "function"
+  ) {
+    showSystemView(
+      "form"
+    );
+  }
+
+  /*
+    入力画面が非表示に
+    なっている場合の保険
+  */
+
+  const formSection =
+    document.getElementById(
+      "salesFormSection"
+    );
+
+  if (formSection) {
+    formSection.hidden = false;
+
+    formSection.classList.remove(
+      "system-view-hidden"
+    );
+
+    formSection.style.removeProperty(
+      "display"
+    );
+  }
+
+  /*
+    案件情報をフォームへ反映
+  */
+
+  const inputValues = {
+    applyDate:
+      sale.applyDate || "",
+
+    contractDate:
+      sale.contractDate || "",
+
+    startDate:
+      sale.startDate || "",
+
+    staff:
+      sale.staff || "",
+
+    customer:
+      sale.customer || "",
+
+    property:
+      sale.property || "",
+
+    company:
+      sale.company || "",
+
+    rent:
+      sale.rent || "",
+
+    managementFee:
+      sale.managementFee || "",
+
+    ad:
+      sale.ad || "",
+
+    adPaymentDate:
+      sale.adPaymentDate || "",
+
+    brokerageFee:
+      sale.brokerageFee || "",
+
+    brokerageTaxType:
+      sale.brokerageTaxType ||
+      "taxExcluded",
+
+    feePaymentDate:
+      sale.feePaymentDate || "",
+
+    installment:
+      sale.installment ||
+      "利用なし",
+
+    status:
+      sale.status ||
+      "申込",
+
+    memo:
+      sale.memo || ""
+  };
+
+  Object.entries(
+    inputValues
+  ).forEach(
+    function (
+      [
+        elementId,
+        value
+      ]
+    ) {
+      const element =
+        document.getElementById(
+          elementId
+        );
+
+      if (element) {
+        element.value =
+          value;
+      }
+    }
+  );
+
+  const editIndexInput =
+    document.getElementById(
+      "editIndex"
+    );
+
+  if (editIndexInput) {
+    editIndexInput.value =
+      index;
+  }
+
+  const submitButton =
+    document.getElementById(
+      "submitButton"
+    );
+
+  if (submitButton) {
+    submitButton.textContent =
+      "更新する";
+  }
+
+  if (
+    typeof updateTaxPreview ===
+    "function"
+  ) {
+    updateTaxPreview();
+  }
+
+  closeCaseMenus();
+
+  /*
+    画面切り替え後に
+    入力フォームまで移動
+  */
+
+  window.setTimeout(
+    function () {
+      if (formSection) {
+        formSection.scrollIntoView({
+          behavior:
+            "smooth",
+
+          block:
+            "start"
+        });
+      }
+    },
+    50
+  );
 }
 
-async function deleteSale(index) {
-  const ok = confirm(
-    "このデータを削除しますか？"
-  );
+
+/* =========================
+   削除
+========================= */
+
+async function deleteSale(
+  index
+) {
+  const ok =
+    confirm(
+      "このデータを削除しますか？"
+    );
 
   if (!ok) {
     return;
   }
 
   const deleted =
-    await deleteSaleData(index);
+    await deleteSaleData(
+      index
+    );
 
   if (!deleted) {
     return;

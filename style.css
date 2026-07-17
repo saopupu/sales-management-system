@@ -3275,9 +3275,7 @@ button,
    申し込み入力をダッシュボード画面から非表示
 ================================================== */
 
-#salesFormSection {
-  display: none;
-}
+
 
 
 /* 申し込み一覧と今日のホームを上へ詰める */
@@ -3463,5 +3461,129 @@ button,
 
   #salesListSection .table-wrap {
     max-height: none;
+  }
+}
+/* =========================
+   近日アラーム
+========================= */
+
+.upcoming-alarm-section {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #f2d184;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fffdf6;
+}
+
+.upcoming-alarm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #f2d184;
+  background: #fff8df;
+}
+
+.upcoming-alarm-header h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+}
+
+.upcoming-alarm-header small {
+  color: #7a6a42;
+}
+
+.upcoming-alarm-header > span {
+  min-width: 40px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  font-weight: 700;
+  text-align: center;
+}
+
+.upcoming-alarm-list {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.upcoming-alarm-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.upcoming-alarm-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  font-size: 20px;
+}
+
+.upcoming-contract
+.upcoming-alarm-icon {
+  background: #fff0f2;
+}
+
+.upcoming-key
+.upcoming-alarm-icon {
+  background: #ebfbf2;
+}
+
+.upcoming-alarm-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.upcoming-alarm-main strong {
+  margin-bottom: 3px;
+  color: #d97706;
+  font-size: 14px;
+}
+
+.upcoming-alarm-main span {
+  font-weight: 700;
+}
+
+.upcoming-alarm-main small {
+  overflow: hidden;
+  margin-top: 2px;
+  color: #64748b;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upcoming-alarm-empty {
+  grid-column: 1 / -1;
+  padding: 20px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* スマホ表示 */
+
+@media (max-width: 768px) {
+  .upcoming-alarm-list {
+    grid-template-columns: 1fr;
+  }
+
+  .upcoming-alarm-header {
+    align-items: flex-start;
   }
 }

@@ -100,6 +100,11 @@ function showLoginScreen() {
 function showAppScreen(
   user
 ) {
+  if (!user) {
+    showLoginScreen();
+    return;
+  }
+
   const setting =
     getUserSetting(
       user.email
@@ -168,14 +173,24 @@ function showAppScreen(
   }
 
   /*
-    画面の権限を反映
+    権限を画面へ反映
   */
 
   applyUserPermissions();
 
   /*
-    ログインユーザーに合わせて
-    アラームを再表示
+    画面切り替えを再調整
+  */
+
+  if (
+    typeof refreshSystemNavigation ===
+    "function"
+  ) {
+    refreshSystemNavigation();
+  }
+
+  /*
+    今日のホームを再表示
   */
 
   if (
