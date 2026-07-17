@@ -182,171 +182,531 @@
 </section>
 
 <!-- =========================
-     今日のホーム
+     Dashboard Version 2
 ========================== -->
 
-<section class="card today-home-card" id="alarmCard">
+<div class="dashboard-v2">
 
-  <div class="today-home-header">
-    <div>
-      <h2>🏠 予定確認</h2>
 
-      <p id="todayHomeGreeting">
-        今日の予定を読み込んでいます...
-      </p>
+  <!-- =========================
+       メインダッシュボード
+  ========================== -->
+
+  <section
+    class="dashboard-v2-section dashboard-overview"
+    id="bossDashboardSection"
+  >
+
+    <div class="dashboard-v2-heading">
+
+      <div class="dashboard-v2-heading-title">
+        <span class="section-heading-icon">▥</span>
+
+        <div>
+          <h2>ダッシュボード</h2>
+          <p>表示月の申込み・契約・売上状況</p>
+        </div>
+      </div>
+
     </div>
+
+
+    <div class="dashboard-overview-layout">
+
+
+      <!-- 左側 -->
+
+      <div class="dashboard-kpi-area">
+
+
+        <!-- 上段：売上 -->
+
+        <div class="dashboard-sales-grid">
+
+
+          <article class="sales-hero-card sales-forecast-card">
+
+            <div class="sales-hero-icon">
+              📝
+            </div>
+
+            <div class="sales-hero-content">
+
+              <span class="sales-hero-label">
+                申込ベース売上
+              </span>
+
+              <strong id="bossApplyDateSales">
+                0円
+              </strong>
+
+              <div class="sales-hero-note">
+                <span>表示月の申込売上</span>
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="sales-hero-card sales-forecast-card">
+
+            <div class="sales-hero-icon">
+              ↗
+            </div>
+
+            <div class="sales-hero-content">
+
+              <span class="sales-hero-label">
+                契約予定売上
+              </span>
+
+              <strong id="bossApplicationSales">
+                0円
+              </strong>
+
+              <div class="sales-hero-note">
+                <span class="sales-mini-chart">
+                  ╱╲╱╲
+                </span>
+
+                <span>
+                  表示月の契約予定売上
+                </span>
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <article class="sales-hero-card sales-result-card">
+
+            <div class="sales-hero-icon">
+              ¥
+            </div>
+
+            <div class="sales-hero-content">
+
+              <span class="sales-hero-label">
+                売上実績
+              </span>
+
+              <strong id="bossPaymentSales">
+                0円
+              </strong>
+
+              <div class="sales-hero-note">
+                <span class="sales-mini-chart">
+                  ╱╲╱╲
+                </span>
+
+                <span>
+                  表示月の入金済み売上
+                </span>
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <!-- 中段：申込み・契約・成約率 -->
+
+        <div class="dashboard-main-kpi-grid">
+
+
+          <article class="dashboard-kpi-card">
+
+            <div class="dashboard-kpi-icon icon-application">
+              👤
+            </div>
+
+            <div class="dashboard-kpi-content">
+
+              <span>申込み人数</span>
+
+              <strong id="bossApplyCount">
+                0件
+              </strong>
+
+              <small>
+                表示月の申込み
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <article class="dashboard-kpi-card">
+
+            <div class="dashboard-kpi-icon icon-contract">
+              🤝
+            </div>
+
+            <div class="dashboard-kpi-content">
+
+              <span>契約人数</span>
+
+              <strong id="bossContractCount">
+                0件
+              </strong>
+
+              <small>
+                契約済み案件
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <article class="dashboard-kpi-card">
+
+            <div class="dashboard-kpi-icon icon-rate">
+              ◔
+            </div>
+
+            <div class="dashboard-kpi-content">
+
+              <span>成約率</span>
+
+              <strong id="bossContractRate">
+                0%
+              </strong>
+
+              <small>
+                契約人数 ÷ 申込み人数
+              </small>
+
+            </div>
+
+          </article>
+
+        </div>
+
+
+        <!-- 下段：審査落ち・キャンセル・未入金 -->
+
+        <div class="dashboard-sub-kpi-grid">
+
+
+          <article class="dashboard-sub-card sub-rejected">
+
+            <div class="dashboard-sub-icon">
+              🛡
+            </div>
+
+            <div class="dashboard-sub-content">
+              <span>審査落ち</span>
+
+              <strong id="bossRejectedCount">
+                0件
+              </strong>
+            </div>
+
+          </article>
+
+
+          <article class="dashboard-sub-card sub-cancel">
+
+            <div class="dashboard-sub-icon">
+              ×
+            </div>
+
+            <div class="dashboard-sub-content">
+              <span>キャンセル</span>
+
+              <strong id="bossCancelCount">
+                0件
+              </strong>
+            </div>
+
+          </article>
+
+
+          <article class="dashboard-sub-card sub-unpaid">
+
+            <div class="dashboard-sub-icon">
+              ▣
+            </div>
+
+            <div class="dashboard-sub-content">
+              <span>仲介未入金</span>
+
+              <strong id="bossUnpaidFee">
+                0件 / 0円
+              </strong>
+            </div>
+
+            <span class="dashboard-unpaid-label">
+              未入金
+            </span>
+
+          </article>
+
+
+          <article class="dashboard-sub-card sub-unpaid">
+
+            <div class="dashboard-sub-icon">
+              📣
+            </div>
+
+            <div class="dashboard-sub-content">
+              <span>AD未入金</span>
+
+              <strong id="bossUnpaidAd">
+                0件 / 0円
+              </strong>
+            </div>
+
+            <span class="dashboard-unpaid-label">
+              未入金
+            </span>
+
+          </article>
+
+        </div>
+
+      </div>
+
+
+      <!-- 右側：ランキング -->
+
+      <aside class="dashboard-ranking-card">
+
+        <div class="dashboard-ranking-header">
+
+          <h3>
+            👑 担当者ランキング
+          </h3>
+
+          <span>
+            入金売上
+          </span>
+
+        </div>
+
+        <div
+          id="staffRanking"
+          class="dashboard-ranking-list"
+        ></div>
+
+        <p class="dashboard-ranking-note">
+          ※ 表示月の売上実績
+        </p>
+
+      </aside>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       入金ベース売上
+  ========================== -->
+
+  <section
+    class="dashboard-v2-section payment-v2-section"
+    id="paymentDashboardSection"
+  >
+
+    <div class="dashboard-v2-heading">
+
+      <div class="dashboard-v2-heading-title">
+
+        <span class="section-heading-icon payment-heading-icon">
+          ¥
+        </span>
+
+        <div>
+          <h2>入金ベース売上</h2>
+          <p>表示月に実際に入金された金額</p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="payment-v2-grid">
+
+
+      <article class="payment-v2-card">
+
+        <div class="payment-v2-icon">
+          ¥
+        </div>
+
+        <div class="payment-v2-content">
+          <span>合計入金額</span>
+
+          <strong id="totalSales">
+            0円
+          </strong>
+        </div>
+
+      </article>
+
+
+      <article class="payment-v2-card">
+
+        <div class="payment-v2-icon">
+          🤝
+        </div>
+
+        <div class="payment-v2-content">
+          <span>仲介手数料入金額</span>
+
+          <strong id="totalFee">
+            0円
+          </strong>
+        </div>
+
+      </article>
+
+
+      <article class="payment-v2-card">
+
+        <div class="payment-v2-icon">
+          📣
+        </div>
+
+        <div class="payment-v2-content">
+          <span>広告料入金額</span>
+
+          <strong id="totalAd">
+            0円
+          </strong>
+        </div>
+
+      </article>
+
+
+      <article class="payment-v2-card">
+
+        <div class="payment-v2-icon">
+          👤
+        </div>
+
+        <div class="payment-v2-content">
+          <span>申込み人数</span>
+
+          <strong id="totalCount">
+            0件
+          </strong>
+        </div>
+
+      </article>
+
+
+      <article class="payment-v2-card payment-v2-unpaid">
+
+        <div class="payment-v2-icon">
+          ▣
+        </div>
+
+        <div class="payment-v2-content">
+          <span>仲介未入金</span>
+
+          <strong id="unpaidFeeCount">
+            0件
+          </strong>
+
+          <small>
+            入金日未登録
+          </small>
+        </div>
+
+      </article>
+
+
+      <article class="payment-v2-card payment-v2-unpaid">
+
+        <div class="payment-v2-icon">
+          ×
+        </div>
+
+        <div class="payment-v2-content">
+          <span>AD未入金</span>
+
+          <strong id="unpaidAdCount">
+            0件
+          </strong>
+
+          <small>
+            入金日未登録
+          </small>
+        </div>
+
+      </article>
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =========================
+       予定確認
+  ========================== -->
+
+  <section
+    class="dashboard-v2-section schedule-v2-section"
+    id="alarmCard"
+  >
+
+    <div class="schedule-v2-header">
+
+      <div class="dashboard-v2-heading-title">
+
+        <span class="section-heading-icon schedule-heading-icon">
+          ⚙
+        </span>
+
+        <div>
+          <h2>予定確認</h2>
+
+          <p id="todayHomeGreeting">
+            今日の予定を読み込んでいます...
+          </p>
+        </div>
+
+      </div>
+
+
+      <div
+        id="todayHomeDate"
+        class="today-home-date schedule-v2-date"
+      >
+        -
+      </div>
+
+    </div>
+
 
     <div
-      id="todayHomeDate"
-      class="today-home-date"
+      id="alarmList"
+      class="schedule-v2-content"
     >
-      -
-    </div>
-  </div>
 
-  <div id="alarmList">
+      <p class="today-home-loading">
+        読み込み中...
+      </p>
 
-    <p>読み込み中...</p>
-
-  </div>
-
-</section>
-<!-- =========================
-     社長ダッシュボード
-========================== -->
-<section
-  class="card"
-  id="bossDashboardSection"
->
-  <h2>📊 ダッシュボード</h2>
-
-  <div class="dashboard">
-
-    <div class="dashboard-card">
-      <span>売り上げ見込み</span>
-      <strong id="bossApplicationSales">0円</strong>
     </div>
 
-    <div class="dashboard-card">
-      <span>売上実績</span>
-      <strong id="bossPaymentSales">0円</strong>
-    </div>
-
-    <div class="dashboard-card">
-      <span>申込み人数</span>
-      <strong id="bossApplyCount">0件</strong>
-    </div>
-
-    <div class="dashboard-card">
-      <span>契約人数</span>
-      <strong id="bossContractCount">0件</strong>
-    </div>
-
-    <div class="dashboard-card">
-      <span>全体成約率</span>
-      <strong id="bossContractRate">0%</strong>
-    </div>
-
-    <div class="dashboard-card warning">
-      <span>審査落ち</span>
-      <strong id="bossRejectedCount">0件</strong>
-    </div>
-
-    <div class="dashboard-card warning">
-      <span>キャンセル</span>
-      <strong id="bossCancelCount">0件</strong>
-    </div>
-
-    <div class="dashboard-card warning">
-      <span>仲介未入金</span>
-      <strong id="bossUnpaidFee">0件 / 0円</strong>
-    </div>
-
-    <div class="dashboard-card warning">
-      <span>AD未入金</span>
-      <strong id="bossUnpaidAd">0件 / 0円</strong>
-    </div>
-
-  </div>
-
-  <div class="card ranking-card">
-    <h3>🏆 担当者ランキング</h3>
-    <div id="staffRanking"></div>
-  </div>
-</section>
+  </section>
 
 
-<!-- =========================
-     入金ベース売上
-========================== -->
-<section
-  class="dashboard"
-  id="paymentDashboardSection"
->
-
-  <div class="dashboard-card">
-    <span>合計入金額</span>
-    <strong id="totalSales">0円</strong>
-  </div>
-
-  <div class="dashboard-card">
-    <span>仲介手数料入金額</span>
-    <strong id="totalFee">0円</strong>
-  </div>
-
-  <div class="dashboard-card">
-    <span>広告料入金額</span>
-    <strong id="totalAd">0円</strong>
-  </div>
-
-  <div class="dashboard-card">
-    <span>申込み人数</span>
-    <strong id="totalCount">0件</strong>
-  </div>
-
-  <div class="dashboard-card warning">
-    <span>仲介未入金</span>
-    <strong id="unpaidFeeCount">0件</strong>
-  </div>
-
-  <div class="dashboard-card warning">
-    <span>AD未入金</span>
-    <strong id="unpaidAdCount">0件</strong>
-  </div>
-
-</section>
-
-
-<!-- =========================
-     ステータス件数
-========================== -->
-<section
-  class="simple-dashboard"
-  id="statusDashboardSection"
->
-
-  <div class="simple-card">
-    <span>申込・進行中</span>
-    <strong id="dashApplyCount">0件</strong>
-  </div>
-
-  <div class="simple-card">
-    <span>契約済み</span>
-    <strong id="dashContractCount">0件</strong>
-  </div>
-
-  <div class="simple-card">
-    <span>審査落ち</span>
-    <strong id="dashRejectedCount">0件</strong>
-  </div>
-
-  <div class="simple-card">
-    <span>キャンセル</span>
-    <strong id="dashCancelCount">0件</strong>
-  </div>
-
-</section>
-
+</div>
 
 <!-- =========================
      申し込み入力

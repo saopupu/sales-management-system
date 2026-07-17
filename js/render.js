@@ -362,9 +362,20 @@ function renderDashboard(data) {
 }
 
 function renderBossDashboard(data) {
-  const selectedMonth = getSelectedMonth();
+  const selectedMonth =
+    getSelectedMonth();
 
-  let applicationSales = 0;
+  /*
+    申込日が表示月の案件
+  */
+
+  const monthlyApplicationData =
+    getMonthlyApplicationData(
+      selectedMonth
+    );
+
+  let applyDateSales = 0;
+  let contractScheduleSales = 0;
   let paymentSales = 0;
 
   let unpaidFeeCount = 0;
@@ -373,70 +384,183 @@ function renderBossDashboard(data) {
   let unpaidAdCount = 0;
   let unpaidAdAmount = 0;
 
+
+  /*
+    申込ベース売上
+
+    申込日が表示月で、
+    審査落ち・キャンセル以外を集計
+  */
+
+  monthlyApplicationData.forEach(
+    function (sale) {
+
+      if (
+        isStatus(
+          sale,
+          "審査落ち"
+        ) ||
+        isStatus(
+          sale,
+          "キャンセル"
+        )
+      ) {
+        return;
+      }
+
+      applyDateSales +=
+        getSaleTotal(sale);
+    }
+  );
+
+
+  /*
+    契約予定売上・入金実績・未入金
+
+    dataは契約日ベースで
+    絞り込まれた案件
+  */
+
   data.forEach(function (sale) {
-    const fee = getBrokerageFee(sale);
-    const ad = getAd(sale);
+    const fee =
+      getBrokerageFee(sale);
 
-    // 申込売上は表示中の案件ベース
-    applicationSales += fee + ad;
+    const ad =
+      getAd(sale);
 
-    // 入金売上は入金日ベース
-    paymentSales += getMonthlyPaymentTotal(
-      sale,
-      selectedMonth
-    );
+    /*
+      契約予定売上
 
-    if (fee > 0 && !sale.feePaymentDate) {
-      unpaidFeeCount++;
-      unpaidFeeAmount += fee;
+      審査落ち・キャンセルは
+      売上見込みから除外
+    */
+
+    if (
+      !isStatus(
+        sale,
+        "審査落ち"
+      ) &&
+      !isStatus(
+        sale,
+        "キャンセル"
+      )
+    ) {
+      contractScheduleSales +=
+        fee + ad;
     }
 
-    if (ad > 0 && !sale.adPaymentDate) {
+    /*
+      入金日ベースの売上実績
+    */
+
+    paymentSales +=
+      getMonthlyPaymentTotal(
+        sale,
+        selectedMonth
+      );
+
+    /*
+      仲介手数料未入金
+    */
+
+    if (
+      fee > 0 &&
+      !sale.feePaymentDate
+    ) {
+      unpaidFeeCount++;
+
+      unpaidFeeAmount +=
+        fee;
+    }
+
+    /*
+      AD未入金
+    */
+
+    if (
+      ad > 0 &&
+      !sale.adPaymentDate
+    ) {
       unpaidAdCount++;
-      unpaidAdAmount += ad;
+
+      unpaidAdAmount +=
+        ad;
     }
   });
 
+
   /*
-   * 申込み人数と成約率は申込日ベースで集計します。
-   * 契約済みや審査落ちへ変更しても、
-   * 申込み人数から消えません。
-   */
-  const monthlyApplicationData =
-    getMonthlyApplicationData(selectedMonth);
+    申込日ベースの件数集計
+  */
 
   const applyCount =
     monthlyApplicationData.length;
 
   const contractCount =
-    monthlyApplicationData.filter(function (sale) {
-      return isContractStatus(sale);
-    }).length;
+    monthlyApplicationData.filter(
+      function (sale) {
+        return isContractStatus(
+          sale
+        );
+      }
+    ).length;
 
   const rejectedCount =
-    monthlyApplicationData.filter(function (sale) {
-      return isStatus(sale, "審査落ち");
-    }).length;
+    monthlyApplicationData.filter(
+      function (sale) {
+        return isStatus(
+          sale,
+          "審査落ち"
+        );
+      }
+    ).length;
 
   const cancelCount =
-    monthlyApplicationData.filter(function (sale) {
-      return isStatus(sale, "キャンセル");
-    }).length;
+    monthlyApplicationData.filter(
+      function (sale) {
+        return isStatus(
+          sale,
+          "キャンセル"
+        );
+      }
+    ).length;
 
-  const contractRate = calculateRate(
-    contractCount,
-    applyCount
+  const contractRate =
+    calculateRate(
+      contractCount,
+      applyCount
+    );
+
+
+  /*
+    金額表示
+  */
+
+  setText(
+    "bossApplyDateSales",
+    formatYen(
+      applyDateSales
+    )
   );
 
   setText(
     "bossApplicationSales",
-    formatYen(applicationSales)
+    formatYen(
+      contractScheduleSales
+    )
   );
 
   setText(
     "bossPaymentSales",
-    formatYen(paymentSales)
+    formatYen(
+      paymentSales
+    )
   );
+
+
+  /*
+    件数表示
+  */
 
   setText(
     "bossApplyCount",
@@ -463,22 +587,34 @@ function renderBossDashboard(data) {
     cancelCount + "件"
   );
 
+
+  /*
+    未入金表示
+  */
+
   setText(
     "bossUnpaidFee",
     unpaidFeeCount +
       "件 / " +
-      formatYen(unpaidFeeAmount)
+      formatYen(
+        unpaidFeeAmount
+      )
   );
 
   setText(
     "bossUnpaidAd",
     unpaidAdCount +
       "件 / " +
-      formatYen(unpaidAdAmount)
+      formatYen(
+        unpaidAdAmount
+      )
   );
+
 
   renderStaffRanking(data);
 }
+
+  
 
 function renderStaffRanking(data) {
   const rankingArea = document.getElementById("staffRanking");

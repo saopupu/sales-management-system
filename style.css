@@ -3587,3 +3587,3793 @@ button,
     align-items: flex-start;
   }
 }
+/* ==================================================
+   Version 9.0
+   Fデザイン｜直感型ダッシュボード
+================================================== */
+
+
+/* ダッシュボード全体 */
+
+#bossDashboardSection {
+  overflow: hidden;
+}
+
+#bossDashboardSection > h2 {
+  margin-bottom: 24px;
+}
+
+#bossDashboardSection > .dashboard {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+
+/* 全カード共通 */
+
+#bossDashboardSection .dashboard-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 122px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-left: none;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.055),
+    0 2px 6px rgba(15, 23, 42, 0.025);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+#bossDashboardSection .dashboard-card:hover {
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+  box-shadow:
+    0 15px 32px rgba(15, 23, 42, 0.11),
+    0 3px 8px rgba(15, 23, 42, 0.04);
+}
+
+#bossDashboardSection .dashboard-card span {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin: 0 0 10px;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+
+#bossDashboardSection .dashboard-card strong {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #172033;
+  font-size: clamp(22px, 2vw, 29px);
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+
+/* ==================================================
+   上段｜売上見込み・売上実績
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(1),
+#bossDashboardSection .dashboard-card:nth-child(2) {
+  grid-column: span 3;
+  min-height: 164px;
+  padding: 26px 28px;
+  border: none;
+  color: #ffffff;
+}
+
+
+/* 売上見込み */
+
+#bossDashboardSection .dashboard-card:nth-child(1) {
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(255, 255, 255, 0.2),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #e11d48 0%,
+      #f43f5e 52%,
+      #fb7185 100%
+    );
+  box-shadow:
+    0 16px 35px rgba(225, 29, 72, 0.24),
+    0 4px 10px rgba(225, 29, 72, 0.12);
+}
+
+
+/* 売上実績 */
+
+#bossDashboardSection .dashboard-card:nth-child(2) {
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(255, 255, 255, 0.2),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #2563eb 0%,
+      #0284c7 52%,
+      #06b6d4 100%
+    );
+  box-shadow:
+    0 16px 35px rgba(37, 99, 235, 0.23),
+    0 4px 10px rgba(37, 99, 235, 0.12);
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1) span,
+#bossDashboardSection .dashboard-card:nth-child(2) span {
+  margin-bottom: 13px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1) strong,
+#bossDashboardSection .dashboard-card:nth-child(2) strong {
+  color: #ffffff;
+  font-size: clamp(31px, 3.1vw, 44px);
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.13);
+}
+
+
+/* 大きなカード右上のアイコン */
+
+#bossDashboardSection .dashboard-card:nth-child(1)::before,
+#bossDashboardSection .dashboard-card:nth-child(2)::before {
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 23px;
+  backdrop-filter: blur(6px);
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1)::before {
+  content: "📈";
+}
+
+#bossDashboardSection .dashboard-card:nth-child(2)::before {
+  content: "💴";
+}
+
+
+/* ==================================================
+   中段｜申込み・契約・成約率
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(3),
+#bossDashboardSection .dashboard-card:nth-child(4),
+#bossDashboardSection .dashboard-card:nth-child(5) {
+  grid-column: span 2;
+  min-height: 130px;
+}
+
+
+/* 申込み人数 */
+
+#bossDashboardSection .dashboard-card:nth-child(3) {
+  border-top: 4px solid #3b82f6;
+  background: linear-gradient(180deg, #f8fbff, #ffffff);
+}
+
+
+/* 契約人数 */
+
+#bossDashboardSection .dashboard-card:nth-child(4) {
+  border-top: 4px solid #10b981;
+  background: linear-gradient(180deg, #f6fdf9, #ffffff);
+}
+
+
+/* 成約率 */
+
+#bossDashboardSection .dashboard-card:nth-child(5) {
+  border-top: 4px solid #8b5cf6;
+  background: linear-gradient(180deg, #faf8ff, #ffffff);
+}
+
+#bossDashboardSection .dashboard-card:nth-child(3) strong {
+  color: #2563eb;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(4) strong {
+  color: #059669;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(5) strong {
+  color: #7c3aed;
+}
+
+
+/* ==================================================
+   下段｜注意・未回収
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(6),
+#bossDashboardSection .dashboard-card:nth-child(7),
+#bossDashboardSection .dashboard-card:nth-child(8),
+#bossDashboardSection .dashboard-card:nth-child(9) {
+  grid-column: span 3;
+  min-height: 112px;
+}
+
+
+/* 審査落ち */
+
+#bossDashboardSection .dashboard-card:nth-child(6) {
+  border-left: 5px solid #ef4444;
+  background: #fffafa;
+}
+
+
+/* キャンセル */
+
+#bossDashboardSection .dashboard-card:nth-child(7) {
+  border-left: 5px solid #f59e0b;
+  background: #fffdf7;
+}
+
+
+/* 仲介未回収 */
+
+#bossDashboardSection .dashboard-card:nth-child(8) {
+  border-left: 5px solid #ec4899;
+  background: #fff9fc;
+}
+
+
+/* AD未回収 */
+
+#bossDashboardSection .dashboard-card:nth-child(9) {
+  border-left: 5px solid #6366f1;
+  background: #fafaff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(6) strong {
+  color: #dc2626;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(7) strong {
+  color: #d97706;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(8) strong {
+  color: #db2777;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(9) strong {
+  color: #4f46e5;
+}
+
+
+/* ==================================================
+   担当者ランキング
+================================================== */
+
+#bossDashboardSection .ranking-card {
+  margin: 4px 0 0;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #ffffff, #fbfcfe);
+  box-shadow: none;
+}
+
+#bossDashboardSection .ranking-card h3 {
+  margin-bottom: 8px;
+  color: #172033;
+  font-size: 17px;
+}
+
+#bossDashboardSection .ranking-row {
+  padding: 15px 4px;
+}
+
+#bossDashboardSection .ranking-row strong {
+  color: #172033;
+  font-size: 18px;
+}
+
+
+/* ==================================================
+   タブレット
+================================================== */
+
+@media (max-width: 1050px) {
+  #bossDashboardSection > .dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(n) {
+    grid-column: span 1;
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(1),
+  #bossDashboardSection .dashboard-card:nth-child(2) {
+    min-height: 150px;
+  }
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 650px) {
+  #bossDashboardSection {
+    padding: 18px 14px;
+  }
+
+  #bossDashboardSection > .dashboard {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(n) {
+    grid-column: span 1;
+    min-height: 106px;
+    padding: 18px;
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(1),
+  #bossDashboardSection .dashboard-card:nth-child(2) {
+    min-height: 138px;
+    padding: 22px 20px;
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(1) strong,
+  #bossDashboardSection .dashboard-card:nth-child(2) strong {
+    padding-right: 42px;
+    font-size: clamp(27px, 9vw, 36px);
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(1)::before,
+  #bossDashboardSection .dashboard-card:nth-child(2)::before {
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+}
+/* ==================================================
+   Version 9.2
+   現在の配置を維持したままUI最終調整
+================================================== */
+
+
+/* ==================================================
+   ダッシュボードセクション全体
+================================================== */
+
+#bossDashboardSection {
+  padding: 26px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fbfcfe 100%
+    );
+  box-shadow:
+    0 12px 34px rgba(15, 23, 42, 0.055),
+    0 2px 8px rgba(15, 23, 42, 0.025);
+}
+
+#bossDashboardSection > h2 {
+  margin: 0 0 22px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9eef5;
+  color: #172033;
+  font-size: 21px;
+  font-weight: 850;
+}
+
+#bossDashboardSection > h2::after {
+  width: 42px;
+}
+
+
+/* ==================================================
+   ダッシュボードの余白
+================================================== */
+
+#bossDashboardSection > .dashboard {
+  gap: 14px;
+  margin-bottom: 17px;
+}
+
+
+/* ==================================================
+   カード共通仕上げ
+================================================== */
+
+#bossDashboardSection .dashboard-card {
+  border-radius: 16px;
+  box-shadow:
+    0 6px 18px rgba(15, 23, 42, 0.055),
+    0 1px 4px rgba(15, 23, 42, 0.025);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+#bossDashboardSection .dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 11px 25px rgba(15, 23, 42, 0.09),
+    0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+#bossDashboardSection .dashboard-card span {
+  margin-bottom: 8px;
+  color: #5d6d84;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+}
+
+#bossDashboardSection .dashboard-card strong {
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+
+/* ==================================================
+   上段｜売上見込み・売上実績
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(1),
+#bossDashboardSection .dashboard-card:nth-child(2) {
+  min-height: 145px;
+  padding: 23px 25px;
+  border-radius: 17px;
+}
+
+
+/* 売上見込み */
+
+#bossDashboardSection .dashboard-card:nth-child(1) {
+  background:
+    radial-gradient(
+      circle at 91% 13%,
+      rgba(255, 255, 255, 0.2),
+      transparent 31%
+    ),
+    linear-gradient(
+      135deg,
+      #e91e4d 0%,
+      #f43f5e 55%,
+      #fb7185 100%
+    );
+  box-shadow:
+    0 12px 28px rgba(225, 29, 72, 0.2),
+    0 3px 8px rgba(225, 29, 72, 0.1);
+}
+
+
+/* 売上実績 */
+
+#bossDashboardSection .dashboard-card:nth-child(2) {
+  background:
+    radial-gradient(
+      circle at 91% 13%,
+      rgba(255, 255, 255, 0.2),
+      transparent 31%
+    ),
+    linear-gradient(
+      135deg,
+      #2563eb 0%,
+      #0b8ed0 55%,
+      #26b9d1 100%
+    );
+  box-shadow:
+    0 12px 28px rgba(37, 99, 235, 0.19),
+    0 3px 8px rgba(37, 99, 235, 0.1);
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1) span,
+#bossDashboardSection .dashboard-card:nth-child(2) span {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1) strong,
+#bossDashboardSection .dashboard-card:nth-child(2) strong {
+  padding-right: 45px;
+  font-size: clamp(28px, 2.7vw, 39px);
+  line-height: 1.13;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1)::before,
+#bossDashboardSection .dashboard-card:nth-child(2)::before {
+  top: 18px;
+  right: 19px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+
+/* ==================================================
+   中段｜申込み・契約・成約率
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(3),
+#bossDashboardSection .dashboard-card:nth-child(4),
+#bossDashboardSection .dashboard-card:nth-child(5) {
+  min-height: 92px;
+  padding: 16px 18px;
+  border-top-width: 3px;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(3) {
+  border-color: #60a5fa;
+  background:
+    radial-gradient(
+      circle at 97% 0%,
+      rgba(236, 72, 153, 0.075) 0 44px,
+      transparent 45px
+    ),
+    #ffffff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(4) {
+  border-color: #34d399;
+  background:
+    radial-gradient(
+      circle at 97% 0%,
+      rgba(16, 185, 129, 0.07) 0 44px,
+      transparent 45px
+    ),
+    #ffffff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(5) {
+  border-color: #a78bfa;
+  background:
+    radial-gradient(
+      circle at 97% 0%,
+      rgba(139, 92, 246, 0.075) 0 44px,
+      transparent 45px
+    ),
+    #ffffff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(3) strong,
+#bossDashboardSection .dashboard-card:nth-child(4) strong,
+#bossDashboardSection .dashboard-card:nth-child(5) strong {
+  font-size: clamp(20px, 1.7vw, 27px);
+}
+
+
+/* ==================================================
+   下段｜審査落ち・キャンセル・未入金
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(6),
+#bossDashboardSection .dashboard-card:nth-child(7),
+#bossDashboardSection .dashboard-card:nth-child(8),
+#bossDashboardSection .dashboard-card:nth-child(9) {
+  min-height: 85px;
+  padding: 15px 18px;
+  border-left-width: 3px;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(6) {
+  background:
+    radial-gradient(
+      circle at 98% 0%,
+      rgba(245, 158, 11, 0.11) 0 40px,
+      transparent 41px
+    ),
+    #fffdfc;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(7) {
+  background:
+    radial-gradient(
+      circle at 98% 0%,
+      rgba(245, 158, 11, 0.11) 0 40px,
+      transparent 41px
+    ),
+    #fffdf8;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(8) {
+  background:
+    radial-gradient(
+      circle at 98% 0%,
+      rgba(236, 72, 153, 0.075) 0 40px,
+      transparent 41px
+    ),
+    #fffafd;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(9) {
+  background:
+    radial-gradient(
+      circle at 98% 0%,
+      rgba(99, 102, 241, 0.075) 0 40px,
+      transparent 41px
+    ),
+    #fbfbff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(6) strong,
+#bossDashboardSection .dashboard-card:nth-child(7) strong,
+#bossDashboardSection .dashboard-card:nth-child(8) strong,
+#bossDashboardSection .dashboard-card:nth-child(9) strong {
+  font-size: clamp(19px, 1.55vw, 25px);
+}
+
+
+/* ==================================================
+   担当者ランキング
+================================================== */
+
+#bossDashboardSection .ranking-card {
+  margin-top: 10px;
+  margin-bottom: 0;
+  padding: 18px 20px;
+  border: 1px solid #e4eaf2;
+  border-radius: 15px;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfcfe
+    );
+  box-shadow:
+    0 5px 16px rgba(15, 23, 42, 0.035);
+}
+
+#bossDashboardSection .ranking-card h3 {
+  margin: 0 0 7px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf1f5;
+  color: #172033;
+  font-size: 15px;
+  font-weight: 850;
+}
+
+#bossDashboardSection .ranking-row {
+  min-height: 42px;
+  padding: 10px 3px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+#bossDashboardSection .ranking-row span {
+  color: #40516a;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+#bossDashboardSection .ranking-row strong {
+  color: #172033;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+
+/* ==================================================
+   下部｜入金ベース売上カード
+================================================== */
+
+#paymentDashboardSection {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      6,
+      minmax(0, 1fr)
+    );
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+#paymentDashboardSection .dashboard-card {
+  position: relative;
+  min-height: 82px;
+  padding: 14px 15px;
+  overflow: hidden;
+  border: 1px solid #e3e9f1;
+  border-left: none;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow:
+    0 4px 13px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+#paymentDashboardSection .dashboard-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.075);
+}
+
+#paymentDashboardSection .dashboard-card::after {
+  content: "";
+  position: absolute;
+  top: -38px;
+  right: -38px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(236, 72, 153, 0.055);
+}
+
+#paymentDashboardSection .dashboard-card span {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 7px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+#paymentDashboardSection .dashboard-card strong {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  color: #172033;
+  font-size: clamp(16px, 1.35vw, 21px);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+#paymentDashboardSection .dashboard-card.warning {
+  border-left: 3px solid #f59e0b;
+}
+
+#paymentDashboardSection .dashboard-card.warning::after {
+  background: rgba(245, 158, 11, 0.08);
+}
+
+
+/* ==================================================
+   最下部｜ステータスカード
+================================================== */
+
+#statusDashboardSection {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+#statusDashboardSection .simple-card {
+  position: relative;
+  min-height: 78px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border: 1px solid #e3e9f1;
+  border-radius: 13px;
+  background: #ffffff;
+  box-shadow:
+    0 4px 13px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+#statusDashboardSection .simple-card:hover {
+  transform: translateY(-2px);
+  border-color: #cbd5e1;
+  box-shadow:
+    0 8px 18px rgba(15, 23, 42, 0.075);
+}
+
+#statusDashboardSection .simple-card::after {
+  content: "";
+  position: absolute;
+  top: -37px;
+  right: -37px;
+  width: 77px;
+  height: 77px;
+  border-radius: 50%;
+  background: rgba(236, 72, 153, 0.055);
+}
+
+#statusDashboardSection .simple-card span {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 7px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+#statusDashboardSection .simple-card strong {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  color: #172033;
+  font-size: clamp(17px, 1.4vw, 22px);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+
+/* ステータスごとの薄い色分け */
+
+#statusDashboardSection .simple-card:nth-child(1) {
+  border-left: 3px solid #3b82f6;
+}
+
+#statusDashboardSection .simple-card:nth-child(1)::after {
+  background: rgba(59, 130, 246, 0.075);
+}
+
+#statusDashboardSection .simple-card:nth-child(2) {
+  border-left: 3px solid #10b981;
+}
+
+#statusDashboardSection .simple-card:nth-child(2)::after {
+  background: rgba(16, 185, 129, 0.075);
+}
+
+#statusDashboardSection .simple-card:nth-child(3) {
+  border-left: 3px solid #ef4444;
+}
+
+#statusDashboardSection .simple-card:nth-child(3)::after {
+  background: rgba(239, 68, 68, 0.07);
+}
+
+#statusDashboardSection .simple-card:nth-child(4) {
+  border-left: 3px solid #f59e0b;
+}
+
+#statusDashboardSection .simple-card:nth-child(4)::after {
+  background: rgba(245, 158, 11, 0.085);
+}
+
+
+/* ==================================================
+   ノートパソコン
+================================================== */
+
+@media (max-width: 1200px) {
+
+  #paymentDashboardSection {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==================================================
+   タブレット
+================================================== */
+
+@media (max-width: 900px) {
+
+  #bossDashboardSection {
+    padding: 20px;
+  }
+
+  #paymentDashboardSection,
+  #statusDashboardSection {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 650px) {
+
+  #bossDashboardSection {
+    padding: 17px 13px;
+  }
+
+  #bossDashboardSection > h2 {
+    margin-bottom: 17px;
+    font-size: 19px;
+  }
+
+  #bossDashboardSection > .dashboard {
+    gap: 10px;
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(1),
+  #bossDashboardSection .dashboard-card:nth-child(2) {
+    min-height: 125px;
+    padding: 20px 18px;
+  }
+
+  #bossDashboardSection .dashboard-card:nth-child(3),
+  #bossDashboardSection .dashboard-card:nth-child(4),
+  #bossDashboardSection .dashboard-card:nth-child(5),
+  #bossDashboardSection .dashboard-card:nth-child(6),
+  #bossDashboardSection .dashboard-card:nth-child(7),
+  #bossDashboardSection .dashboard-card:nth-child(8),
+  #bossDashboardSection .dashboard-card:nth-child(9) {
+    min-height: 82px;
+    padding: 14px 16px;
+  }
+
+  #bossDashboardSection .ranking-card {
+    padding: 16px;
+  }
+
+  #paymentDashboardSection,
+  #statusDashboardSection {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  #paymentDashboardSection .dashboard-card,
+  #statusDashboardSection .simple-card {
+    min-height: 75px;
+  }
+
+}
+/* ==================================================
+   Version 9.3
+   Navy Executive Theme
+   配置・内容はそのまま
+================================================== */
+
+:root {
+  --navy-950: #061b3a;
+  --navy-900: #082653;
+  --navy-800: #0b3470;
+  --navy-700: #124b9a;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --surface: #ffffff;
+  --surface-soft: #f6f9fd;
+  --line: #dce5f0;
+  --text-main: #0b1f40;
+  --text-sub: #61718a;
+}
+
+
+/* ==================================================
+   全体背景
+================================================== */
+
+body {
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbff 0,
+      #f2f6fb 280px,
+      #f4f7fb 100%
+    );
+  color: var(--text-main);
+}
+
+
+/* ==================================================
+   左サイドバー
+================================================== */
+
+.sidebar {
+  border-right: none;
+  background:
+    linear-gradient(
+      180deg,
+      #061b3a 0%,
+      #082653 58%,
+      #061b3a 100%
+    );
+  box-shadow:
+    10px 0 34px rgba(6, 27, 58, 0.17);
+}
+
+.sidebar-brand {
+  border-bottom-color: rgba(255, 255, 255, 0.11);
+}
+
+.sidebar-logo {
+  background:
+    linear-gradient(
+      135deg,
+      #1d4ed8,
+      #3b82f6
+    );
+  box-shadow:
+    0 9px 22px rgba(37, 99, 235, 0.35);
+}
+
+.sidebar-brand strong {
+  color: #ffffff;
+}
+
+.sidebar-brand span {
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.sidebar-link {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.sidebar-link:hover {
+  color: #ffffff;
+  background: rgba(59, 130, 246, 0.17);
+  transform: translateX(2px);
+}
+
+.sidebar-link.active {
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      #124b9a,
+      #1766c2
+    );
+  box-shadow:
+    inset 3px 0 0 #60a5fa,
+    0 8px 20px rgba(3, 18, 43, 0.25);
+}
+
+.sidebar-footer {
+  border-top-color: rgba(255, 255, 255, 0.11);
+  color: rgba(255, 255, 255, 0.63);
+}
+
+.sidebar-footer small {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+
+/* ==================================================
+   上部ヘッダー
+================================================== */
+
+.main-content header {
+  border-color: #dce5f0;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 8px 24px rgba(8, 38, 83, 0.065);
+}
+
+.main-content header h1,
+#loginUserName {
+  color: var(--navy-950);
+}
+
+#logoutButton {
+  border-color: #cdd9e8;
+  color: var(--navy-800);
+}
+
+#logoutButton:hover {
+  border-color: #8fb3e8;
+  background: #eff6ff;
+  color: var(--navy-700);
+}
+
+
+/* ==================================================
+   月選択・出力ボタン
+================================================== */
+
+.month-filter {
+  border-color: var(--line);
+  background: #ffffff;
+}
+
+#showAllButton,
+#csvButton,
+#excelButton {
+  background:
+    linear-gradient(
+      180deg,
+      #0b3470,
+      #061f47
+    );
+  color: #ffffff;
+  box-shadow:
+    0 6px 15px rgba(6, 31, 71, 0.2);
+}
+
+#showAllButton:hover,
+#csvButton:hover,
+#excelButton:hover {
+  background:
+    linear-gradient(
+      180deg,
+      #124b9a,
+      #082653
+    );
+}
+
+
+/* ==================================================
+   ダッシュボード外枠
+================================================== */
+
+#bossDashboardSection {
+  border-color: #d9e3ef;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfdff
+    );
+  box-shadow:
+    0 13px 35px rgba(8, 38, 83, 0.07);
+}
+
+#bossDashboardSection > h2 {
+  color: var(--navy-950);
+  border-bottom-color: #e2e9f2;
+}
+
+#bossDashboardSection > h2::after {
+  background:
+    linear-gradient(
+      90deg,
+      #0b3470,
+      #3b82f6
+    );
+}
+
+
+/* ==================================================
+   売上見込み・売上実績
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(1) {
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(96, 165, 250, 0.23),
+      transparent 31%
+    ),
+    linear-gradient(
+      135deg,
+      #061b3a 0%,
+      #0a3471 56%,
+      #124b9a 100%
+    );
+  box-shadow:
+    0 16px 34px rgba(6, 27, 58, 0.27),
+    0 4px 10px rgba(6, 27, 58, 0.12);
+}
+
+#bossDashboardSection .dashboard-card:nth-child(2) {
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(147, 197, 253, 0.24),
+      transparent 31%
+    ),
+    linear-gradient(
+      135deg,
+      #173a98 0%,
+      #204ec5 54%,
+      #326fe3 100%
+    );
+  box-shadow:
+    0 16px 34px rgba(30, 64, 175, 0.25),
+    0 4px 10px rgba(30, 64, 175, 0.12);
+}
+
+#bossDashboardSection .dashboard-card:nth-child(1)::before,
+#bossDashboardSection .dashboard-card:nth-child(2)::before {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.13);
+}
+
+
+/* ==================================================
+   申込み・契約・成約率
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(3),
+#bossDashboardSection .dashboard-card:nth-child(4),
+#bossDashboardSection .dashboard-card:nth-child(5) {
+  border-top-color: #2e65bd;
+  background:
+    radial-gradient(
+      circle at 97% 0%,
+      rgba(37, 99, 235, 0.075) 0 44px,
+      transparent 45px
+    ),
+    #ffffff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(3) strong,
+#bossDashboardSection .dashboard-card:nth-child(4) strong,
+#bossDashboardSection .dashboard-card:nth-child(5) strong {
+  color: var(--navy-800);
+}
+
+
+/* ==================================================
+   審査落ち・キャンセル・未入金
+================================================== */
+
+#bossDashboardSection .dashboard-card:nth-child(6) {
+  border-left-color: #dc2626;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(7) {
+  border-left-color: #f59e0b;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(8),
+#bossDashboardSection .dashboard-card:nth-child(9) {
+  border-left-color: #1d4ed8;
+  background:
+    radial-gradient(
+      circle at 98% 0%,
+      rgba(37, 99, 235, 0.085) 0 40px,
+      transparent 41px
+    ),
+    #fbfdff;
+}
+
+#bossDashboardSection .dashboard-card:nth-child(8) strong,
+#bossDashboardSection .dashboard-card:nth-child(9) strong {
+  color: var(--navy-800);
+}
+
+
+/* ==================================================
+   担当者ランキング
+================================================== */
+
+#bossDashboardSection .ranking-card {
+  border: none;
+  background:
+    linear-gradient(
+      145deg,
+      #061b3a,
+      #0b3470
+    );
+  box-shadow:
+    0 14px 30px rgba(6, 27, 58, 0.24);
+}
+
+#bossDashboardSection .ranking-card h3 {
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+#bossDashboardSection .ranking-row {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+#bossDashboardSection .ranking-row span {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+#bossDashboardSection .ranking-row strong {
+  color: #ffffff;
+}
+
+
+/* ==================================================
+   入金ベース売上
+================================================== */
+
+#paymentDashboardSection .dashboard-card {
+  border-color: #dce5f0;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfdff
+    );
+}
+
+#paymentDashboardSection .dashboard-card::after {
+  background: rgba(37, 99, 235, 0.07);
+}
+
+#paymentDashboardSection .dashboard-card span {
+  color: #52647e;
+}
+
+#paymentDashboardSection .dashboard-card strong {
+  color: var(--navy-900);
+}
+
+#paymentDashboardSection .dashboard-card {
+  border-top: 2px solid #123f83;
+}
+
+#paymentDashboardSection .dashboard-card.warning {
+  border-top-color: #f59e0b;
+  border-left-color: #f59e0b;
+}
+
+
+/* ==================================================
+   ステータスカード
+================================================== */
+
+#statusDashboardSection .simple-card {
+  border-color: #dce5f0;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfdff
+    );
+}
+
+#statusDashboardSection .simple-card span {
+  color: #52647e;
+}
+
+#statusDashboardSection .simple-card strong {
+  color: var(--navy-900);
+}
+
+#statusDashboardSection .simple-card:nth-child(1) {
+  border-left-color: #0b3470;
+}
+
+#statusDashboardSection .simple-card:nth-child(1)::after {
+  background: rgba(11, 52, 112, 0.09);
+}
+
+#statusDashboardSection .simple-card:nth-child(2) {
+  border-left-color: #0f766e;
+}
+
+#statusDashboardSection .simple-card:nth-child(3) {
+  border-left-color: #dc2626;
+}
+
+#statusDashboardSection .simple-card:nth-child(4) {
+  border-left-color: #f97316;
+}
+
+
+/* ==================================================
+   カード全体の質感
+================================================== */
+
+#bossDashboardSection .dashboard-card,
+#paymentDashboardSection .dashboard-card,
+#statusDashboardSection .simple-card {
+  box-shadow:
+    0 5px 16px rgba(8, 38, 83, 0.055);
+}
+
+#bossDashboardSection .dashboard-card:hover,
+#paymentDashboardSection .dashboard-card:hover,
+#statusDashboardSection .simple-card:hover {
+  border-color: #aac0dd;
+  box-shadow:
+    0 11px 26px rgba(8, 38, 83, 0.11);
+}
+
+
+/* ==================================================
+   スマホ時のサイドバー
+================================================== */
+
+@media (max-width: 760px) {
+
+  .sidebar {
+    background:
+      linear-gradient(
+        90deg,
+        #061b3a,
+        #0b3470
+      );
+  }
+
+  .sidebar-link {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .sidebar-link.active {
+    background: #1d4ed8;
+    box-shadow: none;
+  }
+
+}
+/* ==================================================
+   Version 9.4
+   ホーム画面の3セクション化
+================================================== */
+
+#alarmCard,
+#bossDashboardSection,
+#paymentDashboardSection {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+/* 入金ベース売上の内側 */
+
+#paymentDashboardSection.payment-dashboard-card {
+  padding: 24px;
+  border: 1px solid #d9e3ef;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+#paymentDashboardSection > h2 {
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #061b3a;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.payment-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* 古いdashboard指定の影響を解除 */
+
+#paymentDashboardSection {
+  display: block;
+}
+
+#paymentDashboardSection .dashboard-card {
+  margin: 0;
+}
+
+@media (max-width: 1200px) {
+  .payment-dashboard-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  #paymentDashboardSection.payment-dashboard-card {
+    padding: 17px 13px;
+  }
+
+  .payment-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+/* ==================================================
+   Version 11.0
+   参考画像レイアウト・最終上書き
+================================================== */
+
+
+/* ==================================================
+   全体
+================================================== */
+
+:root {
+  --dashboard-navy-950: #041a3a;
+  --dashboard-navy-900: #062653;
+  --dashboard-navy-800: #0b3470;
+  --dashboard-blue: #1456b8;
+  --dashboard-border: #dce5f0;
+  --dashboard-text: #0b2146;
+  --dashboard-muted: #718096;
+}
+
+body {
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbff 0,
+      #f3f7fc 100%
+    );
+  color: var(--dashboard-text);
+}
+
+.main-content {
+  background: transparent;
+}
+
+.main-content .container {
+  display: block !important;
+  width: 100%;
+  max-width: 1800px;
+  padding: 0 24px 45px;
+}
+
+
+/* ==================================================
+   左サイドバー
+================================================== */
+
+.sidebar {
+  width: 230px;
+  padding: 22px 12px;
+  border-right: none;
+  background:
+    linear-gradient(
+      180deg,
+      #041a3a 0%,
+      #062653 55%,
+      #07316a 100%
+    );
+  box-shadow:
+    8px 0 28px
+    rgba(4, 26, 58, 0.12);
+}
+
+.main-content {
+  width: calc(100% - 230px);
+  margin-left: 230px;
+}
+
+.sidebar-brand {
+  gap: 11px;
+  padding: 4px 5px 24px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+.sidebar-logo {
+  width: 43px;
+  height: 43px;
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      145deg,
+      #174f9f,
+      #0b3470
+    );
+  color: #ffffff;
+  box-shadow:
+    0 8px 18px
+    rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-brand strong {
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.sidebar-brand span {
+  color:
+    rgba(255, 255, 255, 0.62);
+}
+
+.sidebar-nav {
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.sidebar-link {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color:
+    rgba(255, 255, 255, 0.78);
+  box-shadow: none;
+  text-align: left;
+}
+
+.sidebar-link:hover {
+  background:
+    rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  box-shadow: none;
+  transform: none;
+}
+
+.sidebar-link.active {
+  background:
+    linear-gradient(
+      135deg,
+      #0e53ae,
+      #0a438f
+    );
+  color: #ffffff;
+  box-shadow:
+    0 7px 18px
+    rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-footer {
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+  color:
+    rgba(255, 255, 255, 0.62);
+}
+
+.sidebar-footer small {
+  color:
+    rgba(255, 255, 255, 0.42);
+}
+
+
+/* ==================================================
+   上部ヘッダー
+================================================== */
+
+.main-content header {
+  position: relative;
+  top: auto;
+  z-index: 1;
+  min-height: 78px;
+  margin: 0 -24px 22px;
+  padding: 17px 28px;
+  border: none;
+  border-bottom:
+    1px solid
+    #e2e8f0;
+  border-radius: 0;
+  background:
+    rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 3px 14px
+    rgba(15, 23, 42, 0.04);
+}
+
+.main-content header h1 {
+  color: #071e43;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.main-content header p {
+  display: none;
+}
+
+#loginUserName {
+  color: #071e43;
+}
+
+#logoutButton {
+  border:
+    1px solid
+    #d8e1ec;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0b2146;
+}
+
+
+/* ==================================================
+   表示月・ボタン
+================================================== */
+
+.month-filter.card {
+  padding: 14px 16px;
+  border:
+    1px solid
+    #dce5f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 4px 14px
+    rgba(8, 38, 83, 0.045);
+}
+
+.month-filter label {
+  color: #102a56;
+  font-weight: 800;
+}
+
+.month-filter input {
+  width: 170px;
+  height: 43px;
+  border-radius: 8px;
+}
+
+.month-filter button {
+  min-height: 43px;
+  padding: 0 18px;
+  border-radius: 8px;
+}
+
+#showAllButton,
+#csvButton,
+#excelButton {
+  background:
+    linear-gradient(
+      180deg,
+      #0b3470,
+      #061f48
+    );
+  color: #ffffff;
+  box-shadow:
+    0 5px 12px
+    rgba(6, 31, 72, 0.18);
+}
+
+#generateTestDataButton,
+#deleteTestDataButton {
+  border:
+    1px solid
+    #dce5f0;
+  background: #ffffff;
+  color: #64748b;
+  box-shadow: none;
+}
+
+
+/* ==================================================
+   共通セクション
+================================================== */
+
+#bossDashboardSection,
+#paymentDashboardSection,
+#alarmCard {
+  width: 100%;
+  margin-bottom: 20px;
+  border:
+    1px solid
+    #dce5f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 5px 18px
+    rgba(8, 38, 83, 0.05);
+}
+
+#bossDashboardSection > h2,
+#paymentDashboardSection > h2,
+#alarmCard .today-home-header h2 {
+  margin: 0 0 16px;
+  padding: 0 0 13px;
+  border-bottom:
+    1px solid
+    #e5ebf2;
+  color: #071e43;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+#bossDashboardSection > h2::after,
+#paymentDashboardSection > h2::after,
+#alarmCard .today-home-header h2::after {
+  display: none;
+}
+
+
+/* ==================================================
+   ダッシュボード全体
+================================================== */
+
+#bossDashboardSection {
+  display: block !important;
+  padding: 14px;
+}
+
+.dashboard-main-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    320px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+#bossDashboardSection .dashboard {
+  display: grid;
+  grid-template-columns:
+    repeat(12, minmax(0, 1fr));
+  gap: 9px;
+  margin: 0;
+}
+
+
+/* ==================================================
+   ダッシュボードカード共通
+================================================== */
+
+#bossDashboardSection .dashboard-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 94px;
+  margin: 0;
+  padding: 16px 16px 15px;
+  overflow: hidden;
+  border:
+    1px solid
+    var(--dashboard-border);
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px
+    rgba(8, 38, 83, 0.045);
+}
+
+#bossDashboardSection .dashboard-card span {
+  margin-bottom: 8px;
+  color: #3e526e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#bossDashboardSection .dashboard-card strong {
+  margin: 0;
+  color: #071e43;
+  font-size: 25px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+
+/* 売上見込み・売上実績 */
+
+#bossDashboardSection
+.dashboard-card:nth-child(1),
+#bossDashboardSection
+.dashboard-card:nth-child(2) {
+  grid-column: span 6;
+  min-height: 150px;
+  padding: 22px 24px;
+  border: none;
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(73, 132, 255, 0.25),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #062653,
+      #0b3470
+    );
+  box-shadow:
+    0 10px 22px
+    rgba(6, 38, 83, 0.2);
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(2) {
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(120, 163, 255, 0.28),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #123e91,
+      #174fc2
+    );
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(1) span,
+#bossDashboardSection
+.dashboard-card:nth-child(2) span {
+  color:
+    rgba(255, 255, 255, 0.83);
+  font-size: 13px;
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(1) strong,
+#bossDashboardSection
+.dashboard-card:nth-child(2) strong {
+  color: #ffffff;
+  font-size:
+    clamp(
+      25px,
+      2.1vw,
+      35px
+    );
+}
+
+
+/* 申込み・契約・成約率 */
+
+#bossDashboardSection
+.dashboard-card:nth-child(3),
+#bossDashboardSection
+.dashboard-card:nth-child(4),
+#bossDashboardSection
+.dashboard-card:nth-child(5) {
+  grid-column: span 4;
+  min-height: 150px;
+}
+
+
+/* 審査落ち・キャンセル・未入金 */
+
+#bossDashboardSection
+.dashboard-card:nth-child(6),
+#bossDashboardSection
+.dashboard-card:nth-child(7),
+#bossDashboardSection
+.dashboard-card:nth-child(8),
+#bossDashboardSection
+.dashboard-card:nth-child(9) {
+  grid-column: span 3;
+  min-height: 94px;
+  border-left:
+    1px solid
+    var(--dashboard-border);
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(6) {
+  border-top: 3px solid #dc2626;
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(7) {
+  border-top: 3px solid #f97316;
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(8),
+#bossDashboardSection
+.dashboard-card:nth-child(9) {
+  border-top: 3px solid #174f9f;
+}
+
+
+/* ==================================================
+   担当者ランキング
+================================================== */
+
+#bossDashboardSection .ranking-card {
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 18px 20px;
+  border: none;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      160deg,
+      #041a3a,
+      #062653 58%,
+      #0b3470
+    );
+  box-shadow:
+    0 10px 24px
+    rgba(4, 26, 58, 0.22);
+}
+
+#bossDashboardSection .ranking-card h3 {
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 15px;
+}
+
+#bossDashboardSection .ranking-row {
+  min-height: 57px;
+  padding: 14px 2px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+#bossDashboardSection .ranking-row span {
+  color:
+    rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+}
+
+#bossDashboardSection .ranking-row strong {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+
+/* ==================================================
+   入金ベース売上
+================================================== */
+
+#paymentDashboardSection {
+  display: block !important;
+  padding: 14px;
+}
+
+.payment-dashboard-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+#paymentDashboardSection .dashboard-card {
+  position: relative;
+  min-width: 0;
+  min-height: 102px;
+  margin: 0;
+  padding: 18px 14px;
+  border:
+    1px solid
+    #dce5f0;
+  border-top:
+    1px solid
+    #dce5f0;
+  border-left:
+    1px solid
+    #dce5f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px
+    rgba(8, 38, 83, 0.04);
+}
+
+#paymentDashboardSection .dashboard-card span {
+  margin-bottom: 8px;
+  color: #405571;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#paymentDashboardSection .dashboard-card strong {
+  margin: 0;
+  color: #071e43;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+#paymentDashboardSection
+.dashboard-card.warning strong {
+  color: #071e43;
+}
+
+
+/* ==================================================
+   予定確認
+================================================== */
+
+#alarmCard {
+  position: static !important;
+  top: auto !important;
+  display: block !important;
+  grid-column: auto !important;
+  padding: 18px;
+}
+
+#alarmCard .today-home-header {
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+#alarmCard .today-home-header h2 {
+  margin-bottom: 6px;
+}
+
+#alarmCard .today-home-header p {
+  color: #718096;
+  font-size: 12px;
+}
+
+#alarmCard .today-summary-grid {
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    ) !important;
+  gap: 10px;
+}
+
+#alarmCard .today-summary-card {
+  min-height: 92px;
+  padding: 14px;
+  border-radius: 9px;
+}
+
+#alarmCard .today-summary-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+#alarmCard .today-summary-content span {
+  font-size: 12px;
+}
+
+#alarmCard .today-summary-content strong {
+  font-size: 24px;
+}
+
+#alarmCard .today-detail-grid {
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    ) !important;
+  gap: 10px;
+}
+
+#alarmCard .today-detail-card {
+  border-radius: 9px;
+}
+
+#alarmCard .today-detail-header {
+  padding: 11px 13px;
+}
+
+#alarmCard .today-detail-header h3 {
+  font-size: 12px;
+}
+
+
+/* 古いステータスは表示しない */
+
+#statusDashboardSection {
+  display: none !important;
+}
+
+
+/* ==================================================
+   タブレット
+================================================== */
+
+@media (max-width: 1250px) {
+
+  .dashboard-main-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      270px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(6),
+  #bossDashboardSection
+  .dashboard-card:nth-child(7),
+  #bossDashboardSection
+  .dashboard-card:nth-child(8),
+  #bossDashboardSection
+  .dashboard-card:nth-child(9) {
+    grid-column: span 6;
+  }
+
+  .payment-dashboard-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==================================================
+   小さい画面
+================================================== */
+
+@media (max-width: 980px) {
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    width: calc(100% - 200px);
+    margin-left: 200px;
+  }
+
+  .dashboard-main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #bossDashboardSection .ranking-card {
+    min-height: auto;
+  }
+
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 760px) {
+
+  .sidebar {
+    position: sticky;
+    width: 100%;
+    padding: 9px 10px;
+    background:
+      linear-gradient(
+        90deg,
+        #041a3a,
+        #0b3470
+      );
+  }
+
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .main-content .container {
+    padding: 0 10px 30px;
+  }
+
+  .main-content header {
+    margin: 0 -10px 14px;
+    padding: 14px;
+  }
+
+  .month-filter.card {
+    padding: 12px;
+  }
+
+  #bossDashboardSection,
+  #paymentDashboardSection,
+  #alarmCard {
+    padding: 12px;
+  }
+
+  #bossDashboardSection .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(n) {
+    grid-column: auto;
+    min-height: 92px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(1),
+  #bossDashboardSection
+  .dashboard-card:nth-child(2) {
+    min-height: 125px;
+  }
+
+  .payment-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #alarmCard .today-summary-grid,
+  #alarmCard .today-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #alarmCard .today-home-header {
+    display: block !important;
+  }
+
+  #alarmCard .today-home-date {
+    margin-top: 10px;
+  }
+
+}
+/* ==================================================
+   Dashboard Version 12.0
+   参考画像再現用・ホーム画面専用
+================================================== */
+
+
+/* ==================================================
+   ホーム画面の基本
+================================================== */
+
+.dashboard-v2 {
+  --v2-navy-dark: #031b45;
+  --v2-navy: #062b65;
+  --v2-blue: #1257c4;
+  --v2-light-blue: #edf4ff;
+  --v2-border: #dfe7f2;
+  --v2-text: #061d49;
+  --v2-muted: #70809b;
+
+  width: 100%;
+}
+
+.dashboard-v2 *,
+.dashboard-v2 *::before,
+.dashboard-v2 *::after {
+  box-sizing: border-box;
+}
+
+
+/* Version 11のカード指定を解除 */
+
+.dashboard-v2-section {
+  display: block !important;
+  width: 100%;
+  margin: 0 0 22px !important;
+  padding: 18px !important;
+  border: 1px solid var(--v2-border) !important;
+  border-radius: 13px !important;
+  background: #ffffff !important;
+  box-shadow:
+    0 5px 18px
+    rgba(6, 29, 73, 0.055) !important;
+  transform: none !important;
+}
+
+
+/* ==================================================
+   セクション見出し
+================================================== */
+
+.dashboard-v2-heading,
+.schedule-v2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 45px;
+  margin-bottom: 14px;
+  padding: 0 4px 13px;
+  border-bottom: 1px solid #e5ebf3;
+}
+
+.dashboard-v2-heading-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.dashboard-v2-heading-title h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  color: var(--v2-text) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+}
+
+.dashboard-v2-heading-title h2::after {
+  display: none !important;
+}
+
+.dashboard-v2-heading-title p {
+  margin: 3px 0 0;
+  color: var(--v2-muted);
+  font-size: 11px;
+}
+
+.section-heading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #edf3ff;
+  color: #093780;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+
+/* ==================================================
+   ダッシュボード＋ランキング
+================================================== */
+
+.dashboard-overview-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    305px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.dashboard-kpi-area {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+
+/* ==================================================
+   売上ヒーローカード
+================================================== */
+
+.dashboard-sales-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sales-hero-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  min-height: 165px;
+  padding: 22px 24px;
+  overflow: hidden;
+  border-radius: 10px;
+  color: #ffffff;
+  box-shadow:
+    0 10px 24px
+    rgba(3, 27, 69, 0.22);
+}
+
+.sales-hero-card::after {
+  position: absolute;
+  right: -35px;
+  bottom: -55px;
+  width: 170px;
+  height: 170px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  content: "";
+}
+
+.sales-forecast-card {
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(55, 126, 255, 0.34),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #031b45,
+      #07347d
+    );
+}
+
+.sales-result-card {
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(125, 170, 255, 0.35),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #12398c,
+      #1657ca
+    );
+}
+
+.sales-hero-icon {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background:
+    rgba(255, 255, 255, 0.13);
+  font-size: 31px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.sales-hero-content {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.sales-hero-label {
+  display: block;
+  margin-bottom: 8px;
+  color:
+    rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sales-hero-content strong {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size:
+    clamp(
+      26px,
+      2.15vw,
+      38px
+    );
+  font-weight: 900;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sales-hero-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 17px;
+  color:
+    rgba(255, 255, 255, 0.79);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sales-mini-chart {
+  color: #6ab2ff;
+  font-size: 19px;
+  letter-spacing: -5px;
+}
+
+
+/* ==================================================
+   申込み・契約・成約率
+================================================== */
+
+.dashboard-main-kpi-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dashboard-kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  min-height: 125px;
+  padding: 18px;
+  border: 1px solid var(--v2-border);
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfcff
+    );
+  box-shadow:
+    0 4px 13px
+    rgba(3, 27, 69, 0.045);
+}
+
+.dashboard-kpi-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  color: #082d78;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.icon-application {
+  background: #eef0ff;
+}
+
+.icon-contract {
+  background: #eef3ff;
+}
+
+.icon-rate {
+  background: #f0eeff;
+}
+
+.dashboard-kpi-content {
+  min-width: 0;
+}
+
+.dashboard-kpi-content span {
+  display: block;
+  margin-bottom: 5px;
+  color: #273b5d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-kpi-content strong {
+  display: block;
+  margin: 0;
+  color: var(--v2-text);
+  font-size: 29px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.dashboard-kpi-content small {
+  display: block;
+  margin-top: 8px;
+  color: #0a8b7a;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+
+/* ==================================================
+   審査落ち・キャンセル・未入金
+================================================== */
+
+.dashboard-sub-kpi-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dashboard-sub-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  min-height: 100px;
+  padding: 15px;
+  border: 1px solid var(--v2-border);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 11px
+    rgba(3, 27, 69, 0.04);
+}
+
+.dashboard-sub-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.sub-rejected .dashboard-sub-icon {
+  background: #f4edff;
+  color: #4424a8;
+}
+
+.sub-cancel .dashboard-sub-icon {
+  background: #fff0f0;
+  color: #e3232a;
+}
+
+.sub-unpaid .dashboard-sub-icon {
+  background: #eff2ff;
+  color: #092d7e;
+}
+
+.dashboard-sub-content {
+  min-width: 0;
+}
+
+.dashboard-sub-content span {
+  display: block;
+  margin-bottom: 5px;
+  color: #243859;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-sub-content strong {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: var(--v2-text);
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-unpaid-label {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: #f5f7fb;
+  color: #263959;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+
+/* ==================================================
+   ランキング
+================================================== */
+
+.dashboard-ranking-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+  padding: 20px;
+  border-radius: 11px;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      rgba(27, 95, 203, 0.4),
+      transparent 34%
+    ),
+    linear-gradient(
+      160deg,
+      #031b45,
+      #062a62
+    );
+  color: #ffffff;
+  box-shadow:
+    0 11px 25px
+    rgba(3, 27, 69, 0.24);
+}
+
+.dashboard-ranking-header {
+  padding-bottom: 14px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.16);
+}
+
+.dashboard-ranking-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.dashboard-ranking-header > span {
+  display: block;
+  margin-top: 5px;
+  color:
+    rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+.dashboard-ranking-list {
+  flex: 1;
+}
+
+.dashboard-ranking-card .ranking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 65px;
+  padding: 14px 2px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+}
+
+.dashboard-ranking-card .ranking-row span {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-ranking-card .ranking-row strong {
+  margin: 0;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.dashboard-ranking-note {
+  margin: 14px 0 0;
+  color:
+    rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+
+/* ==================================================
+   入金ベース売上
+================================================== */
+
+.payment-v2-section {
+  padding: 18px !important;
+}
+
+.payment-heading-icon {
+  border-radius: 50%;
+  background: #082756;
+  color: #ffffff;
+}
+
+.payment-v2-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.payment-v2-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  min-height: 105px;
+  padding: 15px 13px;
+  border: 1px solid var(--v2-border);
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px
+    rgba(3, 27, 69, 0.035);
+}
+
+.payment-v2-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      145deg,
+      #031b45,
+      #0a3c88
+    );
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.payment-v2-content {
+  min-width: 0;
+}
+
+.payment-v2-content span {
+  display: block;
+  margin-bottom: 6px;
+  color: #283b5d;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.payment-v2-content strong {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: var(--v2-text);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payment-v2-content small {
+  display: block;
+  margin-top: 7px;
+  color: #ff7500;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+
+/* ==================================================
+   予定確認
+================================================== */
+
+.schedule-v2-section {
+  position: static !important;
+  top: auto !important;
+  grid-column: auto !important;
+  padding: 18px !important;
+}
+
+.schedule-heading-icon {
+  background: #eff3ff;
+  color: #0c3277;
+}
+
+.schedule-v2-header {
+  margin-bottom: 15px;
+}
+
+.schedule-v2-date {
+  margin: 0 !important;
+  padding: 7px 12px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+}
+
+.schedule-v2-content {
+  display: block;
+}
+
+
+/* JSが生成する予定カード */
+
+.schedule-v2-section .today-summary-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-bottom: 18px !important;
+}
+
+.schedule-v2-section .today-summary-card {
+  min-height: 105px !important;
+  padding: 16px !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.schedule-v2-section .today-summary-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 11px !important;
+  font-size: 22px !important;
+}
+
+.schedule-v2-section .today-summary-content strong {
+  font-size: 26px !important;
+}
+
+.schedule-v2-section .today-detail-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.schedule-v2-section .today-detail-card {
+  border-radius: 9px !important;
+}
+
+.schedule-v2-section .today-detail-header {
+  padding: 12px 14px !important;
+}
+
+.schedule-v2-section .alarm-item {
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+
+/* ==================================================
+   旧ステータスを完全非表示
+================================================== */
+
+#statusDashboardSection {
+  display: none !important;
+}
+
+
+/* ==================================================
+   画面幅調整
+================================================== */
+
+@media (max-width: 1350px) {
+
+  .dashboard-overview-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      265px;
+  }
+
+  .sales-hero-card {
+    padding: 19px;
+  }
+
+  .dashboard-sub-kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .payment-v2-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 1050px) {
+
+  .dashboard-overview-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-ranking-card {
+    min-height: auto;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .dashboard-sales-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-main-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-sub-kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .payment-v2-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .schedule-v2-section .today-summary-grid,
+  .schedule-v2-section .today-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .dashboard-v2-section {
+    padding: 12px !important;
+  }
+
+  .dashboard-v2-heading,
+  .schedule-v2-header {
+    align-items: flex-start;
+  }
+
+  .dashboard-v2-heading-title p {
+    font-size: 10px;
+  }
+
+  .sales-hero-card {
+    min-height: 145px;
+    padding: 18px;
+  }
+
+  .sales-hero-icon {
+    width: 53px;
+    height: 53px;
+    font-size: 26px;
+  }
+
+  .sales-hero-content strong {
+    font-size: 25px;
+  }
+
+  .dashboard-sub-kpi-grid,
+  .payment-v2-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-v2-header {
+    display: block;
+  }
+
+  .schedule-v2-date {
+    display: inline-flex !important;
+    margin-top: 10px !important;
+  }
+
+}
+/* ==================================================
+   左メニュー切り替え修正
+================================================== */
+
+#bossDashboardSection[style*="display: none"],
+#paymentDashboardSection[style*="display: none"],
+#alarmCard[style*="display: none"],
+#salesFormSection[style*="display: none"],
+#salesListSection[style*="display: none"],
+#staffAnalysisSection[style*="display: none"],
+#monthlyPerformanceSection[style*="display: none"] {
+  display: none !important;
+}
+/* ==================================================
+   画面切り替え 完全修正版
+================================================== */
+
+#bossDashboardSection.system-view-hidden,
+#paymentDashboardSection.system-view-hidden,
+#alarmCard.system-view-hidden,
+#salesFormSection.system-view-hidden,
+#salesListSection.system-view-hidden,
+#staffAnalysisSection.system-view-hidden,
+#monthlyPerformanceSection.system-view-hidden {
+  display: none !important;
+}
+
+#bossDashboardSection[hidden],
+#paymentDashboardSection[hidden],
+#alarmCard[hidden],
+#salesFormSection[hidden],
+#salesListSection[hidden],
+#staffAnalysisSection[hidden],
+#monthlyPerformanceSection[hidden] {
+  display: none !important;
+}
+/* ==================================================
+   スマホ表示 最終調整
+================================================== */
+
+@media screen and (max-width: 760px) {
+
+  /* =========================
+     画面全体
+  ========================= */
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .app-layout {
+    display: block;
+    width: 100%;
+  }
+
+
+  /* =========================
+     上部メニュー
+  ========================= */
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
+    padding: 8px 10px 9px;
+
+    overflow: visible;
+
+    background:
+      linear-gradient(
+        90deg,
+        #041a3a,
+        #0b3470
+      );
+
+    box-shadow:
+      0 4px 14px
+      rgba(4, 26, 58, 0.2);
+  }
+
+
+  /* ロゴ部分を小さくする */
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 7px;
+    padding: 0 3px;
+  }
+
+  .sidebar-logo {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+  }
+
+  .sidebar-brand strong {
+    color: #ffffff;
+    font-size: 13px;
+  }
+
+  .sidebar-brand span {
+    display: none;
+  }
+
+
+  /* メニューを横並び */
+
+  .sidebar-nav {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+
+    gap: 5px;
+
+    width: 100%;
+    margin: 0;
+  }
+
+  .sidebar-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+
+    padding: 5px 2px;
+
+    border-radius: 8px;
+
+    color:
+      rgba(
+        255,
+        255,
+        255,
+        0.72
+      );
+
+    font-size: 10px;
+    line-height: 1.2;
+    text-align: center;
+
+    white-space: nowrap;
+  }
+
+  .sidebar-link:hover {
+    color: #ffffff;
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.08
+      );
+
+    transform: none;
+  }
+
+  .sidebar-link.active {
+    color: #ffffff;
+
+    background:
+      rgba(
+        37,
+        99,
+        235,
+        0.95
+      );
+
+    box-shadow: none;
+  }
+
+  .sidebar-icon {
+    width: auto;
+    font-size: 17px;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+
+  /* =========================
+     メイン画面
+  ========================= */
+
+  .main-content {
+    width: 100%;
+    min-width: 0;
+
+    margin-left: 0;
+  }
+
+  .main-content .container {
+    display: block !important;
+
+    width: 100%;
+    max-width: 100%;
+
+    padding:
+      0
+      9px
+      35px;
+  }
+
+
+  /* =========================
+     上部ヘッダー
+  ========================= */
+
+  .main-content header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    min-height: auto;
+
+    margin:
+      0
+      -9px
+      12px;
+
+    padding:
+      11px
+      12px;
+
+    border-radius: 0;
+  }
+
+  .main-content header h1 {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .main-content header p {
+    display: none;
+  }
+
+  .login-user-area {
+    gap: 7px;
+  }
+
+  .login-user-area > div {
+    display: none;
+  }
+
+  #logoutButton {
+    min-width: auto;
+    min-height: 34px;
+
+    padding: 0 10px;
+
+    font-size: 11px;
+  }
+
+
+  /* =========================
+     表示月・出力ボタン
+  ========================= */
+
+  .month-filter.card {
+    display: grid;
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+    gap: 7px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+  }
+
+  .month-filter label {
+    grid-column: 1 / -1;
+
+    font-size: 12px;
+  }
+
+  .month-filter input {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    height: 40px;
+
+    font-size: 14px;
+  }
+
+  .month-filter button {
+    width: 100%;
+    min-width: 0;
+    min-height: 39px;
+
+    padding: 5px 4px;
+
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+
+  /* =========================
+     各セクション
+  ========================= */
+
+  #bossDashboardSection,
+  #paymentDashboardSection,
+  #alarmCard,
+  #salesFormSection,
+  #salesListSection,
+  #staffAnalysisSection,
+  #monthlyPerformanceSection {
+    width: 100%;
+    max-width: 100%;
+
+    margin-bottom: 12px;
+    padding: 11px;
+
+    border-radius: 10px;
+  }
+
+  #bossDashboardSection > h2,
+  #paymentDashboardSection > h2,
+  #salesFormSection > h2,
+  #salesListSection > h2,
+  #staffAnalysisSection > h2,
+  #monthlyPerformanceSection > h2,
+  #alarmCard .today-home-header h2 {
+    margin-bottom: 11px;
+    padding-bottom: 9px;
+
+    font-size: 15px;
+  }
+
+
+  /* =========================
+     ダッシュボード
+  ========================= */
+
+  .dashboard-main-layout {
+    display: block;
+  }
+
+  #bossDashboardSection .dashboard {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 7px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(n) {
+    grid-column: auto;
+
+    min-height: 82px;
+
+    padding: 11px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(1),
+  #bossDashboardSection
+  .dashboard-card:nth-child(2) {
+    grid-column: 1 / -1;
+
+    min-height: 112px;
+
+    padding: 16px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card span {
+    margin-bottom: 5px;
+
+    font-size: 10px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card strong {
+    font-size: 19px;
+
+    overflow-wrap: anywhere;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(1)
+  strong,
+  #bossDashboardSection
+  .dashboard-card:nth-child(2)
+  strong {
+    font-size: 26px;
+  }
+
+  #bossDashboardSection .ranking-card {
+    min-height: auto;
+
+    margin-top: 8px;
+    padding: 13px;
+  }
+
+
+  /* =========================
+     入金ベース売上
+  ========================= */
+
+  #paymentDashboardSection.payment-dashboard-card {
+    padding: 11px;
+  }
+
+  .payment-dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 7px;
+  }
+
+  #paymentDashboardSection
+  .dashboard-card {
+    min-width: 0;
+    min-height: 80px;
+
+    padding: 10px;
+  }
+
+  #paymentDashboardSection
+  .dashboard-card span {
+    font-size: 10px;
+  }
+
+  #paymentDashboardSection
+  .dashboard-card strong {
+    font-size: 17px;
+
+    overflow-wrap: anywhere;
+  }
+
+
+  /* =========================
+     予定確認
+  ========================= */
+
+  #alarmCard .today-home-header {
+    display: block !important;
+  }
+
+  #alarmCard .today-home-date {
+    margin-top: 7px;
+
+    font-size: 11px;
+  }
+
+  #alarmCard .today-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      ) !important;
+
+    gap: 5px;
+  }
+
+  #alarmCard .today-summary-card {
+    min-width: 0;
+    min-height: 75px;
+
+    padding: 8px 5px;
+  }
+
+  #alarmCard .today-summary-icon {
+    width: 31px;
+    height: 31px;
+
+    font-size: 15px;
+  }
+
+  #alarmCard
+  .today-summary-content span {
+    font-size: 9px;
+  }
+
+  #alarmCard
+  .today-summary-content strong {
+    font-size: 18px;
+  }
+
+  #alarmCard .today-detail-grid {
+    grid-template-columns:
+      1fr !important;
+
+    gap: 7px;
+  }
+
+
+  /* =========================
+     フォーム
+  ========================= */
+
+  #salesForm {
+    display: block;
+  }
+
+  #salesForm .form-grid,
+  #salesFormSection .form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+  }
+
+  #salesForm input,
+  #salesForm select,
+  #salesForm textarea {
+    width: 100%;
+    max-width: 100%;
+
+    font-size: 16px;
+  }
+
+  #salesForm button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+
+  /* =========================
+     案件一覧
+  ========================= */
+
+  #salesListSection {
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  #salesListSection .list-header {
+    display: block;
+  }
+
+  #salesListSection
+  .list-header input {
+    width: 100%;
+    max-width: 100%;
+
+    margin-top: 9px;
+
+    font-size: 16px;
+  }
+
+  #salesListSection .table-wrap {
+    width: 100%;
+    max-height: none;
+
+    overflow-x: auto;
+    overflow-y: visible;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #salesListSection table {
+    min-width: 1250px;
+  }
+
+
+  /* =========================
+     分析画面
+  ========================= */
+
+  #staffAnalysisSection .dashboard,
+  #monthlyPerformanceSection .dashboard,
+  #staffAnalysisSection .simple-dashboard,
+  #monthlyPerformanceSection .simple-dashboard {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+  }
+
+
+  /* =========================
+     画面切り替えを維持
+  ========================= */
+
+  #bossDashboardSection.system-view-hidden,
+  #paymentDashboardSection.system-view-hidden,
+  #alarmCard.system-view-hidden,
+  #salesFormSection.system-view-hidden,
+  #salesListSection.system-view-hidden,
+  #staffAnalysisSection.system-view-hidden,
+  #monthlyPerformanceSection.system-view-hidden {
+    display: none !important;
+  }
+}
+/* =========================
+   売上カードを横3列にする
+========================= */
+
+.dashboard-sales-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.dashboard-sales-grid .sales-hero-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* 画面が狭いとき */
+@media screen and (max-width: 900px) {
+  .dashboard-sales-grid {
+    grid-template-columns: 1fr;
+  }
+}
