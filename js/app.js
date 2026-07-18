@@ -50,7 +50,160 @@ const editIndexInput =
   document.getElementById(
     "editIndex"
   );
+/*
+=========================================
+ 契約予定月の選択肢を作成
+=========================================
+*/
 
+function createContractPlanOptions() {
+  const contractPlanSelect =
+    document.getElementById(
+      "contractPlan"
+    );
+
+  if (!contractPlanSelect) {
+    return;
+  }
+
+  /*
+    現在保存されている値を保持
+  */
+
+  const currentValue =
+    contractPlanSelect.value;
+
+  /*
+    一度選択肢を作り直す
+  */
+
+  contractPlanSelect.innerHTML = `
+    <option value="">予定なし</option>
+    <option value="未定">未定</option>
+  `;
+
+  const today =
+    new Date();
+
+  /*
+    前月から24か月先まで作成
+  */
+
+  for (
+    let offset = -1;
+    offset <= 24;
+    offset++
+  ) {
+    const targetDate =
+      new Date(
+        today.getFullYear(),
+        today.getMonth() + offset,
+        1
+      );
+
+    const year =
+      targetDate.getFullYear();
+
+    const month =
+      String(
+        targetDate.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+    const value =
+      year + "-" + month;
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      value;
+
+    option.textContent =
+      year +
+      "年" +
+      Number(month) +
+      "月予定";
+
+    contractPlanSelect.appendChild(
+      option
+    );
+  }
+
+  /*
+    編集中の予定月が選択肢にない場合も保持
+  */
+
+  if (
+    currentValue &&
+    currentValue !== "未定" &&
+    !Array.from(
+      contractPlanSelect.options
+    ).some(function (option) {
+      return option.value ===
+        currentValue;
+    })
+  ) {
+    const oldOption =
+      document.createElement(
+        "option"
+      );
+
+    oldOption.value =
+      currentValue;
+
+    oldOption.textContent =
+      formatContractPlanText(
+        currentValue
+      );
+
+    contractPlanSelect.appendChild(
+      oldOption
+    );
+  }
+
+  contractPlanSelect.value =
+    currentValue;
+}
+
+
+/*
+=========================================
+ 契約予定の表示文字
+=========================================
+*/
+
+function formatContractPlanText(
+  contractPlan
+) {
+  if (!contractPlan) {
+    return "";
+  }
+
+  if (contractPlan === "未定") {
+    return "未定";
+  }
+
+  if (
+    /^\d{4}-\d{2}$/.test(
+      contractPlan
+    )
+  ) {
+    const parts =
+      contractPlan.split("-");
+
+    return (
+      Number(parts[1]) +
+      "月予定"
+    );
+  }
+
+  return contractPlan;
+}
 
 /* =========================
    現在の月を取得
@@ -101,11 +254,20 @@ if (form) {
           ).value,
 
         contractDate:
-          document.getElementById(
-            "contractDate"
-          ).value,
+  document.getElementById(
+    "contractDate"
+  ).value,
 
-        startDate:
+contractPlan:
+  document.getElementById(
+    "contractDate"
+  ).value
+    ? ""
+    : document.getElementById(
+        "contractPlan"
+      ).value,
+
+startDate:
           document.getElementById(
             "startDate"
           ).value,
@@ -665,4 +827,5 @@ if (deleteTestDataButton) {
   );
 
 }
+createContractPlanOptions();
 startApp();

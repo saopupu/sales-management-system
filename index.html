@@ -151,9 +151,15 @@
      表示月・出力
 ========================== -->
 <section class="month-filter card">
-  <label for="monthFilter">表示月</label>
+ <label for="monthFilter">表示月</label>
 
-  <input type="month" id="monthFilter">
+<input type="month" id="monthFilter">
+
+
+
+
+
+  
 
   <button type="button" id="showAllButton">
     全期間表示
@@ -754,31 +760,47 @@
     </div>
 
     <!-- ② 契約情報 -->
-    <h3 class="form-section-title">契約情報</h3>
+<h3 class="form-section-title">契約情報</h3>
 
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="contractDate">契約日</label>
-        <input type="date" id="contractDate">
-      </div>
+<div class="form-grid">
 
-      <div class="form-group">
-        <label for="startDate">契約開始日</label>
-        <input type="date" id="startDate">
-      </div>
+  <div class="form-group">
+    <label for="contractDate">契約日</label>
+    <input type="date" id="contractDate">
+  </div>
 
-      <div class="form-group">
-        <label for="status">ステータス</label>
-        <select id="status">
-          <option value="申込">申込</option>
-          <option value="審査中">審査中</option>
-          <option value="契約予定">契約予定</option>
-          <option value="契約済">契約済</option>
-          <option value="審査落ち">審査落ち</option>
-          <option value="キャンセル">キャンセル</option>
-        </select>
-      </div>
-    </div>
+  <div class="form-group">
+    <label for="contractPlan">契約予定</label>
+
+    <select id="contractPlan">
+      <option value="">予定なし</option>
+      <option value="未定">未定</option>
+    </select>
+
+    <small>
+      契約日が未確定の場合に選択してください
+    </small>
+  </div>
+
+  <div class="form-group">
+    <label for="startDate">契約開始日</label>
+    <input type="date" id="startDate">
+  </div>
+
+  <div class="form-group">
+    <label for="status">ステータス</label>
+
+    <select id="status">
+      <option value="申込">申込</option>
+      <option value="審査中">審査中</option>
+      <option value="契約予定">契約予定</option>
+      <option value="契約済">契約済</option>
+      <option value="審査落ち">審査落ち</option>
+      <option value="キャンセル">キャンセル</option>
+    </select>
+  </div>
+
+</div>
 
     <!-- ③ 売上情報 -->
     <h3 class="form-section-title">売上情報</h3>
@@ -877,14 +899,38 @@
   id="salesListSection"
 >
 
-  <div class="list-header">
-    <h2>📋 案件一覧</h2>
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="お客様名・物件名・管理会社などで検索"
-    >
+<div class="list-header">
+
+  <h2>📋 案件一覧</h2>
+
+  <div class="list-filter-area">
+
+    <div class="list-search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="お客様名・物件名・管理会社などで検索"
+      >
+    </div>
+
+    <div class="list-staff-filter">
+      <label for="staffFilter">担当者</label>
+
+      <select
+        id="staffFilter"
+        onchange="render()"
+      >
+        <option value="">全員</option>
+        <option value="矢部">矢部</option>
+        <option value="早坂">早坂</option>
+        <option value="米山">米山</option>
+        <option value="吉田">吉田</option>
+      </select>
+    </div>
+
   </div>
+
+</div>
 
   <div class="table-wrap">
     <table>
@@ -906,6 +952,7 @@
           <th>仲介入力額</th>
           <th>税区分</th>
           <th>仲介税込</th>
+          <th>合計売上</th>
           <th>仲介入金日</th>
           <th>分割</th>
           <th>状態</th>

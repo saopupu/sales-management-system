@@ -1,11 +1,53 @@
 function render() {
-  const data = getFilteredData();
+  /*
+    ダッシュボード・集計用
 
-  renderDashboard(data);
-  renderBossDashboard(data);
-  renderStaffSummary(data);
+    未定案件は毎月の売上へ
+    重複加算しない
+  */
+
+  const data =
+    getFilteredData(
+      false
+    );
+
+  /*
+    案件一覧用
+
+    未定案件はどの月にも表示
+  */
+
+  const selectedStaff =
+  getSelectedStaff();
+
+const tableData =
+  getFilteredData(true).filter(function (sale) {
+
+    if (!selectedStaff) {
+      return true;
+    }
+
+    return sale.staff === selectedStaff;
+  });
+
+  renderDashboard(
+    data
+  );
+
+  renderBossDashboard(
+    data
+  );
+
+  renderStaffSummary(
+    data
+  );
+
   renderMonthlyPerformance();
-  renderTable(data);
+
+  renderTable(
+    tableData
+  );
+
   renderAlarm();
 }
 
@@ -15,6 +57,9 @@ function getKeyword() {
 
 function getSelectedMonth() {
   return document.getElementById("monthFilter").value;
+}
+function getSelectedStaff() {
+  return document.getElementById("staffFilter").value;
 }
 // 申込み人数・成約率用：申込日ベース
 function getApplicationMonth(sale) {
@@ -104,10 +149,62 @@ function getMonthlyPerformance(month) {
    月判定
 ========================= */
 
-// 案件一覧・契約件数用：契約日ベース
-function getCaseMonth(sale) {
-  const date = sale.contractDate || "";
-  return date ? date.slice(0, 7) : "";
+/*
+=========================================
+ 案件の契約月を取得
+=========================================
+*/
+
+function getCaseMonth(
+  sale
+) {
+  /*
+    契約日が決まっている場合
+  */
+
+  const contractDate =
+    sale.contractDate || "";
+
+  if (contractDate) {
+    return contractDate.slice(
+      0,
+      7
+    );
+  }
+
+  /*
+    契約日が未確定の場合は
+    契約予定月を使用
+  */
+
+  const contractPlan =
+    sale.contractPlan || "";
+
+  if (
+    /^\d{4}-\d{2}$/.test(
+      contractPlan
+    )
+  ) {
+    return contractPlan;
+  }
+
+  return "";
+}
+
+
+/*
+=========================================
+ 未定案件か判定
+=========================================
+*/
+
+function isUndecidedContract(
+  sale
+) {
+  return (
+    !sale.contractDate &&
+    sale.contractPlan === "未定"
+  );
 }
 
 // 仲介手数料売上用：仲介手数料入金日ベース
@@ -143,20 +240,50 @@ function matchesKeyword(sale, keyword) {
 }
 
 // 案件一覧は契約日ベースで絞り込み
-function getFilteredData() {
-  const keyword = getKeyword();
-  const selectedMonth = getSelectedMonth();
-  const data = getSalesData();
+function getFilteredData(showUndecided = false) {
+
+  const keyword =
+    getKeyword();
+
+  const selectedMonth =
+    getSelectedMonth();
+
+  const data =
+    getSalesData();
 
   return data.filter(function (sale) {
-    const caseMonth = getCaseMonth(sale);
 
-    if (selectedMonth && caseMonth !== selectedMonth) {
-      return false;
+    const caseMonth =
+      getCaseMonth(sale);
+
+    if (selectedMonth) {
+
+      if (showUndecided) {
+
+        if (
+          caseMonth !== selectedMonth &&
+          !isUndecidedContract(sale)
+        ) {
+          return false;
+        }
+
+      } else {
+
+        if (caseMonth !== selectedMonth) {
+          return false;
+        }
+
+      }
+
     }
 
-    return matchesKeyword(sale, keyword);
+    return matchesKeyword(
+      sale,
+      keyword
+    );
+
   });
+
 }
 
 function setText(id, text) {
@@ -1047,7 +1174,9 @@ function renderTable(
         getBrokerageFee(
           sale
         );
-
+const totalSales =
+  brokerageFeeTaxIncluded +
+  (Number(sale.ad) || 0);
       const adPaymentText =
         sale.adPaymentDate
           ? `
@@ -1157,14 +1286,20 @@ function renderTable(
         </td>
 
         <td>
-          ${formatYen(
-            brokerageFeeTaxIncluded
-          )}
-        </td>
+  ${formatYen(
+    brokerageFeeTaxIncluded
+  )}
+</td>
 
-        <td>
-          ${feePaymentText}
-        </td>
+<td>
+  <strong class="case-total-sales">
+    ${formatYen(totalSales)}
+  </strong>
+</td>
+
+<td>
+  ${feePaymentText}
+</td>
 
         <td>
           ${sale.installment || "利用なし"}

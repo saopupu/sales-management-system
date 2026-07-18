@@ -160,15 +160,95 @@ button:hover {
   background: #6b7280;
 }
 
+/* =========================
+   案件一覧ヘッダー
+========================= */
+
 .list-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 28px;
+  margin-bottom: 22px;
 }
 
-.list-header input {
-  max-width: 280px;
+.list-header h2 {
+  flex: 0 0 145px;
+  margin: 0;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.list-filter-area {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  align-items: center;
+  gap: 24px;
+}
+
+.list-search-box {
+  width: 100%;
+}
+
+.list-search-box input {
+  width: 100%;
+  max-width: none;
+  height: 52px;
+  padding: 0 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+  font-size: 15px;
+}
+
+.list-staff-filter {
+  display: grid;
+  grid-template-columns: 64px minmax(180px, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.list-staff-filter label {
+  display: inline-block;
+  min-width: 64px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #123a70;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+}
+
+.list-staff-filter select {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+  font-size: 15px;
+}
+
+/* スマホ・狭い画面 */
+
+@media (max-width: 900px) {
+
+  .list-header {
+    display: block;
+  }
+
+  .list-header h2 {
+    margin-bottom: 16px;
+  }
+
+  .list-filter-area {
+    grid-template-columns: 1fr;gap: 20px
+    gap: 14px;
+  }
+
+  .list-staff-filter {
+    grid-template-columns: 80px 1fr;
+  }
 }
 
 .table-wrap {
@@ -6127,17 +6207,10 @@ body {
 .sales-hero-content strong {
   display: block;
   margin: 0;
-  overflow: hidden;
   color: #ffffff;
-  font-size:
-    clamp(
-      26px,
-      2.15vw,
-      38px
-    );
+  font-size: 28px;
   font-weight: 900;
   line-height: 1.15;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -7376,4 +7449,64 @@ body {
   .dashboard-sales-grid {
     grid-template-columns: 1fr;
   }
+}
+/* =========================
+   契約予定・未定表示
+========================= */
+
+.contract-plan-text {
+  color: #d32f2f;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.contract-undecided-text {
+  color: #d32f2f;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.contract-date-text {
+  white-space: nowrap;
+}
+
+#contractPlan + small {
+  display: block;
+  margin-top: 5px;
+  color: #777;
+  font-size: 12px;
+}
+.contract-plan-text {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.contract-undecided-text {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.contract-date-text {
+  color: inherit;
+}
+.case-total-sales {
+    color: #1976d2;
+    font-weight: 700;
+    display: block;
+    text-align: right;
+    font-size: 16px;
+}
+/* ダッシュボード金額の省略表示を解除 */
+
+.sales-hero-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sales-hero-content strong {
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+  font-size: clamp(20px, 2.2vw, 28px);
 }
