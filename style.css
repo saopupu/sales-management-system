@@ -7606,3 +7606,55 @@ table {
   color: #dc2626 !important;
   font-weight: 700;
 }
+/* =========================
+   案件一覧 固定列
+========================= */
+
+.sticky-staff{
+    position:sticky;
+    left:0;
+    z-index:20;
+    background:#fff;
+}
+
+.sticky-customer{
+    position:sticky;
+    left:82px;
+    z-index:20;
+    background:#fff;
+}
+
+thead .sticky-staff,
+thead .sticky-customer{
+    z-index:30;
+}
+/* ===========================
+   案件一覧 固定列 Version9
+=========================== */
+
+#salesListSection table{
+    overflow: visible !important;
+    border-radius: 0 !important;
+}
+
+#salesListSection thead th{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #f8fafc;
+}
+
+#salesListSection .sticky-staff{
+    position: sticky;
+    left: 0;
+    z-index: 30;
+    background: white;
+}
+
+#salesListSection .sticky-customer{
+    position: sticky;
+    left: 90px;
+    z-index: 30;
+    background: white;
+    box-shadow: 5px 0 8px rgba(0,0,0,.08);
+}

@@ -1258,20 +1258,20 @@ const totalSales =
     ${sale.startDate || ""}
   </td>
 
-  <td>
-    <span
-      class="
-        staff-badge
-        staff-${sale.staff || ""}
-      "
-    >
+  <td class="case-fixed-staff">
+  <span
+    class="
+      staff-badge
+      staff-${sale.staff || ""}
+    "
+  >
       ${sale.staff || ""}
     </span>
   </td>
 
-  <td>
-    ${sale.customer || ""}
-  </td>
+  <td class="case-fixed-customer">
+  ${sale.customer || ""}
+</td>
 
   <td>
     ${sale.property || ""}
