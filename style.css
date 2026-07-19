@@ -7606,25 +7606,4 @@ table {
   color: #dc2626 !important;
   font-weight: 700;
 }
-/* ===== 案件一覧 固定列 ===== */
 
-.case-fixed-staff,
-.case-fixed-customer{
-  position: sticky;
-  background:#fff;
-}
-
-.case-fixed-staff{
-  left:0;
-  z-index:20;
-}
-
-.case-fixed-customer{
-  left:90px;
-  z-index:20;
-}
-
-thead .case-fixed-staff,
-thead .case-fixed-customer{
-  z-index:30;
-}
