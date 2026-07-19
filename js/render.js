@@ -1234,44 +1234,44 @@ const totalSales =
       tr.className =
         `case-row status-${status}`;
 
-      tr.innerHTML = `
-  <td>
-  ${sale.applyDate || ""}
-</td>
-
-<td>
-  <span
-    class="
-      status-badge
-      status-${status}
-    "
-  >
-    ${status}
-  </span>
-</td>
-
-<td>
-  ${getContractDateDisplay(sale)}
-</td>
-
-  <td>
-    ${sale.startDate || ""}
-  </td>
-
+         tr.innerHTML = `
   <td class="case-fixed-staff">
-  <span
-    class="
-      staff-badge
-      staff-${sale.staff || ""}
-    "
-  >
+    <span
+      class="
+        staff-badge
+        staff-${sale.staff || ""}
+      "
+    >
       ${sale.staff || ""}
     </span>
   </td>
 
   <td class="case-fixed-customer">
-  ${sale.customer || ""}
-</td>
+    ${sale.customer || ""}
+  </td>
+
+  <td>
+    ${sale.applyDate || ""}
+  </td>
+
+  <td>
+    <span
+      class="
+        status-badge
+        status-${status}
+      "
+    >
+      ${status}
+    </span>
+  </td>
+
+  <td>
+    ${getContractDateDisplay(sale)}
+  </td>
+
+  <td>
+    ${sale.startDate || ""}
+  </td>
 
   <td>
     ${sale.property || ""}

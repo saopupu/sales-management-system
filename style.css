@@ -7606,78 +7606,25 @@ table {
   color: #dc2626 !important;
   font-weight: 700;
 }
-/* ===========================
-   案件一覧 固定列 完成版
-=========================== */
+/* ===== 案件一覧 固定列 ===== */
 
-#salesListSection .table-wrap {
-  width: 100%;
-  max-height: 70vh;
-  overflow: auto;
-  position: relative;
-}
-
-#salesListSection table {
-  min-width: 1800px;
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: visible !important;
-  border-radius: 0 !important;
-}
-
-#salesListSection thead th {
+.case-fixed-staff,
+.case-fixed-customer{
   position: sticky;
-  top: 0;
-  z-index: 20;
-  background: #f8fafc;
+  background:#fff;
 }
 
-/* 1列目：担当 */
-#salesListSection .case-fixed-staff {
-  position: sticky;
-  left: 0;
-  width: 90px;
-  min-width: 90px;
-  max-width: 90px;
-  z-index: 30;
-  background: #ffffff;
+.case-fixed-staff{
+  left:0;
+  z-index:20;
 }
 
-/* 2列目：お客様 */
-#salesListSection .case-fixed-customer {
-  position: sticky;
-  left: 90px;
-  width: 150px;
-  min-width: 150px;
-  max-width: 150px;
-  z-index: 30;
-  background: #ffffff;
-  box-shadow: 5px 0 8px rgba(15, 23, 42, 0.08);
+.case-fixed-customer{
+  left:90px;
+  z-index:20;
 }
 
-/* ヘッダーの固定列を最前面にする */
-#salesListSection thead .case-fixed-staff,
-#salesListSection thead .case-fixed-customer {
-  z-index: 40;
-  background: #f8fafc;
-}
-
-/* 偶数行 */
-#salesListSection tbody tr:nth-child(even) .case-fixed-staff,
-#salesListSection tbody tr:nth-child(even) .case-fixed-customer {
-  background: #f8fafc;
-}
-
-/* 契約済み行 */
-#salesListSection tbody tr.status-契約済 .case-fixed-staff,
-#salesListSection tbody tr.status-契約済 .case-fixed-customer,
-#salesListSection tbody tr.status-契約済み .case-fixed-staff,
-#salesListSection tbody tr.status-契約済み .case-fixed-customer {
-  background: #dcfce7;
-}
-
-/* ホバー時 */
-#salesListSection tbody tr:hover .case-fixed-staff,
-#salesListSection tbody tr:hover .case-fixed-customer {
-  background: #eaf4ff;
+thead .case-fixed-staff,
+thead .case-fixed-customer{
+  z-index:30;
 }
