@@ -252,13 +252,18 @@ button:hover {
 }
 
 .table-wrap {
+  width: 100%;
+  max-height: 70vh;
   overflow-x: auto;
+  overflow-y: auto;
+  position: relative;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 1400px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 th,
@@ -309,8 +314,8 @@ tr:hover {
 
 .status-審査落ち,
 .status-キャンセル {
-  background: #fee2e2;
-  color: #991b1b;
+  background: #e5e7eb;
+  color: #4b5563;
 }
 
 .action-buttons {
@@ -7509,4 +7514,95 @@ body {
   text-overflow: clip;
   white-space: nowrap;
   font-size: clamp(20px, 2.2vw, 28px);
+}
+.contract-plan-text {
+  color: #d32f2f;
+  font-weight: bold;
+}
+/* 合計売上 */
+.total-sales-cell {
+  font-size: 17px;
+  font-weight: 800;
+  color: #2563eb;
+  background: #eff6ff;
+}
+.table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 0 #e5e7eb;
+}
+.table-wrap {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-height: none !important;
+}
+
+table {
+  width: 100% !important;
+  min-width: 1400px !important;
+  border-collapse: collapse !important;
+}
+
+.table-wrap thead th {
+  position: static !important;
+  top: auto !important;
+  z-index: auto !important;
+  display: table-cell !important;
+}
+.table-wrap thead th {
+  color: #475569 !important;
+  background: #f7f9fc !important;
+}
+.inactive-row {
+  background: #f3f4f6;
+}
+
+.inactive-row td {
+  background: #f3f4f6 !important;
+  color: #6b7280;
+}
+
+.inactive-row:hover td {
+  background: #e5e7eb !important;
+}
+.case-row.status-審査落ち td,
+.case-row.status-キャンセル td {
+  background: #e5e7eb !important;
+  color: #6b7280;
+}
+
+.case-row.status-審査落ち:hover td,
+.case-row.status-キャンセル:hover td {
+  background: #d1d5db !important;
+}
+.unpaid-count {
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.unpaid-money {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.contract-undecided {
+  color: #e53935;
+  font-weight: bold;
+}
+
+.contract-plan-text {
+  color: #ff9800;
+  font-weight: bold;
+}
+/* 契約日表示 */
+.contract-undecided,
+.contract-plan-text {
+  color: #dc2626 !important;
+  font-weight: 700;
 }

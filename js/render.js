@@ -198,9 +198,7 @@ function getCaseMonth(
 =========================================
 */
 
-function isUndecidedContract(
-  sale
-) {
+ function isUndecidedContract(sale) {
   return (
     !sale.contractDate &&
     sale.contractPlan === "未定"
@@ -719,23 +717,23 @@ function renderBossDashboard(data) {
     未入金表示
   */
 
-  setText(
-    "bossUnpaidFee",
-    unpaidFeeCount +
-      "件 / " +
-      formatYen(
-        unpaidFeeAmount
-      )
-  );
+  document.getElementById("bossUnpaidFee").innerHTML = `
+  <div class="unpaid-count">
+    ${unpaidFeeCount}件
+  </div>
+  <div class="unpaid-money">
+    ${formatYen(unpaidFeeAmount)}
+  </div>
+`;
 
-  setText(
-    "bossUnpaidAd",
-    unpaidAdCount +
-      "件 / " +
-      formatYen(
-        unpaidAdAmount
-      )
-  );
+document.getElementById("bossUnpaidAd").innerHTML = `
+  <div class="unpaid-count">
+    ${unpaidAdCount}件
+  </div>
+  <div class="unpaid-money">
+    ${formatYen(unpaidAdAmount)}
+  </div>
+`;
 
 
   renderStaffRanking(data);
@@ -1144,7 +1142,29 @@ setText(
 /* =========================
    案件一覧
 ========================= */
+function getContractDateDisplay(sale) {
 
+  // 契約済み
+  if (sale.contractDate) {
+    return sale.contractDate;
+  }
+
+  // 契約予定あり
+  if (sale.contractPlan) {
+    return `
+      <span class="contract-plan-text">
+        ${sale.contractPlan}予定
+      </span>
+    `;
+  }
+
+  // 契約日未定
+  return `
+    <span class="contract-undecided">
+      未定
+    </span>
+  `;
+}
 function renderTable(
   data
 ) {
@@ -1207,195 +1227,197 @@ const totalSales =
         sale.status ||
         "申込";
 
-      const tr =
-        document.createElement(
-          "tr"
-        );
+      const tr = document.createElement("tr");
+
+
 
       tr.className =
         `case-row status-${status}`;
 
       tr.innerHTML = `
-        <td>
-          ${sale.applyDate || ""}
-        </td>
+  <td>
+  ${sale.applyDate || ""}
+</td>
 
-        <td>
-          ${sale.contractDate || ""}
-        </td>
+<td>
+  <span
+    class="
+      status-badge
+      status-${status}
+    "
+  >
+    ${status}
+  </span>
+</td>
 
-        <td>
-          ${sale.startDate || ""}
-        </td>
+<td>
+  ${getContractDateDisplay(sale)}
+</td>
 
-        <td>
-          <span
-            class="
-              staff-badge
-              staff-${sale.staff || ""}
-            "
-          >
-            ${sale.staff || ""}
-          </span>
-        </td>
+  <td>
+    ${sale.startDate || ""}
+  </td>
 
-        <td>
-          ${sale.customer || ""}
-        </td>
+  <td>
+    <span
+      class="
+        staff-badge
+        staff-${sale.staff || ""}
+      "
+    >
+      ${sale.staff || ""}
+    </span>
+  </td>
 
-        <td>
-          ${sale.property || ""}
-        </td>
+  <td>
+    ${sale.customer || ""}
+  </td>
 
-        <td>
-          ${sale.company || ""}
-        </td>
+  <td>
+    ${sale.property || ""}
+  </td>
 
-        <td>
-          ${formatYen(
-            sale.rent
-          )}
-        </td>
+  <td>
+    ${sale.company || ""}
+  </td>
 
-        <td>
-          ${formatYen(
-            sale.managementFee
-          )}
-        </td>
+  <td>
+    ${formatYen(
+      sale.rent
+    )}
+  </td>
 
-        <td>
-          ${formatYen(
-            sale.ad
-          )}
-        </td>
+  <td>
+    ${formatYen(
+      sale.managementFee
+    )}
+  </td>
 
-        <td>
-          ${adPaymentText}
-        </td>
+  <td>
+    ${formatYen(
+      sale.ad
+    )}
+  </td>
 
-        <td>
-          ${formatYen(
-            sale.brokerageFee
-          )}
-        </td>
+  <td>
+    ${adPaymentText}
+  </td>
 
-        <td>
-          ${getTaxTypeText(
-            sale.brokerageTaxType
-          )}
-        </td>
+  <td>
+    ${formatYen(
+      sale.brokerageFee
+    )}
+  </td>
 
-        <td>
+  <td>
+    ${getTaxTypeText(
+      sale.brokerageTaxType
+    )}
+  </td>
+
+  <td>
+    ${formatYen(
+      brokerageFeeTaxIncluded
+    )}
+  </td>
+
+  <td class="total-sales-cell">
   ${formatYen(
-    brokerageFeeTaxIncluded
+    totalSales
   )}
 </td>
 
-<td>
-  <strong class="case-total-sales">
-    ${formatYen(totalSales)}
-  </strong>
-</td>
+  <td>
+    ${feePaymentText}
+  </td>
 
-<td>
-  ${feePaymentText}
-</td>
+  <td>
+    ${sale.installment || "利用なし"}
+  </td>
 
-        <td>
-          ${sale.installment || "利用なし"}
-        </td>
+  
 
-        <td>
-          <span
-            class="
-              status-badge
-              status-${status}
-            "
-          >
-            ${status}
-          </span>
-        </td>
+  <td>
+    ${sale.memo || ""}
+  </td>
 
-        <td>
-          ${sale.memo || ""}
-        </td>
+  <td>
+    <div class="case-menu-wrap">
 
-        <td>
+      <button
+        type="button"
+        class="case-menu-button"
+        aria-label="案件メニューを開く"
+        onclick="
+          toggleCaseMenu(
+            event,
+            ${originalIndex}
+          )
+        "
+      >
+        ⋮
+      </button>
 
-          <div class="case-menu-wrap">
+      <div
+        class="case-action-menu"
+        id="caseActionMenu-${originalIndex}"
+      >
 
-            <button
-              type="button"
-              class="case-menu-button"
-              aria-label="案件メニューを開く"
-              onclick="
-                toggleCaseMenu(
-                  event,
-                  ${originalIndex}
-                )
-              "
-            >
-              ⋮
-            </button>
+        <button
+          type="button"
+          onclick="
+            event.stopPropagation();
+            editSale(${originalIndex});
+          "
+        >
+          ✏️ 編集
+        </button>
 
-            <div
-  class="case-action-menu"
-  id="caseActionMenu-${originalIndex}"
->
+        <button
+          type="button"
+          onclick="
+            openBrokerageInvoice(
+              ${originalIndex}
+            );
 
-              <button
-  type="button"
-  onclick="event.stopPropagation(); editSale(${originalIndex});"
->
-  ✏️ 編集
-</button>
+            closeCaseMenus();
+          "
+        >
+          📄 仲介手数料請求書
+        </button>
 
-              <button
-                type="button"
-                onclick="
-                  openBrokerageInvoice(
-                    ${originalIndex}
-                  );
+        <button
+          type="button"
+          onclick="
+            openAdInvoice(
+              ${originalIndex}
+            );
 
-                  closeCaseMenus();
-                "
-              >
-                📄 仲介手数料請求書
-              </button>
+            closeCaseMenus();
+          "
+        >
+          📄 AD請求書
+        </button>
 
-              <button
-                type="button"
-                onclick="
-                  openAdInvoice(
-                    ${originalIndex}
-                  );
+        <button
+          type="button"
+          class="danger"
+          onclick="
+            deleteSale(
+              ${originalIndex}
+            );
 
-                  closeCaseMenus();
-                "
-              >
-                📄 AD請求書
-              </button>
+            closeCaseMenus();
+          "
+        >
+          🗑 削除
+        </button>
 
-              <button
-                type="button"
-                class="danger"
-                onclick="
-                  deleteSale(
-                    ${originalIndex}
-                  );
+      </div>
 
-                  closeCaseMenus();
-                "
-              >
-                🗑 削除
-              </button>
-
-            </div>
-
-          </div>
-
-        </td>
-      `;
+    </div>
+  </td>
+`;
 
       salesTableBody.appendChild(
         tr
