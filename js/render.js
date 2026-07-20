@@ -199,12 +199,20 @@ function getCaseMonth(
 */
 
  function isUndecidedContract(sale) {
+  const contractDate =
+    sale.contractDate || "";
+
+  const contractPlan =
+    sale.contractPlan || "";
+
   return (
-    !sale.contractDate &&
-    sale.contractPlan === "未定"
+    !contractDate &&
+    (
+      !contractPlan ||
+      contractPlan === "未定"
+    )
   );
 }
-
 // 仲介手数料売上用：仲介手数料入金日ベース
 function getFeePaymentMonth(sale) {
   const date = sale.feePaymentDate || "";
@@ -216,15 +224,14 @@ function getAdPaymentMonth(sale) {
   const date = sale.adPaymentDate || "";
   return date ? date.slice(0, 7) : "";
 }
-
 function matchesKeyword(sale, keyword) {
   const targetText = `
     ${sale.applyDate || ""}
     ${sale.contractDate || ""}
+    ${sale.contractPlan || ""}
     ${sale.startDate || ""}
     ${sale.staff || ""}
     ${sale.customer || ""}
-    
     ${sale.property || ""}
     ${sale.company || ""}
     ${sale.installment || ""}
@@ -237,9 +244,14 @@ function matchesKeyword(sale, keyword) {
   return targetText.includes(keyword);
 }
 
-// 案件一覧は契約日ベースで絞り込み
-function getFilteredData(showUndecided = false) {
 
+/*
+=========================================
+ 案件を表示月・検索文字で絞り込む
+=========================================
+*/
+
+function getFilteredData(showUndecided = false) {
   const keyword =
     getKeyword();
 
@@ -250,40 +262,51 @@ function getFilteredData(showUndecided = false) {
     getSalesData();
 
   return data.filter(function (sale) {
-
     const caseMonth =
       getCaseMonth(sale);
 
+    /*
+      月が選択されている場合
+    */
+
     if (selectedMonth) {
+      /*
+        案件一覧
+
+        契約日未定・契約予定月未入力の案件は
+        すべての月に表示
+      */
 
       if (showUndecided) {
-
         if (
           caseMonth !== selectedMonth &&
           !isUndecidedContract(sale)
         ) {
           return false;
         }
-
       } else {
+        /*
+          ダッシュボード・集計
+
+          選択した契約月の案件だけを使用
+        */
 
         if (caseMonth !== selectedMonth) {
           return false;
         }
-
       }
-
     }
+
+    /*
+      キーワード検索
+    */
 
     return matchesKeyword(
       sale,
       keyword
     );
-
   });
-
 }
-
 function setText(id, text) {
   const element = document.getElementById(id);
 
@@ -491,6 +514,16 @@ function renderBossDashboard(data) {
     getSelectedMonth();
 
   /*
+    契約予定売上用
+
+    契約日未定の案件は
+    どの表示月でも予定売上へ含める
+  */
+
+  const contractScheduleData =
+    getFilteredData(true);
+
+  /*
     申込日が表示月の案件
   */
 
@@ -540,10 +573,44 @@ function renderBossDashboard(data) {
 
 
   /*
-    契約予定売上・入金実績・未入金
+    契約予定売上
 
-    dataは契約日ベースで
-    絞り込まれた案件
+    契約日または契約予定月が
+    表示月の案件に加えて、
+
+    契約日未定の案件も
+    売上見込みへ含める
+
+    審査落ち・キャンセルは除外
+  */
+
+  contractScheduleData.forEach(
+    function (sale) {
+
+      if (
+        isStatus(
+          sale,
+          "審査落ち"
+        ) ||
+        isStatus(
+          sale,
+          "キャンセル"
+        )
+      ) {
+        return;
+      }
+
+      contractScheduleSales +=
+        getSaleTotal(sale);
+    }
+  );
+
+
+  /*
+    入金実績・未入金
+
+    dataは契約日・契約予定月を基準に
+    表示月で絞り込まれた案件
   */
 
   data.forEach(function (sale) {
@@ -552,27 +619,6 @@ function renderBossDashboard(data) {
 
     const ad =
       getAd(sale);
-
-    /*
-      契約予定売上
-
-      審査落ち・キャンセルは
-      売上見込みから除外
-    */
-
-    if (
-      !isStatus(
-        sale,
-        "審査落ち"
-      ) &&
-      !isStatus(
-        sale,
-        "キャンセル"
-      )
-    ) {
-      contractScheduleSales +=
-        fee + ad;
-    }
 
     /*
       入金日ベースの売上実績
@@ -714,27 +760,56 @@ function renderBossDashboard(data) {
 
 
   /*
-    未入金表示
+    仲介手数料未入金表示
   */
 
-  document.getElementById("bossUnpaidFee").innerHTML = `
-  <div class="unpaid-count">
-    ${unpaidFeeCount}件
-  </div>
-  <div class="unpaid-money">
-    ${formatYen(unpaidFeeAmount)}
-  </div>
-`;
+  const bossUnpaidFee =
+    document.getElementById(
+      "bossUnpaidFee"
+    );
 
-document.getElementById("bossUnpaidAd").innerHTML = `
-  <div class="unpaid-count">
-    ${unpaidAdCount}件
-  </div>
-  <div class="unpaid-money">
-    ${formatYen(unpaidAdAmount)}
-  </div>
-`;
+  if (bossUnpaidFee) {
+    bossUnpaidFee.innerHTML = `
+      <div class="unpaid-count">
+        ${unpaidFeeCount}件
+      </div>
 
+      <div class="unpaid-money">
+        ${formatYen(
+          unpaidFeeAmount
+        )}
+      </div>
+    `;
+  }
+
+
+  /*
+    AD未入金表示
+  */
+
+  const bossUnpaidAd =
+    document.getElementById(
+      "bossUnpaidAd"
+    );
+
+  if (bossUnpaidAd) {
+    bossUnpaidAd.innerHTML = `
+      <div class="unpaid-count">
+        ${unpaidAdCount}件
+      </div>
+
+      <div class="unpaid-money">
+        ${formatYen(
+          unpaidAdAmount
+        )}
+      </div>
+    `;
+  }
+
+
+  /*
+    担当者ランキング
+  */
 
   renderStaffRanking(data);
 }
@@ -808,26 +883,42 @@ function renderStaffSummary(data) {
    * 申込み人数・契約人数・審査落ち・キャンセルは、
    * ステータスではなく申込日を基準に対象月を決めます。
    */
-  applicationData.forEach(function (sale) {
-    if (!staffTotals[sale.staff]) {
-      return;
-    }
+  /*
+  申込み人数・審査落ち・キャンセル
+  → 申込日ベース
+*/
 
-    // 申込日がある案件は、現在のステータスに関係なく申込み人数に含める
-    staffTotals[sale.staff].applyCount++;
+applicationData.forEach(function (sale) {
+  if (!staffTotals[sale.staff]) {
+    return;
+  }
 
-    if (isContractStatus(sale)) {
-      staffTotals[sale.staff].contractCount++;
-    }
+  staffTotals[sale.staff].applyCount++;
 
-    if (isStatus(sale, "審査落ち")) {
-      staffTotals[sale.staff].rejectedCount++;
-    }
+  if (isStatus(sale, "審査落ち")) {
+    staffTotals[sale.staff].rejectedCount++;
+  }
 
-    if (isStatus(sale, "キャンセル")) {
-      staffTotals[sale.staff].cancelCount++;
-    }
-  });
+  if (isStatus(sale, "キャンセル")) {
+    staffTotals[sale.staff].cancelCount++;
+  }
+});
+
+
+/*
+  契約人数
+  → 契約日・契約予定月ベース
+*/
+
+data.forEach(function (sale) {
+  if (!staffTotals[sale.staff]) {
+    return;
+  }
+
+  if (isContractStatus(sale)) {
+    staffTotals[sale.staff].contractCount++;
+  }
+});
 
   /*
    * 売上と未入金額は、今までどおり

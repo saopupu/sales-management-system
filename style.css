@@ -7607,3 +7607,42 @@ table {
   font-weight: 700;
 }
 
+/* =========================================
+   契約済みの連続行・色崩れ修正
+========================================= */
+
+/*
+  契約済みの行は、
+  偶数行の色より緑色を優先する
+*/
+
+.table-wrap tbody
+.case-row.status-契約済 > td,
+.table-wrap tbody
+.case-row.status-契約済み > td {
+  background: #f0fdf4 !important;
+}
+
+
+/*
+  契約済み行にマウスを乗せたとき
+*/
+
+.table-wrap tbody
+.case-row.status-契約済:hover > td,
+.table-wrap tbody
+.case-row.status-契約済み:hover > td {
+  background: #dcfce7 !important;
+}
+
+
+/*
+  契約済みバッジの色
+*/
+
+.status-badge.status-契約済,
+.status-badge.status-契約済み {
+  background: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #166534 !important;
+}
