@@ -7646,3 +7646,182 @@ table {
   border-color: #bbf7d0 !important;
   color: #166534 !important;
 }
+/* =========================================
+   案件一覧・左端2列固定
+========================================= */
+
+/*
+  stickyを安定させるため、
+  tableのborder-collapseをseparateにする
+*/
+
+.table-wrap table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+
+/*
+  1列目：担当者
+*/
+
+.table-wrap .case-fixed-staff {
+  position: sticky !important;
+  left: 0 !important;
+
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+
+  z-index: 20;
+  background: #ffffff;
+}
+
+
+/*
+  2列目：お客様名
+
+  担当者列の横幅90px分、
+  左から空けて固定する
+*/
+
+.table-wrap .case-fixed-customer {
+  position: sticky !important;
+  left: 90px !important;
+
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+
+  z-index: 19;
+  background: #ffffff;
+
+  box-shadow:
+    4px 0 7px
+    rgba(15, 23, 42, 0.08);
+}
+
+
+/*
+  ヘッダーの固定列を
+  データ行より手前に表示する
+*/
+
+.table-wrap thead
+.case-fixed-staff,
+.table-wrap thead
+.case-fixed-customer {
+  z-index: 40 !important;
+  background: #f7f9fc !important;
+}
+
+
+/*
+  偶数行の固定列にも
+  既存のしま模様を反映
+*/
+
+.table-wrap tbody
+tr:nth-child(even)
+.case-fixed-staff,
+.table-wrap tbody
+tr:nth-child(even)
+.case-fixed-customer {
+  background: #f8fafc;
+}
+
+
+/*
+  マウスを乗せた行の固定列
+*/
+
+.table-wrap tbody
+tr:hover
+.case-fixed-staff,
+.table-wrap tbody
+tr:hover
+.case-fixed-customer {
+  background: #eaf4ff;
+}
+
+
+/*
+  契約済みの固定列にも
+  緑色を確実に反映
+*/
+
+.table-wrap tbody
+.case-row.status-契約済
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-契約済み
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済み
+.case-fixed-customer {
+  background: #f0fdf4 !important;
+}
+
+
+/*
+  契約済みにマウスを乗せたとき
+*/
+
+.table-wrap tbody
+.case-row.status-契約済:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済:hover
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-契約済み:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済み:hover
+.case-fixed-customer {
+  background: #dcfce7 !important;
+}
+
+
+/*
+  審査落ち・キャンセルの固定列
+*/
+
+.table-wrap tbody
+.case-row.status-審査落ち
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-審査落ち
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-キャンセル
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-キャンセル
+.case-fixed-customer {
+  background: #e5e7eb !important;
+}
+
+
+/*
+  審査落ち・キャンセルに
+  マウスを乗せたとき
+*/
+
+.table-wrap tbody
+.case-row.status-審査落ち:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-審査落ち:hover
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-キャンセル:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-キャンセル:hover
+.case-fixed-customer {
+  background: #d1d5db !important;
+}
