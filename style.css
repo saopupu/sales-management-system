@@ -7825,3 +7825,194 @@ tr:hover
 .case-fixed-customer {
   background: #d1d5db !important;
 }
+/* =========================================
+   左端2列固定・最終上書き
+========================================= */
+
+/*
+  stickyを妨害している
+  tableのoverflow:hiddenを解除
+*/
+
+#salesListSection .table-wrap table {
+  overflow: visible !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+
+/*
+  スクロールするのはtable-wrapだけ
+*/
+
+#salesListSection .table-wrap {
+  position: relative !important;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  max-height: 70vh !important;
+}
+
+
+/*
+  1列目：担当
+*/
+
+#salesListSection
+.table-wrap
+thead th:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody td:nth-child(1) {
+  position: sticky !important;
+  left: 0 !important;
+
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+
+  z-index: 20 !important;
+  background: #ffffff;
+}
+
+
+/*
+  2列目：お客様
+*/
+
+#salesListSection
+.table-wrap
+thead th:nth-child(2),
+
+#salesListSection
+.table-wrap
+tbody td:nth-child(2) {
+  position: sticky !important;
+  left: 90px !important;
+
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+
+  z-index: 19 !important;
+  background: #ffffff;
+
+  box-shadow:
+    5px 0 8px
+    rgba(15, 23, 42, 0.12);
+}
+
+
+/*
+  固定ヘッダーをデータ行より前に出す
+*/
+
+#salesListSection
+.table-wrap
+thead th:nth-child(1) {
+  z-index: 42 !important;
+  background: #f7f9fc !important;
+}
+
+#salesListSection
+.table-wrap
+thead th:nth-child(2) {
+  z-index: 41 !important;
+  background: #f7f9fc !important;
+}
+
+
+/*
+  偶数行
+*/
+
+#salesListSection
+.table-wrap
+tbody tr:nth-child(even)
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody tr:nth-child(even)
+td:nth-child(2) {
+  background: #f8fafc;
+}
+
+
+/*
+  ホバー
+*/
+
+#salesListSection
+.table-wrap
+tbody tr:hover
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody tr:hover
+td:nth-child(2) {
+  background: #eaf4ff;
+}
+
+
+/*
+  契約済み
+*/
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済
+td:nth-child(2),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済み
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済み
+td:nth-child(2) {
+  background: #f0fdf4 !important;
+}
+
+
+/*
+  審査落ち・キャンセル
+*/
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-審査落ち
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-審査落ち
+td:nth-child(2),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-キャンセル
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-キャンセル
+td:nth-child(2) {
+  background: #e5e7eb !important;
+}
