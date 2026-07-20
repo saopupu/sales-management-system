@@ -500,7 +500,6 @@ function renderDashboard(data) {
   setText("totalSales", formatYen(totalSales));
   setText("totalFee", formatYen(totalBrokerageFee));
   setText("totalAd", formatYen(totalAd));
-  setText("totalCount", data.length + "件");
   setText("unpaidFeeCount", unpaidFeeCount + "件");
   setText("unpaidAdCount", unpaidAdCount + "件");
   setText("dashApplyCount", applyCount + "件");

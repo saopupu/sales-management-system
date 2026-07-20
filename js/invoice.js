@@ -653,7 +653,11 @@ function openInvoicePreview(
   const taxMode =
     invoice.taxMode ||
     "taxExcluded";
-
+const stampImageUrl =
+  new URL(
+    "images/stamp.png",
+    window.location.href
+  ).href;
   previewWindow.document.open();
 
   previewWindow.document.write(`
@@ -1463,7 +1467,7 @@ function openInvoicePreview(
 
         </div>
 <img
-  src="images/stamp.png"
+  src="${stampImageUrl}"
   class="company-stamp"
 >
         
