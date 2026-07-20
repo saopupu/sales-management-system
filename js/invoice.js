@@ -935,6 +935,18 @@ function openInvoicePreview(
 
       padding-right: 22mm;
     }
+      .company-stamp {
+  position: absolute;
+
+  top: 1mm;      /* 少し上へ */
+  right: 5mm;    /* 左へ移動 */
+
+  width: 34mm;
+
+  opacity: 0.88;
+
+  pointer-events: none;
+}
 
     .company-name {
       margin-bottom: 2mm;
@@ -1450,7 +1462,10 @@ function openInvoicePreview(
           </div>
 
         </div>
-
+<img
+  src="images/stamp.png"
+  class="company-stamp"
+>
         
 
       </div>
