@@ -51,8 +51,7 @@ function render() {
   const selectedApplyMonth =
     getSelectedApplyMonth();
 
-  const selectedStatus =
-    getSelectedStatus();
+  const selectedStatus = "";
 
   const tableData =
     getFilteredData(
