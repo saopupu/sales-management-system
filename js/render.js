@@ -28,21 +28,13 @@ function render() {
 
   /*
     ダッシュボード・集計用
-
-    未定案件は毎月の売上へ
-    重複加算しない
   */
 
   const data =
-    getFilteredData(
-      false
-    );
+    getFilteredData(false);
 
   /*
     案件一覧用
-
-    担当者・申込月・進捗で絞り込む
-    未定案件はどの月にも表示
   */
 
   const selectedStaff =
@@ -51,97 +43,135 @@ function render() {
   const selectedApplyMonth =
     getSelectedApplyMonth();
 
+  /*
+    いったん進捗フィルターを無効化
+    案件一覧を復旧させるため
+  */
+
   const selectedStatus = "";
 
   const tableData =
-    getFilteredData(
-      true
-    ).filter(function (sale) {
-
-      /*
-        担当者で絞り込む
-      */
-
-      if (
-        selectedStaff &&
-        sale.staff !== selectedStaff
-      ) {
-        return false;
-      }
-
-      /*
-        申込月で絞り込む
-      */
-
-      if (
-        selectedApplyMonth &&
-        (
-          !sale.applyDate ||
-          sale.applyDate.slice(
-            0,
-            7
-          ) !== selectedApplyMonth
-        )
-      ) {
-        return false;
-      }
-
-      /*
-        進捗で絞り込む
-      */
-
-      if (selectedStatus) {
+    getFilteredData(true).filter(
+      function (sale) {
 
         /*
-          進行中の場合は
-          「申込」と「審査中」を表示
+          担当者で絞り込む
         */
 
         if (
-          selectedStatus === "進行中"
+          selectedStaff &&
+          sale.staff !== selectedStaff
         ) {
+          return false;
+        }
+
+        /*
+          申込月で絞り込む
+        */
+
+        if (
+          selectedApplyMonth &&
+          (
+            !sale.applyDate ||
+            sale.applyDate.slice(
+              0,
+              7
+            ) !== selectedApplyMonth
+          )
+        ) {
+          return false;
+        }
+
+        /*
+          進捗で絞り込む
+        */
+
+        if (selectedStatus) {
           if (
-            sale.status !== "申込" &&
-            sale.status !== "審査中"
+            selectedStatus === "進行中"
+          ) {
+            if (
+              sale.status !== "申込" &&
+              sale.status !== "審査中"
+            ) {
+              return false;
+            }
+          } else if (
+            sale.status !== selectedStatus
           ) {
             return false;
           }
         }
 
-        /*
-          進行中以外は
-          選択した進捗と完全一致
-        */
-
-        else if (
-          sale.status !== selectedStatus
-        ) {
-          return false;
-        }
+        return true;
       }
+    );
 
-      return true;
-    });
+  /*
+    最初に案件一覧を表示
 
-  renderDashboard(
-    data
-  );
-
-  renderBossDashboard(
-    data
-  );
-
-  renderStaffSummary(
-    data
-  );
-
-  renderMonthlyPerformance();
+    この後のダッシュボード処理で
+    エラーが起きても一覧を残す
+  */
 
   renderTable(
     tableData
   );
 
-  renderAlarm();
+  /*
+    ダッシュボード類は個別に実行
+  */
+
+  try {
+    renderDashboard(
+      data
+    );
+  } catch (error) {
+    console.error(
+      "ダッシュボード表示エラー",
+      error
+    );
+  }
+
+  try {
+    renderBossDashboard(
+      data
+    );
+  } catch (error) {
+    console.error(
+      "社長ダッシュボード表示エラー",
+      error
+    );
+  }
+
+  try {
+    renderStaffSummary(
+      data
+    );
+  } catch (error) {
+    console.error(
+      "担当者別集計表示エラー",
+      error
+    );
+  }
+
+  try {
+    renderMonthlyPerformance();
+  } catch (error) {
+    console.error(
+      "月末実績表示エラー",
+      error
+    );
+  }
+
+  try {
+    renderAlarm();
+  } catch (error) {
+    console.error(
+      "アラーム表示エラー",
+      error
+    );
+  }
 }
 
 /*
