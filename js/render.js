@@ -20,158 +20,17 @@ function getSelectedStatus() {
   return statusFilter.value;
 }
 function render() {
-  /*
-    申込月フィルターの選択肢を更新
-  */
+  const allSales =
+    getSalesData();
 
-  updateApplyMonthFilter();
-
-  /*
-    ダッシュボード・集計用
-  */
-
-  const data =
-    getFilteredData(false);
-
-  /*
-    案件一覧用
-  */
-
-  const selectedStaff =
-    getSelectedStaff();
-
-  const selectedApplyMonth =
-    getSelectedApplyMonth();
-
-  /*
-    いったん進捗フィルターを無効化
-    案件一覧を復旧させるため
-  */
-
-  const selectedStatus = "";
-
-  const tableData =
-    getFilteredData(true).filter(
-      function (sale) {
-
-        /*
-          担当者で絞り込む
-        */
-
-        if (
-          selectedStaff &&
-          sale.staff !== selectedStaff
-        ) {
-          return false;
-        }
-
-        /*
-          申込月で絞り込む
-        */
-
-        if (
-          selectedApplyMonth &&
-          (
-            !sale.applyDate ||
-            sale.applyDate.slice(
-              0,
-              7
-            ) !== selectedApplyMonth
-          )
-        ) {
-          return false;
-        }
-
-        /*
-          進捗で絞り込む
-        */
-
-        if (selectedStatus) {
-          if (
-            selectedStatus === "進行中"
-          ) {
-            if (
-              sale.status !== "申込" &&
-              sale.status !== "審査中"
-            ) {
-              return false;
-            }
-          } else if (
-            sale.status !== selectedStatus
-          ) {
-            return false;
-          }
-        }
-
-        return true;
-      }
-    );
-
-  /*
-    最初に案件一覧を表示
-
-    この後のダッシュボード処理で
-    エラーが起きても一覧を残す
-  */
-
-  renderTable(
-    tableData
+  console.log(
+    "案件データ件数：",
+    allSales.length
   );
 
-  /*
-    ダッシュボード類は個別に実行
-  */
-
-  try {
-    renderDashboard(
-      data
-    );
-  } catch (error) {
-    console.error(
-      "ダッシュボード表示エラー",
-      error
-    );
-  }
-
-  try {
-    renderBossDashboard(
-      data
-    );
-  } catch (error) {
-    console.error(
-      "社長ダッシュボード表示エラー",
-      error
-    );
-  }
-
-  try {
-    renderStaffSummary(
-      data
-    );
-  } catch (error) {
-    console.error(
-      "担当者別集計表示エラー",
-      error
-    );
-  }
-
-  try {
-    renderMonthlyPerformance();
-  } catch (error) {
-    console.error(
-      "月末実績表示エラー",
-      error
-    );
-  }
-
-  try {
-    renderAlarm();
-  } catch (error) {
-    console.error(
-      "アラーム表示エラー",
-      error
-    );
-  }
+  renderTable(
+    allSales
+  );
 }
 
 /*
