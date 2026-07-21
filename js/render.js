@@ -835,8 +835,6 @@ console.table(
   ]
 );
 
-copy(JSON.stringify(contractScheduleCheck, null, 2));
-
 console.log(
   "契約予定売上：",
   contractScheduleSales
