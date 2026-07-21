@@ -1,3 +1,27 @@
+function getKeyword() {
+  const searchInput =
+    document.getElementById("searchInput");
+
+  if (!searchInput) {
+    return "";
+  }
+
+  return searchInput.value
+    .toLowerCase()
+    .trim();
+}
+
+function getSelectedMonth() {
+  const monthFilter =
+    document.getElementById("monthFilter");
+
+  if (!monthFilter) {
+    return "";
+  }
+
+  return monthFilter.value;
+}
+
 function getSelectedStaff() {
   const staffFilter =
     document.getElementById("staffFilter");
