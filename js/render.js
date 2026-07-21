@@ -1,5 +1,11 @@
 function render() {
   /*
+    申込月フィルターの選択肢を更新
+  */
+
+  updateApplyMonthFilter();
+
+  /*
     ダッシュボード・集計用
 
     未定案件は毎月の売上へ
@@ -14,21 +20,51 @@ function render() {
   /*
     案件一覧用
 
+    担当者・申込月で絞り込む
     未定案件はどの月にも表示
   */
 
   const selectedStaff =
-  getSelectedStaff();
+    getSelectedStaff();
 
-const tableData =
-  getFilteredData(true).filter(function (sale) {
+  const selectedApplyMonth =
+    getSelectedApplyMonth();
 
-    if (!selectedStaff) {
+  const tableData =
+    getFilteredData(
+      true
+    ).filter(function (sale) {
+
+      /*
+        担当者で絞り込む
+      */
+
+      if (
+        selectedStaff &&
+        sale.staff !== selectedStaff
+      ) {
+        return false;
+      }
+
+      /*
+        申込月で絞り込む
+      */
+
+      if (
+        selectedApplyMonth &&
+        (
+          !sale.applyDate ||
+          sale.applyDate.slice(
+            0,
+            7
+          ) !== selectedApplyMonth
+        )
+      ) {
+        return false;
+      }
+
       return true;
-    }
-
-    return sale.staff === selectedStaff;
-  });
+    });
 
   renderDashboard(
     data
@@ -58,9 +94,95 @@ function getKeyword() {
 function getSelectedMonth() {
   return document.getElementById("monthFilter").value;
 }
+
 function getSelectedStaff() {
   return document.getElementById("staffFilter").value;
 }
+
+/*
+  案件一覧の申込月を取得
+*/
+
+function getSelectedApplyMonth() {
+  const applyMonthFilter =
+    document.getElementById(
+      "applyMonthFilter"
+    );
+
+  if (!applyMonthFilter) {
+    return "";
+  }
+
+  return applyMonthFilter.value;
+}
+
+/*
+  申込月フィルターの選択肢を作る
+*/
+
+function updateApplyMonthFilter() {
+  const select =
+    document.getElementById(
+      "applyMonthFilter"
+    );
+
+  if (!select) {
+    return;
+  }
+
+  const currentValue =
+    select.value;
+
+  const months =
+    [
+      ...new Set(
+        getSalesData()
+          .map(function (sale) {
+            if (!sale.applyDate) {
+              return "";
+            }
+
+            return sale.applyDate.slice(
+              0,
+              7
+            );
+          })
+          .filter(Boolean)
+      )
+    ]
+      .sort()
+      .reverse();
+
+  select.innerHTML =
+    '<option value="">すべて</option>';
+
+  months.forEach(function (month) {
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      month;
+
+    option.textContent =
+      month;
+
+    select.appendChild(
+      option
+    );
+  });
+
+  if (
+    months.includes(
+      currentValue
+    )
+  ) {
+    select.value =
+      currentValue;
+  }
+}
+
 // 申込み人数・成約率用：申込日ベース
 function getApplicationMonth(sale) {
   const date = sale.applyDate || "";
@@ -583,26 +705,70 @@ function renderBossDashboard(data) {
     審査落ち・キャンセルは除外
   */
 
-  contractScheduleData.forEach(
-    function (sale) {
+  const contractScheduleCheck = [];
 
-      if (
-        isStatus(
-          sale,
-          "審査落ち"
-        ) ||
-        isStatus(
-          sale,
-          "キャンセル"
-        )
-      ) {
-        return;
-      }
+contractScheduleData.forEach(
+  function (sale) {
 
-      contractScheduleSales +=
-        getSaleTotal(sale);
+    if (
+      isStatus(
+        sale,
+        "審査落ち"
+      ) ||
+      isStatus(
+        sale,
+        "キャンセル"
+      )
+    ) {
+      return;
     }
-  );
+
+    const brokerageFee =
+      getBrokerageFee(sale);
+
+    const ad =
+      getAd(sale);
+
+    const total =
+      getSaleTotal(sale);
+
+    contractScheduleSales +=
+      total;
+
+    contractScheduleCheck.push({
+      担当: sale.staff || "",
+      お客様: sale.customer || "",
+      ステータス: sale.status || "申込",
+      契約日: sale.contractDate || "",
+      契約予定月: sale.contractPlan || "",
+      仲介手数料入力額:
+        Number(sale.brokerageFee) || 0,
+      税区分:
+        getTaxTypeText(
+          sale.brokerageTaxType
+        ),
+      仲介手数料計算後:
+        brokerageFee,
+      AD:
+        ad,
+      合計:
+        total,
+      未定案件:
+        isUndecidedContract(sale)
+          ? "はい"
+          : ""
+    });
+  }
+);
+
+console.table(
+  contractScheduleCheck
+);
+
+console.log(
+  "契約予定売上：",
+  contractScheduleSales
+);
 
 
   /*
@@ -1272,9 +1438,23 @@ function renderTable(
 
   salesTableBody.innerHTML =
     "";
+    const salesListCount =
+  document.getElementById(
+    "salesListCount"
+  );
 
-  data.forEach(
-    function (sale) {
+if (salesListCount) {
+  salesListCount.textContent =
+    "表示件数：" +
+    data.length +
+    "件";
+}
+
+ data.forEach(
+  function (
+    sale,
+    displayIndex
+  ) {
       const originalIndex =
         allData.indexOf(
           sale
@@ -1339,6 +1519,9 @@ const totalSales =
   <td class="case-fixed-customer">
     ${sale.customer || ""}
   </td>
+  <td class="case-number-cell">
+  ${displayIndex + 1}
+</td>
 
   <td>
     ${sale.applyDate || ""}

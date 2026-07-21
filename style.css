@@ -8016,3 +8016,16 @@ tbody
 td:nth-child(2) {
   background: #e5e7eb !important;
 }
+.sales-list-count {
+  margin: 0 0 10px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.case-number-cell {
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+}

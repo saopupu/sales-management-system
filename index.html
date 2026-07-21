@@ -889,33 +889,48 @@
 
   <div class="list-filter-area">
 
-    <div class="list-search-box">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="お客様名・物件名・管理会社などで検索"
-      >
-    </div>
+   <div class="list-search-box">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="お客様名・物件名・管理会社などで検索"
+  >
+</div>
 
-    <div class="list-staff-filter">
-      <label for="staffFilter">担当者</label>
+<div class="list-staff-filter">
+  <label for="staffFilter">担当者</label>
 
-      <select
-        id="staffFilter"
-        onchange="render()"
-      >
-        <option value="">全員</option>
-        <option value="矢部">矢部</option>
-        <option value="早坂">早坂</option>
-        <option value="米山">米山</option>
-        <option value="吉田">吉田</option>
-      </select>
-    </div>
+  <select
+    id="staffFilter"
+    onchange="render()"
+  >
+    <option value="">全員</option>
+    <option value="矢部">矢部</option>
+    <option value="早坂">早坂</option>
+    <option value="米山">米山</option>
+    <option value="吉田">吉田</option>
+  </select>
+</div>
 
+<div class="list-staff-filter">
+  <label for="applyMonthFilter">申込月</label>
+
+  <select
+    id="applyMonthFilter"
+    onchange="render()"
+  >
+    <option value="">すべて</option>
+  </select>
+</div>
   </div>
 
 </div>
-
+<p
+  id="salesListCount"
+  class="sales-list-count"
+>
+  表示件数：0件
+</p>
   <div class="table-wrap">
     <table>
 
@@ -923,6 +938,7 @@
   <tr>
   <th class="case-fixed-staff">担当</th>
   <th class="case-fixed-customer">お客様</th>
+  <th>No.</th>
   <th>申込日</th>
   <th>進捗</th>
   <th>契約日</th>
