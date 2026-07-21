@@ -8029,3 +8029,133 @@ td:nth-child(2) {
   text-align: center;
   font-weight: bold;
 }
+/* ==================================================
+   案件一覧フィルター配置調整
+   ※HTML・JavaScriptは変更しない
+================================================== */
+
+#salesListSection .list-header {
+  display: grid;
+  grid-template-columns:
+    minmax(280px, 1.35fr)
+    repeat(3, minmax(180px, 1fr));
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+/* 案件一覧タイトル */
+#salesListSection .list-header > h2 {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/*
+  中の要素を親グリッド上へ並べる
+  検索・担当者・申込月を直接配置可能にする
+*/
+#salesListSection .list-filter-area {
+  display: contents;
+}
+
+/* 1列目：検索 */
+#salesListSection .list-search-box {
+  grid-column: 1;
+  min-width: 0;
+}
+
+/* 2列目：担当者 */
+#salesListSection .list-filter-area
+  .list-staff-filter:has(#staffFilter) {
+  grid-column: 2;
+}
+
+/* 3列目：進捗 */
+#salesListSection .list-header
+  > .list-staff-filter:has(#statusFilter) {
+  grid-column: 3;
+}
+
+/* 4列目：申込月 */
+#salesListSection .list-filter-area
+  .list-staff-filter:has(#applyMonthFilter) {
+  grid-column: 4;
+}
+
+/* 担当者・進捗・申込月を同じ形式にする */
+#salesListSection .list-staff-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  min-width: 0;
+}
+
+/* ラベル */
+#salesListSection .list-staff-filter label {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: #123a70;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* 検索欄・選択欄の高さを統一 */
+#salesListSection .list-search-box input,
+#salesListSection .list-staff-filter select {
+  width: 100%;
+  height: 52px;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+/* タブレット */
+@media (max-width: 1100px) {
+  #salesListSection .list-header {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  #salesListSection .list-header > h2 {
+    grid-column: 1 / -1;
+  }
+
+  #salesListSection .list-search-box {
+    grid-column: 1 / -1;
+  }
+
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#staffFilter),
+  #salesListSection .list-header
+    > .list-staff-filter:has(#statusFilter),
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#applyMonthFilter) {
+    grid-column: auto;
+  }
+}
+
+/* スマホ */
+@media (max-width: 650px) {
+  #salesListSection .list-header {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  #salesListSection .list-header > h2,
+  #salesListSection .list-search-box,
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#staffFilter),
+  #salesListSection .list-header
+    > .list-staff-filter:has(#statusFilter),
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#applyMonthFilter) {
+    grid-column: 1;
+  }
+}
