@@ -581,7 +581,591 @@ function openAdInvoice(
       )
   });
 }
+/* ==================================================
+   管理会社送付状
+================================================== */
 
+function openCoverLetter(
+  index
+) {
+  const sale =
+    getSalesData()[index];
+
+  if (!sale) {
+    alert(
+      "案件データを取得できませんでした。"
+    );
+
+    return;
+  }
+
+  const previewWindow =
+    window.open(
+      "",
+      "_blank",
+      "width=1100,height=900"
+    );
+
+  if (!previewWindow) {
+    alert(
+      "送付状画面を開けませんでした。\nブラウザのポップアップを許可してください。"
+    );
+
+    return;
+  }
+
+  const issueDate =
+    getJapaneseIssueDate();
+
+  const company =
+    invoiceEscapeHtml(
+      addRecipientSuffix(
+        sale.company,
+        "御中"
+      )
+    );
+
+  const property =
+    invoiceEscapeHtml(
+      sale.property ||
+      "物件名未入力"
+    );
+
+  const customer =
+    invoiceEscapeHtml(
+      sale.customer ||
+      "契約者名未入力"
+    );
+
+  const stampImageUrl =
+    new URL(
+      "images/stamp.png",
+      window.location.href
+    ).href;
+
+  previewWindow.document.open();
+
+  previewWindow.document.write(`
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>管理会社送付状</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #e8edf4;
+      color: #172033;
+
+      font-family:
+        "Yu Mincho",
+        "Hiragino Mincho ProN",
+        "Noto Serif JP",
+        serif;
+    }
+
+    .cover-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+
+      padding: 14px;
+
+      background:
+        rgba(
+          8,
+          41,
+          86,
+          0.97
+        );
+    }
+
+    .cover-toolbar button {
+      min-height: 42px;
+
+      padding:
+        0
+        18px;
+
+      border:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          0.35
+        );
+
+      border-radius: 8px;
+
+      background: #ffffff;
+      color: #0b2b57;
+
+      font-size: 14px;
+      font-weight: 800;
+
+      cursor: pointer;
+    }
+
+    .cover-toolbar button.primary {
+      background: #1856a9;
+      color: #ffffff;
+    }
+
+    .cover-help {
+      padding: 8px 12px;
+
+      background: #fff7dc;
+      color: #715b17;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .cover-sheet {
+      position: relative;
+
+      width: 210mm;
+      min-height: 297mm;
+
+      margin:
+        24px
+        auto;
+
+      padding:
+        18mm
+        17mm;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 12px 40px
+        rgba(
+          15,
+          23,
+          42,
+          0.18
+        );
+    }
+
+    .cover-title {
+      margin:
+        4mm
+        0
+        14mm;
+
+      color: #0b2b57;
+
+      font-size: 27pt;
+      font-weight: 700;
+
+      letter-spacing: 0.35em;
+      text-align: center;
+      text-indent: 0.35em;
+    }
+
+    .cover-date {
+      margin-bottom: 8mm;
+
+      font-size: 10.5pt;
+      text-align: right;
+    }
+
+    .cover-recipient {
+      margin-bottom: 12mm;
+
+      font-size: 17pt;
+      font-weight: 700;
+
+      overflow-wrap: anywhere;
+    }
+
+    .sender-area {
+      position: relative;
+
+      width: 82mm;
+
+      margin:
+        0
+        0
+        12mm
+        auto;
+
+      padding-right: 22mm;
+
+      font-size: 10pt;
+      line-height: 1.7;
+    }
+
+    .sender-name {
+      font-size: 14pt;
+      font-weight: 700;
+    }
+
+    .company-stamp {
+      position: absolute;
+
+      top: 0;
+      right: 0;
+
+      width: 32mm;
+
+      opacity: 0.88;
+
+      pointer-events: none;
+    }
+
+    .cover-subject {
+      margin-bottom: 10mm;
+
+      font-size: 15pt;
+      font-weight: 700;
+
+      text-align: center;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .cover-message {
+      margin-bottom: 9mm;
+
+      font-size: 11pt;
+      line-height: 2;
+    }
+
+    .cover-case {
+      margin-bottom: 9mm;
+
+      padding:
+        6mm
+        7mm;
+
+      border:
+        1px solid
+        #b8c8dc;
+
+      font-size: 11pt;
+      line-height: 2;
+    }
+
+    .document-box {
+      width: 100%;
+
+      border-collapse: collapse;
+
+      font-size: 11pt;
+    }
+
+    .document-box th,
+    .document-box td {
+      border:
+        1px solid
+        #b8c8dc;
+
+      padding:
+        4mm
+        5mm;
+    }
+
+    .document-box th {
+      background: #edf3fa;
+      color: #0b2b57;
+
+      text-align: center;
+    }
+
+    .document-box td:first-child {
+      width: 24mm;
+      text-align: center;
+    }
+
+    .cover-closing {
+      margin-top: 9mm;
+
+      font-size: 11pt;
+      text-align: right;
+    }
+
+    .editable {
+      outline: none;
+    }
+
+    .editable:hover {
+      background: #fffbed;
+    }
+
+    .editable:focus {
+      background: #fff6c9;
+    }
+
+    @media print {
+
+      @page {
+        size: A4 portrait;
+        margin: 7mm;
+      }
+
+      body {
+        background: #ffffff;
+
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .cover-toolbar,
+      .cover-help {
+        display: none !important;
+      }
+
+      .cover-sheet {
+        width: auto;
+        min-height: auto;
+
+        margin: 0;
+        padding: 0;
+
+        box-shadow: none;
+      }
+
+      .editable:hover,
+      .editable:focus {
+        background: transparent;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="cover-toolbar">
+
+    <button
+      type="button"
+      class="primary"
+      onclick="window.print()"
+    >
+      🖨 印刷・PDF保存
+    </button>
+
+    <button
+      type="button"
+      onclick="window.close()"
+    >
+      閉じる
+    </button>
+
+  </div>
+
+  <div class="cover-help">
+    宛名・件名・文章・物件名・契約者名・送付書類は、文字をクリックして修正できます。
+  </div>
+
+  <main class="cover-sheet">
+
+    <div class="cover-date">
+      ${invoiceEscapeHtml(issueDate)}
+    </div>
+
+    <div
+      class="cover-recipient editable"
+      contenteditable="true"
+      spellcheck="false"
+    >
+      ${company}
+    </div>
+
+    <div class="sender-area">
+
+      <div class="sender-name">
+        ${invoiceEscapeHtml(INVOICE_COMPANY.name)}
+      </div>
+
+      <div>
+        ${invoiceEscapeHtml(INVOICE_COMPANY.address1)}
+      </div>
+
+      <div>
+        ${invoiceEscapeHtml(INVOICE_COMPANY.address2)}
+      </div>
+
+      <div>
+        TEL：${invoiceEscapeHtml(INVOICE_COMPANY.tel)}
+      </div>
+
+      <div>
+        FAX：${invoiceEscapeHtml(INVOICE_COMPANY.fax)}
+      </div>
+
+      <img
+        src="${stampImageUrl}"
+        class="company-stamp"
+      >
+
+    </div>
+
+    <h1 class="cover-title">
+      送 付 状
+    </h1>
+
+    <div
+      class="cover-subject editable"
+      contenteditable="true"
+      spellcheck="false"
+    >
+      契約書類送付のご案内
+    </div>
+
+    <div
+      class="cover-message editable"
+      contenteditable="true"
+      spellcheck="false"
+    >
+      平素より大変お世話になっております。<br>
+      下記の契約書類を送付いたしますので、<br>
+      ご査収のほどよろしくお願い申し上げます。
+    </div>
+
+    <div class="cover-case">
+
+      <div>
+        物件名：
+        <span
+          class="editable"
+          contenteditable="true"
+          spellcheck="false"
+        >${property}</span>
+      </div>
+
+      <div>
+        契約者名：
+        <span
+          class="editable"
+          contenteditable="true"
+          spellcheck="false"
+        >${customer} 様</span>
+      </div>
+
+    </div>
+
+    <table class="document-box">
+
+      <thead>
+
+        <tr>
+          <th>確認</th>
+          <th>送付書類</th>
+          <th>部数</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>□</td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            賃貸借契約書
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+        </tr>
+
+        <tr>
+          <td>□</td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            重要事項説明書
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+        </tr>
+
+        <tr>
+          <td>□</td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            その他
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="cover-closing">
+      以上
+    </div>
+
+  </main>
+
+</body>
+
+</html>
+  `);
+
+  previewWindow.document.close();
+}
 
 /* ==================================================
    請求書プレビュー

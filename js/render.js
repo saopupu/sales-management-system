@@ -1841,6 +1841,18 @@ const totalSales =
         >
           📄 AD請求書
         </button>
+        <button
+  type="button"
+  onclick="
+    openCoverLetter(
+      ${originalIndex}
+    );
+
+    closeCaseMenus();
+  "
+>
+  📮 管理会社送付状
+</button>
 
         <button
           type="button"
