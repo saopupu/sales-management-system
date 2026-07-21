@@ -1,3 +1,24 @@
+function getSelectedStaff() {
+  const staffFilter =
+    document.getElementById("staffFilter");
+
+  if (!staffFilter) {
+    return "";
+  }
+
+  return staffFilter.value;
+}
+
+function getSelectedStatus() {
+  const statusFilter =
+    document.getElementById("statusFilter");
+
+  if (!statusFilter) {
+    return "";
+  }
+
+  return statusFilter.value;
+}
 function render() {
   /*
     申込月フィルターの選択肢を更新
@@ -20,7 +41,7 @@ function render() {
   /*
     案件一覧用
 
-    担当者・申込月で絞り込む
+    担当者・申込月・進捗で絞り込む
     未定案件はどの月にも表示
   */
 
@@ -29,6 +50,9 @@ function render() {
 
   const selectedApplyMonth =
     getSelectedApplyMonth();
+
+  const selectedStatus =
+    getSelectedStatus();
 
   const tableData =
     getFilteredData(
@@ -63,6 +87,40 @@ function render() {
         return false;
       }
 
+      /*
+        進捗で絞り込む
+      */
+
+      if (selectedStatus) {
+
+        /*
+          進行中の場合は
+          「申込」と「審査中」を表示
+        */
+
+        if (
+          selectedStatus === "進行中"
+        ) {
+          if (
+            sale.status !== "申込" &&
+            sale.status !== "審査中"
+          ) {
+            return false;
+          }
+        }
+
+        /*
+          進行中以外は
+          選択した進捗と完全一致
+        */
+
+        else if (
+          sale.status !== selectedStatus
+        ) {
+          return false;
+        }
+      }
+
       return true;
     });
 
@@ -85,18 +143,6 @@ function render() {
   );
 
   renderAlarm();
-}
-
-function getKeyword() {
-  return document.getElementById("searchInput").value.toLowerCase();
-}
-
-function getSelectedMonth() {
-  return document.getElementById("monthFilter").value;
-}
-
-function getSelectedStaff() {
-  return document.getElementById("staffFilter").value;
 }
 
 /*
@@ -706,7 +752,10 @@ function renderBossDashboard(data) {
   */
 
   const contractScheduleCheck = [];
-
+const undecidedTotal = {
+  count: 0,
+  amount: 0
+};
 contractScheduleData.forEach(
   function (sale) {
 
@@ -734,7 +783,10 @@ contractScheduleData.forEach(
 
     contractScheduleSales +=
       total;
-
+if (isUndecidedContract(sale)) {
+  undecidedTotal.count++;
+  undecidedTotal.amount += total;
+}
     contractScheduleCheck.push({
       担当: sale.staff || "",
       お客様: sale.customer || "",
@@ -758,18 +810,44 @@ contractScheduleData.forEach(
           ? "はい"
           : ""
     });
+    if (!isUndecidedContract(sale)) {
+  console.log(
+    sale.customer,
+    sale.contractDate || sale.contractPlan,
+    formatYen(total)
+  );
+}
   }
 );
 
+
 console.table(
-  contractScheduleCheck
+  contractScheduleCheck,
+  [
+    "担当",
+    "お客様",
+    "ステータス",
+    "契約日",
+    "契約予定月",
+    "仲介手数料計算後",
+    "AD",
+    "合計",
+    "未定案件"
+  ]
 );
+
+copy(JSON.stringify(contractScheduleCheck, null, 2));
 
 console.log(
   "契約予定売上：",
   contractScheduleSales
 );
-
+console.log(
+  "未定案件",
+  undecidedTotal.count + "件",
+  formatYen(undecidedTotal.amount)
+);
+console.log(JSON.stringify(contractScheduleCheck, null, 2));
 
   /*
     入金実績・未入金

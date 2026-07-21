@@ -923,7 +923,21 @@
   </select>
 </div>
   </div>
+<div class="list-staff-filter">
+  <label for="statusFilter">進捗</label>
 
+  <select
+    id="statusFilter"
+    onchange="render()"
+  >
+    <option value="">すべて</option>
+    <option value="進行中">進行中</option>
+    <option value="契約予定">契約予定</option>
+    <option value="契約済">契約済</option>
+    <option value="キャンセル">キャンセル</option>
+    <option value="審査落ち">審査落ち</option>
+  </select>
+</div>
 </div>
 <p
   id="salesListCount"
