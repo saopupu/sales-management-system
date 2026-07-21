@@ -44,17 +44,194 @@ function getSelectedStatus() {
   return statusFilter.value;
 }
 function render() {
-  const allSales =
-    getSalesData();
+  /*
+    申込月フィルターの選択肢を更新
+  */
 
-  console.log(
-    "案件データ件数：",
-    allSales.length
-  );
+  updateApplyMonthFilter();
+
+  /*
+    ダッシュボード・集計用データ
+  */
+
+  const dashboardData =
+    getFilteredData(false);
+
+  /*
+    案件一覧用フィルター
+  */
+
+  const selectedStaff =
+    getSelectedStaff();
+
+  const selectedApplyMonth =
+    getSelectedApplyMonth();
+
+  const selectedStatus =
+    getSelectedStatus();
+
+  const tableData =
+    getFilteredData(true).filter(
+      function (sale) {
+
+        /*
+          担当者フィルター
+        */
+
+        if (
+          selectedStaff &&
+          sale.staff !== selectedStaff
+        ) {
+          return false;
+        }
+
+        /*
+          申込月フィルター
+        */
+
+        if (
+          selectedApplyMonth &&
+          (
+            !sale.applyDate ||
+            sale.applyDate.slice(
+              0,
+              7
+            ) !== selectedApplyMonth
+          )
+        ) {
+          return false;
+        }
+
+        /*
+          進捗フィルター
+        */
+
+        if (selectedStatus) {
+
+          /*
+            進行中
+            申込・審査中をまとめて表示
+          */
+
+          if (
+            selectedStatus === "進行中"
+          ) {
+            if (
+              sale.status !== "申込" &&
+              sale.status !== "審査中"
+            ) {
+              return false;
+            }
+          }
+
+          /*
+            契約済み
+            「契約済」「契約済み」の両方に対応
+          */
+
+          else if (
+            selectedStatus === "契約済み"
+          ) {
+            if (
+              !isContractStatus(sale)
+            ) {
+              return false;
+            }
+          }
+
+          /*
+            その他の進捗
+          */
+
+          else if (
+            sale.status !== selectedStatus
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+    );
+
+  /*
+    案件一覧を先に表示
+  */
 
   renderTable(
-    allSales
+    tableData
   );
+
+  /*
+    ダッシュボード
+  */
+
+  try {
+    renderDashboard(
+      dashboardData
+    );
+  } catch (error) {
+    console.error(
+      "ダッシュボード表示エラー",
+      error
+    );
+  }
+
+  /*
+    社長用ダッシュボード
+  */
+
+  try {
+    renderBossDashboard(
+      dashboardData
+    );
+  } catch (error) {
+    console.error(
+      "社長ダッシュボード表示エラー",
+      error
+    );
+  }
+
+  /*
+    担当者別集計
+  */
+
+  try {
+    renderStaffSummary(
+      dashboardData
+    );
+  } catch (error) {
+    console.error(
+      "担当者別集計表示エラー",
+      error
+    );
+  }
+
+  /*
+    月末実績
+  */
+
+  try {
+    renderMonthlyPerformance();
+  } catch (error) {
+    console.error(
+      "月末実績表示エラー",
+      error
+    );
+  }
+
+  /*
+    アラーム
+  */
+
+  try {
+    renderAlarm();
+  } catch (error) {
+    console.error(
+      "アラーム表示エラー",
+      error
+    );
+  }
 }
 
 /*
