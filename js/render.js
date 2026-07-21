@@ -848,15 +848,20 @@ const undecidedTotal = {
 contractScheduleData.forEach(
   function (sale) {
 
+    const isContractPlan =
+      isStatus(
+        sale,
+        "契約予定"
+      );
+
+    const isContracted =
+      isContractStatus(
+        sale
+      );
+
     if (
-      isStatus(
-        sale,
-        "審査落ち"
-      ) ||
-      isStatus(
-        sale,
-        "キャンセル"
-      )
+      !isContractPlan &&
+      !isContracted
     ) {
       return;
     }
