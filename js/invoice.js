@@ -585,9 +585,7 @@ function openAdInvoice(
    管理会社送付状
 ================================================== */
 
-function openCoverLetter(
-  index
-) {
+function openCoverLetter(index) {
   const sale =
     getSalesData()[index];
 
@@ -637,12 +635,6 @@ function openCoverLetter(
       "契約者名未入力"
     );
 
-  const stampImageUrl =
-    new URL(
-      "images/stamp.png",
-      window.location.href
-    ).href;
-
   previewWindow.document.open();
 
   previewWindow.document.write(`
@@ -663,14 +655,29 @@ function openCoverLetter(
 
   <style>
 
+    :root {
+      --navy: #0b2b57;
+      --navy-light: #244d7e;
+      --line: #9eb1c8;
+      --soft-blue: #f7f9fc;
+      --text: #1d2736;
+    }
+
     * {
       box-sizing: border-box;
     }
 
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       margin: 0;
+      padding: 0;
+
       background: #e8edf4;
-      color: #172033;
+      color: var(--text);
 
       font-family:
         "Yu Mincho",
@@ -678,6 +685,10 @@ function openCoverLetter(
         "Noto Serif JP",
         serif;
     }
+
+    /* =========================
+       上部操作ボタン
+    ========================= */
 
     .cover-toolbar {
       position: sticky;
@@ -696,6 +707,15 @@ function openCoverLetter(
           41,
           86,
           0.97
+        );
+
+      box-shadow:
+        0 4px 16px
+        rgba(
+          0,
+          0,
+          0,
+          0.18
         );
     }
 
@@ -718,7 +738,13 @@ function openCoverLetter(
       border-radius: 8px;
 
       background: #ffffff;
-      color: #0b2b57;
+      color: var(--navy);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
       font-size: 14px;
       font-weight: 800;
@@ -729,6 +755,10 @@ function openCoverLetter(
     .cover-toolbar button.primary {
       background: #1856a9;
       color: #ffffff;
+    }
+
+    .cover-toolbar button:hover {
+      opacity: 0.92;
     }
 
     .cover-help {
@@ -744,8 +774,13 @@ function openCoverLetter(
         sans-serif;
 
       font-size: 12px;
+      line-height: 1.7;
       text-align: center;
     }
+
+    /* =========================
+       A4送付状本体
+    ========================= */
 
     .cover-sheet {
       position: relative;
@@ -758,8 +793,9 @@ function openCoverLetter(
         auto;
 
       padding:
-        18mm
-        17mm;
+        15mm
+        16mm
+        10mm;
 
       background: #ffffff;
 
@@ -773,13 +809,135 @@ function openCoverLetter(
         );
     }
 
+    .cover-sheet::before {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      right: 0;
+
+      height: 3mm;
+
+      background: var(--navy);
+
+      content: "";
+    }
+
+    .cover-sheet::after {
+      position: absolute;
+
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      height: 3mm;
+
+      background: var(--navy);
+
+      content: "";
+    }
+
+    /* =========================
+       上部情報
+    ========================= */
+
+    .cover-date {
+      margin-bottom: 9mm;
+
+      font-size: 10.5pt;
+      text-align: right;
+    }
+
+    .cover-top {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        80mm;
+
+      gap: 12mm;
+
+      align-items: start;
+
+      margin-bottom: 10mm;
+    }
+
+    .cover-recipient {
+      min-height: 17mm;
+
+      padding:
+        0
+        2mm
+        3mm;
+
+      border-bottom:
+        1.4px solid
+        var(--navy-light);
+
+      color: var(--navy);
+
+      font-size: 17pt;
+      font-weight: 700;
+
+      letter-spacing: 0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .sender-area {
+      font-size: 10pt;
+      line-height: 1.65;
+      text-align: right;
+    }
+
+    .sender-name {
+      margin-bottom: 2mm;
+
+      color: var(--navy);
+
+      font-size: 14pt;
+      font-weight: 700;
+    }
+
+    /* =========================
+       タイトル
+    ========================= */
+
+    .cover-title-area {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+      gap: 5mm;
+
+      margin-bottom: 9mm;
+    }
+
+    .cover-title-area::before,
+    .cover-title-area::after {
+      width: 35mm;
+      height: 1px;
+
+      background: var(--navy-light);
+
+      content: "";
+    }
+
+    .cover-title-symbol {
+      width: 3mm;
+      height: 3mm;
+
+      background: #7f9abb;
+
+      transform: rotate(45deg);
+    }
+
     .cover-title {
       margin:
-        4mm
         0
-        14mm;
+        0
+        9mm;
 
-      color: #0b2b57;
+      color: var(--navy);
 
       font-size: 27pt;
       font-weight: 700;
@@ -789,127 +947,170 @@ function openCoverLetter(
       text-indent: 0.35em;
     }
 
-    .cover-date {
+    /* =========================
+       挨拶文
+    ========================= */
+
+    .cover-message {
       margin-bottom: 8mm;
 
-      font-size: 10.5pt;
-      text-align: right;
+      font-size: 11pt;
+      line-height: 2;
     }
 
-    .cover-recipient {
-      margin-bottom: 12mm;
+    /* =========================
+       物件情報
+    ========================= */
 
-      font-size: 17pt;
+    .cover-case {
+      margin-bottom: 8mm;
+
+      padding:
+        5mm
+        6mm;
+
+      border:
+        1px solid
+        var(--line);
+
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          var(--soft-blue)
+        );
+
+      font-size: 11pt;
+    }
+
+    .case-row {
+      display: grid;
+
+      grid-template-columns:
+        27mm
+        minmax(0, 1fr);
+
+      align-items: center;
+
+      min-height: 10mm;
+    }
+
+    .case-row + .case-row {
+      margin-top: 1.5mm;
+    }
+
+    .case-label {
+      position: relative;
+
+      padding-left: 4mm;
+
+      color: var(--navy);
       font-weight: 700;
+    }
+
+    .case-label::before {
+      position: absolute;
+
+      top: 50%;
+      left: 0;
+
+      width: 1.2mm;
+      height: 7mm;
+
+      background: var(--navy);
+
+      transform: translateY(-50%);
+
+      content: "";
+    }
+
+    .case-value {
+      padding-left: 3mm;
 
       overflow-wrap: anywhere;
     }
 
-    .sender-area {
-      position: relative;
-
-      width: 82mm;
-
-      margin:
-        0
-        0
-        12mm
-        auto;
-
-      padding-right: 22mm;
-
-      font-size: 10pt;
-      line-height: 1.7;
-    }
-
-    .sender-name {
-      font-size: 14pt;
-      font-weight: 700;
-    }
-
-    .company-stamp {
-      position: absolute;
-
-      top: 0;
-      right: 0;
-
-      width: 32mm;
-
-      opacity: 0.88;
-
-      pointer-events: none;
-    }
-
-    .cover-subject {
-      margin-bottom: 10mm;
-
-      font-size: 15pt;
-      font-weight: 700;
-
-      text-align: center;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-
-    .cover-message {
-      margin-bottom: 9mm;
-
-      font-size: 11pt;
-      line-height: 2;
-    }
-
-    .cover-case {
-      margin-bottom: 9mm;
-
-      padding:
-        6mm
-        7mm;
-
-      border:
-        1px solid
-        #b8c8dc;
-
-      font-size: 11pt;
-      line-height: 2;
-    }
+    /* =========================
+       書類一覧
+    ========================= */
 
     .document-box {
       width: 100%;
 
       border-collapse: collapse;
+      table-layout: fixed;
 
-      font-size: 11pt;
+      font-size: 10.5pt;
     }
 
     .document-box th,
     .document-box td {
       border:
         1px solid
-        #b8c8dc;
-
-      padding:
-        4mm
-        5mm;
+        var(--line);
     }
 
     .document-box th {
-      background: #edf3fa;
-      color: #0b2b57;
+      height: 11mm;
 
+      background: var(--navy);
+      color: #ffffff;
+
+      font-size: 10.5pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-align: center;
+    }
+
+    .document-box th:first-child {
+      width: 26mm;
+    }
+
+    .document-box th:last-child {
+      width: 38mm;
+    }
+
+    .document-box td {
+      height: 11mm;
+
+      padding:
+        2.5mm
+        5mm;
+
+      background: #ffffff;
+    }
+
+    .document-box tbody tr:nth-child(even) td {
+      background: #fbfcfe;
     }
 
     .document-box td:first-child {
-      width: 24mm;
+      padding: 0;
+
+      font-family:
+        "Yu Gothic",
+        "Hiragino Kaku Gothic ProN",
+        sans-serif;
+
+      font-size: 15pt;
       text-align: center;
     }
 
+    .document-box td:last-child {
+      text-align: center;
+      white-space: nowrap;
+    }
+
     .cover-closing {
-      margin-top: 9mm;
+      margin-top: 6mm;
 
       font-size: 11pt;
       text-align: right;
     }
+
+    /* =========================
+       編集可能部分
+    ========================= */
 
     .editable {
       outline: none;
@@ -921,7 +1122,37 @@ function openCoverLetter(
 
     .editable:focus {
       background: #fff6c9;
+
+      box-shadow:
+        0 0 0 3px
+        #fff6c9;
     }
+
+    /* =========================
+       スマホ表示
+    ========================= */
+
+    @media screen and (max-width: 850px) {
+
+      body {
+        overflow-x: auto;
+      }
+
+      .cover-toolbar {
+        position: static;
+      }
+
+      .cover-sheet {
+        margin:
+          12px
+          auto;
+      }
+
+    }
+
+    /* =========================
+       印刷設定
+    ========================= */
 
     @media print {
 
@@ -930,7 +1161,14 @@ function openCoverLetter(
         margin: 7mm;
       }
 
+      html,
       body {
+        width: auto;
+        height: auto;
+
+        margin: 0;
+        padding: 0;
+
         background: #ffffff;
 
         -webkit-print-color-adjust: exact;
@@ -944,17 +1182,25 @@ function openCoverLetter(
 
       .cover-sheet {
         width: auto;
-        min-height: auto;
+        min-height: 283mm;
 
         margin: 0;
-        padding: 0;
+
+        padding:
+          8mm
+          9mm
+          7mm;
 
         box-shadow: none;
+
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
 
       .editable:hover,
       .editable:focus {
         background: transparent;
+        box-shadow: none;
       }
 
     }
@@ -985,7 +1231,7 @@ function openCoverLetter(
   </div>
 
   <div class="cover-help">
-    宛名・件名・文章・物件名・契約者名・送付書類は、文字をクリックして修正できます。
+    宛名・文章・物件名・契約者名・送付書類・部数は、文字をクリックして修正できます。
   </div>
 
   <main class="cover-sheet">
@@ -994,53 +1240,50 @@ function openCoverLetter(
       ${invoiceEscapeHtml(issueDate)}
     </div>
 
-    <div
-      class="cover-recipient editable"
-      contenteditable="true"
-      spellcheck="false"
-    >
-      ${company}
-    </div>
+    <section class="cover-top">
 
-    <div class="sender-area">
-
-      <div class="sender-name">
-        ${invoiceEscapeHtml(INVOICE_COMPANY.name)}
-      </div>
-
-      <div>
-        ${invoiceEscapeHtml(INVOICE_COMPANY.address1)}
-      </div>
-
-      <div>
-        ${invoiceEscapeHtml(INVOICE_COMPANY.address2)}
-      </div>
-
-      <div>
-        TEL：${invoiceEscapeHtml(INVOICE_COMPANY.tel)}
-      </div>
-
-      <div>
-        FAX：${invoiceEscapeHtml(INVOICE_COMPANY.fax)}
-      </div>
-
-      <img
-        src="${stampImageUrl}"
-        class="company-stamp"
+      <div
+        class="cover-recipient editable"
+        contenteditable="true"
+        spellcheck="false"
       >
+        ${company}
+      </div>
 
-    </div>
+      <div class="sender-area">
+
+        <div class="sender-name">
+          ${invoiceEscapeHtml(INVOICE_COMPANY.name)}
+        </div>
+
+        <div>
+          ${invoiceEscapeHtml(INVOICE_COMPANY.address1)}
+        </div>
+
+        <div>
+          ${invoiceEscapeHtml(INVOICE_COMPANY.address2)}
+        </div>
+
+        <div>
+          TEL：${invoiceEscapeHtml(INVOICE_COMPANY.tel)}
+        </div>
+
+        <div>
+          FAX：${invoiceEscapeHtml(INVOICE_COMPANY.fax)}
+        </div>
+
+      </div>
+
+    </section>
 
     <h1 class="cover-title">
       送 付 状
     </h1>
 
-    <div
-      class="cover-subject editable"
-      contenteditable="true"
-      spellcheck="false"
-    >
-      契約書類送付のご案内
+    <div class="cover-title-area">
+      <span></span>
+      <span class="cover-title-symbol"></span>
+      <span></span>
     </div>
 
     <div
@@ -1053,27 +1296,41 @@ function openCoverLetter(
       ご査収のほどよろしくお願い申し上げます。
     </div>
 
-    <div class="cover-case">
+    <section class="cover-case">
 
-      <div>
-        物件名：
-        <span
-          class="editable"
+      <div class="case-row">
+
+        <div class="case-label">
+          物件名：
+        </div>
+
+        <div
+          class="case-value editable"
           contenteditable="true"
           spellcheck="false"
-        >${property}</span>
+        >
+          ${property}
+        </div>
+
       </div>
 
-      <div>
-        契約者名：
-        <span
-          class="editable"
+      <div class="case-row">
+
+        <div class="case-label">
+          契約者名：
+        </div>
+
+        <div
+          class="case-value editable"
           contenteditable="true"
           spellcheck="false"
-        >${customer} 様</span>
+        >
+          ${customer} 様
+        </div>
+
       </div>
 
-    </div>
+    </section>
 
     <table class="document-box">
 
@@ -1090,7 +1347,14 @@ function openCoverLetter(
       <tbody>
 
         <tr>
-          <td>□</td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
 
           <td
             class="editable"
@@ -1107,10 +1371,18 @@ function openCoverLetter(
           >
             1部
           </td>
+
         </tr>
 
         <tr>
-          <td>□</td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
 
           <td
             class="editable"
@@ -1127,17 +1399,25 @@ function openCoverLetter(
           >
             1部
           </td>
+
         </tr>
 
         <tr>
-          <td>□</td>
 
           <td
             class="editable"
             contenteditable="true"
             spellcheck="false"
           >
-            その他
+            □
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            個人情報の取扱いに関する同意書
           </td>
 
           <td
@@ -1147,6 +1427,147 @@ function openCoverLetter(
           >
             1部
           </td>
+
+        </tr>
+
+        <tr>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            入居者申込書（コピー）
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+
+        </tr>
+
+        <tr>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            保証委託契約申込書（コピー）
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+
+        </tr>
+
+        <tr>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            本人確認書類（コピー）
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+
+        </tr>
+
+        <tr>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            収入証明書（コピー）
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+
+        </tr>
+
+        <tr>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            □
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            鍵引渡し確認書（コピー）
+          </td>
+
+          <td
+            class="editable"
+            contenteditable="true"
+            spellcheck="false"
+          >
+            1部
+          </td>
+
         </tr>
 
       </tbody>
