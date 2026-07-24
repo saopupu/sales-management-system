@@ -332,19 +332,29 @@ function makeStaffSummaryRows(data) {
           item.contractCount,
           item.applicationCount
         );
+        const inquiryContractRate =
+  calculateExportRate(
+    item.contractCount,
+    performance.assignedCounts[staff]
+  );
 
       return {
         "担当者": staff,
-        "振り分け人数":
-          performance.assignedCounts[staff],
-        "申込み人数":
-          item.applicationCount,
-        "契約人数":
-          item.contractCount,
-        "成約率":
-          contractRate + "%",
-        "申込売上":
-          item.applicationSales,
+"振り分け人数":
+  performance.assignedCounts[staff],
+"申込み人数":
+  item.applicationCount,
+"契約人数":
+  item.contractCount,
+
+"申込成約率":
+  contractRate + "%",
+
+"反響成約率":
+  inquiryContractRate + "%",
+
+"申込売上":
+  item.applicationSales,
         "仲介入金売上":
           item.feePaymentSales,
         "AD入金売上":
@@ -457,14 +467,15 @@ function exportExcel() {
   const staffRows = makeStaffSummaryRows(data);
   const staffSheet = XLSX.utils.json_to_sheet(staffRows);
   staffSheet["!cols"] = [
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 12 },
-    { wch: 14 },
-    { wch: 16 },
-    { wch: 14 },
-    { wch: 16 },
-    { wch: 14 }
+{ wch: 12 },
+{ wch: 12 },
+{ wch: 12 },
+{ wch: 14 },
+{ wch: 16 },
+{ wch: 16 },
+{ wch: 14 },
+{ wch: 16 },
+{ wch: 14 }
   ];
 
   XLSX.utils.book_append_sheet(workbook, staffSheet, "担当者別集計");
