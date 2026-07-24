@@ -1539,6 +1539,11 @@ setText(
       totalApplicationCount,
       inquiryCount
     );
+    const inquiryContractRate =
+  calculateRate(
+    totalContractCount,
+    inquiryCount
+  );
 
   setText(
     "monthlyTotalAssignedCount",
@@ -1564,6 +1569,10 @@ setText(
     "monthlyInquiryApplicationRate",
     inquiryApplicationRate + "%"
   );
+  setText(
+  "monthlyInquiryContractRate",
+  inquiryContractRate + "%"
+);
 }
 /* =========================
    案件一覧
