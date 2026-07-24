@@ -1033,7 +1033,45 @@ function openCoverLetter(index) {
     /* =========================
        書類一覧
     ========================= */
+.document-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 
+  margin-bottom: 3mm;
+}
+
+.document-controls button {
+  min-height: 34px;
+
+  padding:
+    0
+    14px;
+
+  border:
+    1px solid
+    var(--navy-light);
+
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: var(--navy);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.document-controls button:hover {
+  background: #edf3fa;
+}
     .document-box {
       width: 100%;
 
@@ -1176,9 +1214,10 @@ function openCoverLetter(index) {
       }
 
       .cover-toolbar,
-      .cover-help {
-        display: none !important;
-      }
+.cover-help,
+.document-controls {
+  display: none !important;
+}
 
       .cover-sheet {
         width: auto;
@@ -1332,253 +1371,129 @@ function openCoverLetter(index) {
 
     </section>
 
-    <table class="document-box">
+    <div class="document-controls">
 
-      <thead>
+  <button
+    type="button"
+    onclick="addDocumentRow()"
+  >
+    ＋ 書類を追加
+  </button>
 
-        <tr>
-          <th>確認</th>
-          <th>送付書類</th>
-          <th>部数</th>
-        </tr>
+  <button
+    type="button"
+    onclick="removeLastDocumentRow()"
+  >
+    － 最後の行を削除
+  </button>
 
-      </thead>
+</div>
 
-      <tbody>
+<table class="document-box">
 
-        <tr>
+  <thead>
 
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
+    <tr>
+      <th>確認</th>
+      <th>送付書類</th>
+      <th>部数</th>
+    </tr>
 
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            賃貸借契約書
-          </td>
+  </thead>
 
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
+  <tbody id="documentTableBody">
+  </tbody>
 
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            重要事項説明書
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            個人情報の取扱いに関する同意書
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            入居者申込書（コピー）
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            保証委託契約申込書（コピー）
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            本人確認書類（コピー）
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            収入証明書（コピー）
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            □
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            鍵引渡し確認書（コピー）
-          </td>
-
-          <td
-            class="editable"
-            contenteditable="true"
-            spellcheck="false"
-          >
-            1部
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
+</table>
     <div class="cover-closing">
       以上
     </div>
 
+
   </main>
+
+  <script>
+
+    function addDocumentRow() {
+      const tableBody =
+        document.getElementById(
+          "documentTableBody"
+        );
+
+      if (!tableBody) {
+        return;
+      }
+
+      const row =
+        document.createElement(
+          "tr"
+        );
+
+      row.innerHTML =
+        '<td class="editable" ' +
+        'contenteditable="true" ' +
+        'spellcheck="false">' +
+        '□' +
+        '</td>' +
+
+        '<td class="editable" ' +
+        'contenteditable="true" ' +
+        'spellcheck="false">' +
+        '書類名を入力' +
+        '</td>' +
+
+        '<td class="editable" ' +
+        'contenteditable="true" ' +
+        'spellcheck="false">' +
+        '1部' +
+        '</td>';
+
+      tableBody.appendChild(row);
+
+      const documentName =
+        row.children[1];
+
+      if (documentName) {
+        documentName.focus();
+
+        const selection =
+          window.getSelection();
+
+        const range =
+          document.createRange();
+
+        range.selectNodeContents(
+          documentName
+        );
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+
+    function removeLastDocumentRow() {
+      const tableBody =
+        document.getElementById(
+          "documentTableBody"
+        );
+
+      if (
+        !tableBody ||
+        !tableBody.lastElementChild
+      ) {
+        alert(
+          "削除する書類がありません。"
+        );
+
+        return;
+      }
+
+      tableBody.removeChild(
+        tableBody.lastElementChild
+      );
+    }
+
+  </script>
 
 </body>
 
