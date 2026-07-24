@@ -1773,11 +1773,7 @@ const totalSales =
     )}
   </td>
 
-  <td class="total-sales-cell">
-  ${formatYen(
-    totalSales
-  )}
-</td>
+ 
 
   <td>
     ${feePaymentText}
