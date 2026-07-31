@@ -10,47 +10,74 @@ function normalizeLedgerText(value) {
 
 function formatLedgerCurrency(value) {
   const amount = Number(value) || 0;
-  return amount.toLocaleString("ja-JP") + "円";
+
+  return (
+    amount.toLocaleString("ja-JP") +
+    "円"
+  );
 }
 
 function formatLedgerDate(dateText) {
-  const text = normalizeLedgerText(dateText);
+  const text =
+    normalizeLedgerText(dateText);
 
   if (!text) {
     return "";
   }
 
-  const date = new Date(text + "T00:00:00");
+  const date =
+    new Date(text + "T00:00:00");
 
-  if (Number.isNaN(date.getTime())) {
+  if (
+    Number.isNaN(date.getTime())
+  ) {
     return text;
   }
 
   return (
     date.getFullYear() +
     "/" +
-    String(date.getMonth() + 1).padStart(2, "0") +
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0") +
     "/" +
-    String(date.getDate()).padStart(2, "0")
+    String(
+      date.getDate()
+    ).padStart(2, "0")
   );
 }
 
-function isLedgerTargetMonth(dateText, targetMonth) {
-  const date = normalizeLedgerText(dateText);
-  const month = normalizeLedgerText(targetMonth);
+function isLedgerTargetMonth(
+  dateText,
+  targetMonth
+) {
+  const date =
+    normalizeLedgerText(dateText);
+
+  const month =
+    normalizeLedgerText(targetMonth);
 
   if (!date || !month) {
     return false;
   }
 
-  return date.slice(0, 7) === month;
+  return (
+    date.slice(0, 7) === month
+  );
 }
 
-function getLedgerBrokerageIncluded(sale) {
-  const fee = Number(sale.brokerageFee) || 0;
-  const taxType = sale.brokerageTaxType || "";
+function getLedgerBrokerageIncluded(
+  sale
+) {
+  const fee =
+    Number(sale.brokerageFee) || 0;
 
-  if (taxType === "taxExcluded") {
+  const taxType =
+    sale.brokerageTaxType || "";
+
+  if (
+    taxType === "taxExcluded"
+  ) {
     return Math.round(fee * 1.1);
   }
 
@@ -58,12 +85,18 @@ function getLedgerBrokerageIncluded(sale) {
 }
 
 function getLedgerTaxExcluded(amount) {
-  return Math.round((Number(amount) || 0) / 1.1);
+  return Math.round(
+    (Number(amount) || 0) / 1.1
+  );
 }
 
-function createLedgerRows(targetMonth, targetStaff) {
+function createLedgerRows(
+  targetMonth,
+  targetStaff
+) {
   const sales =
-    typeof getSalesData === "function"
+    typeof getSalesData ===
+      "function"
       ? getSalesData()
       : [];
 
@@ -74,12 +107,23 @@ function createLedgerRows(targetMonth, targetStaff) {
       return;
     }
 
-    const saleStaff = normalizeLedgerText(sale.staff);
-    const selectedStaff = normalizeLedgerText(targetStaff);
+    const saleStaff =
+      normalizeLedgerText(
+        sale.staff
+      );
 
-    if (saleStaff !== selectedStaff) {
+    const selectedStaff =
+      normalizeLedgerText(
+        targetStaff
+      );
+
+    if (
+      saleStaff !== selectedStaff
+    ) {
       return;
     }
+
+    /* 仲介手数料 */
 
     if (
       isLedgerTargetMonth(
@@ -88,21 +132,39 @@ function createLedgerRows(targetMonth, targetStaff) {
       )
     ) {
       const includedAmount =
-        getLedgerBrokerageIncluded(sale);
+        getLedgerBrokerageIncluded(
+          sale
+        );
 
       if (includedAmount > 0) {
         rows.push({
-          paymentDate: sale.feePaymentDate,
-          paymentName: sale.customer || "仲介手数料",
-          property: sale.property || "",
-          includedAmount: includedAmount,
+          paymentDate:
+            sale.feePaymentDate,
+
+          paymentType:
+            "仲介手数料",
+
+          paymentName:
+            sale.customer || "",
+
+          property:
+            sale.property || "",
+
+          includedAmount:
+            includedAmount,
+
           excludedAmount:
-            sale.brokerageTaxType === "free"
+            sale.brokerageTaxType ===
+              "free"
               ? includedAmount
-              : getLedgerTaxExcluded(includedAmount)
+              : getLedgerTaxExcluded(
+                  includedAmount
+                )
         });
       }
     }
+
+    /* 広告料 */
 
     if (
       isLedgerTargetMonth(
@@ -110,23 +172,39 @@ function createLedgerRows(targetMonth, targetStaff) {
         targetMonth
       )
     ) {
-      const adAmount = Number(sale.ad) || 0;
+      const adAmount =
+        Number(sale.ad) || 0;
 
       if (adAmount > 0) {
         rows.push({
-          paymentDate: sale.adPaymentDate,
-          paymentName: sale.customer || "広告料",
-          property: sale.property || "",
-          includedAmount: adAmount,
+          paymentDate:
+            sale.adPaymentDate,
+
+          paymentType:
+            "広告料",
+
+          paymentName:
+            sale.customer || "",
+
+          property:
+            sale.property || "",
+
+          includedAmount:
+            adAmount,
+
           excludedAmount:
-            getLedgerTaxExcluded(adAmount)
+            getLedgerTaxExcluded(
+              adAmount
+            )
         });
       }
     }
   });
 
   rows.sort(function (a, b) {
-    return String(a.paymentDate).localeCompare(
+    return String(
+      a.paymentDate
+    ).localeCompare(
       String(b.paymentDate)
     );
   });
@@ -134,12 +212,15 @@ function createLedgerRows(targetMonth, targetStaff) {
   return rows;
 }
 
-function formatLedgerMonthTitle(monthText) {
+function formatLedgerMonthTitle(
+  monthText
+) {
   if (!monthText) {
     return "-";
   }
 
-  const parts = monthText.split("-");
+  const parts =
+    monthText.split("-");
 
   return (
     parts[0] +
@@ -151,40 +232,65 @@ function formatLedgerMonthTitle(monthText) {
 
 function renderSalesLedger() {
   const monthInput =
-    document.getElementById("ledgerMonth");
+    document.getElementById(
+      "ledgerMonth"
+    );
 
   const staffSelect =
-    document.getElementById("ledgerStaff");
+    document.getElementById(
+      "ledgerStaff"
+    );
 
   const tableBody =
-    document.getElementById("ledgerTableBody");
+    document.getElementById(
+      "ledgerTableBody"
+    );
 
   const periodElement =
-    document.getElementById("ledgerPeriod");
+    document.getElementById(
+      "ledgerPeriod"
+    );
 
   const staffNameElement =
-    document.getElementById("ledgerStaffName");
+    document.getElementById(
+      "ledgerStaffName"
+    );
 
   const totalIncludedElement =
-    document.getElementById("ledgerTotalIncluded");
+    document.getElementById(
+      "ledgerTotalIncluded"
+    );
 
   const totalExcludedElement =
-    document.getElementById("ledgerTotalExcluded");
+    document.getElementById(
+      "ledgerTotalExcluded"
+    );
 
-  if (!monthInput || !staffSelect || !tableBody) {
+  if (
+    !monthInput ||
+    !staffSelect ||
+    !tableBody
+  ) {
     return;
   }
 
-  const targetMonth = monthInput.value;
-  const targetStaff = staffSelect.value;
+  const targetMonth =
+    monthInput.value;
+
+  const targetStaff =
+    staffSelect.value;
 
   if (!targetMonth) {
-    alert("入金月を選択してください。");
+    alert(
+      "入金月を選択してください。"
+    );
     return;
   }
 
   if (!targetStaff) {
-    alert("担当者を選択してください。");
+    alert(
+      "担当者を選択してください。"
+    );
     return;
   }
 
@@ -196,7 +302,9 @@ function renderSalesLedger() {
 
   if (periodElement) {
     periodElement.textContent =
-      formatLedgerMonthTitle(targetMonth);
+      formatLedgerMonthTitle(
+        targetMonth
+      );
   }
 
   if (staffNameElement) {
@@ -215,8 +323,15 @@ function renderSalesLedger() {
       </tr>
     `;
 
-    totalIncludedElement.textContent = "0円";
-    totalExcludedElement.textContent = "0円";
+    if (totalIncludedElement) {
+      totalIncludedElement.textContent =
+        "0円";
+    }
+
+    if (totalExcludedElement) {
+      totalExcludedElement.textContent =
+        "0円";
+    }
 
     return;
   }
@@ -226,44 +341,96 @@ function renderSalesLedger() {
 
   rows.forEach(function (row) {
     totalIncluded +=
-      Number(row.includedAmount) || 0;
+      Number(
+        row.includedAmount
+      ) || 0;
 
     totalExcluded +=
-      Number(row.excludedAmount) || 0;
+      Number(
+        row.excludedAmount
+      ) || 0;
+
+    const badgeClass =
+      row.paymentType ===
+        "仲介手数料"
+        ? "fee"
+        : "ad";
 
     const tr =
       document.createElement("tr");
 
     tr.innerHTML = `
-      <td>${formatLedgerDate(row.paymentDate)}</td>
-      <td>${row.paymentName}</td>
-      <td>${row.property}</td>
-      <td>${formatLedgerCurrency(row.includedAmount)}</td>
+      <td>
+        ${formatLedgerDate(
+          row.paymentDate
+        )}
+      </td>
+
+      <td>
+        ${row.paymentName}
+      </td>
+
+      <td>
+        ${row.property}
+      </td>
+
+      <td>
+        <span class="ledger-badge ${badgeClass}">
+          ${row.paymentType}
+        </span>
+
+        <br>
+
+        ${formatLedgerCurrency(
+          row.includedAmount
+        )}
+      </td>
     `;
 
     tableBody.appendChild(tr);
   });
 
-  totalIncludedElement.textContent =
-    formatLedgerCurrency(totalIncluded);
+  if (totalIncludedElement) {
+    totalIncludedElement.textContent =
+      formatLedgerCurrency(
+        totalIncluded
+      );
+  }
 
-  totalExcludedElement.textContent =
-    formatLedgerCurrency(totalExcluded);
+  if (totalExcludedElement) {
+    totalExcludedElement.textContent =
+      formatLedgerCurrency(
+        totalExcluded
+      );
+  }
 }
 
 function printSalesLedger() {
-  renderSalesLedger();
+  const printArea =
+    document.getElementById(
+      "ledgerPrintArea"
+    );
 
-  setTimeout(function () {
-    window.print();
-  }, 100);
+  if (!printArea) {
+    alert(
+      "印刷する売上台帳が見つかりません。"
+    );
+    return;
+  }
+
+  window.print();
 }
 
 function setInitialLedgerMonth() {
   const monthInput =
-    document.getElementById("ledgerMonth");
+    document.getElementById(
+      "ledgerMonth"
+    );
 
-  if (!monthInput || monthInput.value) {
+  if (
+    !monthInput ||
+    monthInput.value
+  ) {
     return;
   }
 
@@ -272,29 +439,23 @@ function setInitialLedgerMonth() {
   monthInput.value =
     now.getFullYear() +
     "-" +
-    String(now.getMonth() + 1).padStart(2, "0");
+    String(
+      now.getMonth() + 1
+    ).padStart(2, "0");
 }
 
 function initializeSalesLedger() {
   setInitialLedgerMonth();
 
   const showButton =
-    document.getElementById("showLedgerButton");
-
-  const printButton =
-    document.getElementById("printLedgerButton");
+    document.getElementById(
+      "showLedgerButton"
+    );
 
   if (showButton) {
     showButton.addEventListener(
       "click",
       renderSalesLedger
-    );
-  }
-
-  if (printButton) {
-    printButton.addEventListener(
-      "click",
-      printSalesLedger
     );
   }
 }

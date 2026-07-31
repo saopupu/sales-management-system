@@ -242,9 +242,9 @@ button:hover {
   }
 
   .list-filter-area {
-    grid-template-columns: 1fr;gap: 20px
-    gap: 14px;
-  }
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
 
   .list-staff-filter {
     grid-template-columns: 80px 1fr;
@@ -8162,4 +8162,3448 @@ td:nth-child(2) {
 /* 画面切り替え用 */
 .system-view-hidden {
   display: none !important;
+}
+/* =========================
+   売上台帳の種別ラベル
+========================= */
+
+.ledger-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 5px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.ledger-badge.fee {
+  background-color: #16855b;
+}
+
+.ledger-badge.ad {
+  background-color: #d4af37;
+  color: #111111;
+}
+
+
+
+/* =========================
+   売上台帳 印刷・PDF用
+========================= */
+
+/* ==================================================
+   カード全体の質感
+================================================== */
+
+#bossDashboardSection .dashboard-card,
+#paymentDashboardSection .dashboard-card,
+#statusDashboardSection .simple-card {
+  box-shadow:
+    0 5px 16px rgba(8, 38, 83, 0.055);
+}
+
+#bossDashboardSection .dashboard-card:hover,
+#paymentDashboardSection .dashboard-card:hover,
+#statusDashboardSection .simple-card:hover {
+  border-color: #aac0dd;
+  box-shadow:
+    0 11px 26px rgba(8, 38, 83, 0.11);
+}
+
+
+/* ==================================================
+   スマホ時のサイドバー
+================================================== */
+
+@media (max-width: 760px) {
+
+  .sidebar {
+    background:
+      linear-gradient(
+        90deg,
+        #061b3a,
+        #0b3470
+      );
+  }
+
+  .sidebar-link {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .sidebar-link.active {
+    background: #1d4ed8;
+    box-shadow: none;
+  }
+
+}
+/* ==================================================
+   Version 9.4
+   ホーム画面の3セクション化
+================================================== */
+
+#alarmCard,
+#bossDashboardSection,
+#paymentDashboardSection {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+/* 入金ベース売上の内側 */
+
+#paymentDashboardSection.payment-dashboard-card {
+  padding: 24px;
+  border: 1px solid #d9e3ef;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+#paymentDashboardSection > h2 {
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #061b3a;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.payment-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* 古いdashboard指定の影響を解除 */
+
+#paymentDashboardSection {
+  display: block;
+}
+
+#paymentDashboardSection .dashboard-card {
+  margin: 0;
+}
+
+@media (max-width: 1200px) {
+  .payment-dashboard-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  #paymentDashboardSection.payment-dashboard-card {
+    padding: 17px 13px;
+  }
+
+  .payment-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+/* ==================================================
+   Version 11.0
+   参考画像レイアウト・最終上書き
+================================================== */
+
+
+/* ==================================================
+   全体
+================================================== */
+
+:root {
+  --dashboard-navy-950: #041a3a;
+  --dashboard-navy-900: #062653;
+  --dashboard-navy-800: #0b3470;
+  --dashboard-blue: #1456b8;
+  --dashboard-border: #dce5f0;
+  --dashboard-text: #0b2146;
+  --dashboard-muted: #718096;
+}
+
+body {
+  background:
+    linear-gradient(
+      180deg,
+      #f8fbff 0,
+      #f3f7fc 100%
+    );
+  color: var(--dashboard-text);
+}
+
+.main-content {
+  background: transparent;
+}
+
+.main-content .container {
+  display: block !important;
+  width: 100%;
+  max-width: 1800px;
+  padding: 0 24px 45px;
+}
+
+
+/* ==================================================
+   左サイドバー
+================================================== */
+
+.sidebar {
+  width: 230px;
+  padding: 22px 12px;
+  border-right: none;
+  background:
+    linear-gradient(
+      180deg,
+      #041a3a 0%,
+      #062653 55%,
+      #07316a 100%
+    );
+  box-shadow:
+    8px 0 28px
+    rgba(4, 26, 58, 0.12);
+}
+
+.main-content {
+  width: calc(100% - 230px);
+  margin-left: 230px;
+}
+
+.sidebar-brand {
+  gap: 11px;
+  padding: 4px 5px 24px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+.sidebar-logo {
+  width: 43px;
+  height: 43px;
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      145deg,
+      #174f9f,
+      #0b3470
+    );
+  color: #ffffff;
+  box-shadow:
+    0 8px 18px
+    rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-brand strong {
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.sidebar-brand span {
+  color:
+    rgba(255, 255, 255, 0.62);
+}
+
+.sidebar-nav {
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.sidebar-link {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color:
+    rgba(255, 255, 255, 0.78);
+  box-shadow: none;
+  text-align: left;
+}
+
+.sidebar-link:hover {
+  background:
+    rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  box-shadow: none;
+  transform: none;
+}
+
+.sidebar-link.active {
+  background:
+    linear-gradient(
+      135deg,
+      #0e53ae,
+      #0a438f
+    );
+  color: #ffffff;
+  box-shadow:
+    0 7px 18px
+    rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-footer {
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+  color:
+    rgba(255, 255, 255, 0.62);
+}
+
+.sidebar-footer small {
+  color:
+    rgba(255, 255, 255, 0.42);
+}
+
+
+/* ==================================================
+   上部ヘッダー
+================================================== */
+
+.main-content header {
+  position: relative;
+  top: auto;
+  z-index: 1;
+  min-height: 78px;
+  margin: 0 -24px 22px;
+  padding: 17px 28px;
+  border: none;
+  border-bottom:
+    1px solid
+    #e2e8f0;
+  border-radius: 0;
+  background:
+    rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 3px 14px
+    rgba(15, 23, 42, 0.04);
+}
+
+.main-content header h1 {
+  color: #071e43;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.main-content header p {
+  display: none;
+}
+
+#loginUserName {
+  color: #071e43;
+}
+
+#logoutButton {
+  border:
+    1px solid
+    #d8e1ec;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0b2146;
+}
+
+
+/* ==================================================
+   表示月・ボタン
+================================================== */
+
+.month-filter.card {
+  padding: 14px 16px;
+  border:
+    1px solid
+    #dce5f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 4px 14px
+    rgba(8, 38, 83, 0.045);
+}
+
+.month-filter label {
+  color: #102a56;
+  font-weight: 800;
+}
+
+.month-filter input {
+  width: 170px;
+  height: 43px;
+  border-radius: 8px;
+}
+
+.month-filter button {
+  min-height: 43px;
+  padding: 0 18px;
+  border-radius: 8px;
+}
+
+#showAllButton,
+#csvButton,
+#excelButton {
+  background:
+    linear-gradient(
+      180deg,
+      #0b3470,
+      #061f48
+    );
+  color: #ffffff;
+  box-shadow:
+    0 5px 12px
+    rgba(6, 31, 72, 0.18);
+}
+
+#generateTestDataButton,
+#deleteTestDataButton {
+  border:
+    1px solid
+    #dce5f0;
+  background: #ffffff;
+  color: #64748b;
+  box-shadow: none;
+}
+
+
+/* ==================================================
+   共通セクション
+================================================== */
+
+#bossDashboardSection,
+#paymentDashboardSection,
+#alarmCard {
+  width: 100%;
+  margin-bottom: 20px;
+  border:
+    1px solid
+    #dce5f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 5px 18px
+    rgba(8, 38, 83, 0.05);
+}
+
+#bossDashboardSection > h2,
+#paymentDashboardSection > h2,
+#alarmCard .today-home-header h2 {
+  margin: 0 0 16px;
+  padding: 0 0 13px;
+  border-bottom:
+    1px solid
+    #e5ebf2;
+  color: #071e43;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+#bossDashboardSection > h2::after,
+#paymentDashboardSection > h2::after,
+#alarmCard .today-home-header h2::after {
+  display: none;
+}
+
+
+/* ==================================================
+   ダッシュボード全体
+================================================== */
+
+#bossDashboardSection {
+  display: block !important;
+  padding: 14px;
+}
+
+.dashboard-main-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    320px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+#bossDashboardSection .dashboard {
+  display: grid;
+  grid-template-columns:
+    repeat(12, minmax(0, 1fr));
+  gap: 9px;
+  margin: 0;
+}
+
+
+/* ==================================================
+   ダッシュボードカード共通
+================================================== */
+
+#bossDashboardSection .dashboard-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 94px;
+  margin: 0;
+  padding: 16px 16px 15px;
+  overflow: hidden;
+  border:
+    1px solid
+    var(--dashboard-border);
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px
+    rgba(8, 38, 83, 0.045);
+}
+
+#bossDashboardSection .dashboard-card span {
+  margin-bottom: 8px;
+  color: #3e526e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#bossDashboardSection .dashboard-card strong {
+  margin: 0;
+  color: #071e43;
+  font-size: 25px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+
+/* 売上見込み・売上実績 */
+
+#bossDashboardSection
+.dashboard-card:nth-child(1),
+#bossDashboardSection
+.dashboard-card:nth-child(2) {
+  grid-column: span 6;
+  min-height: 150px;
+  padding: 22px 24px;
+  border: none;
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(73, 132, 255, 0.25),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #062653,
+      #0b3470
+    );
+  box-shadow:
+    0 10px 22px
+    rgba(6, 38, 83, 0.2);
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(2) {
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(120, 163, 255, 0.28),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #123e91,
+      #174fc2
+    );
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(1) span,
+#bossDashboardSection
+.dashboard-card:nth-child(2) span {
+  color:
+    rgba(255, 255, 255, 0.83);
+  font-size: 13px;
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(1) strong,
+#bossDashboardSection
+.dashboard-card:nth-child(2) strong {
+  color: #ffffff;
+  font-size:
+    clamp(
+      25px,
+      2.1vw,
+      35px
+    );
+}
+
+
+/* 申込み・契約・成約率 */
+
+#bossDashboardSection
+.dashboard-card:nth-child(3),
+#bossDashboardSection
+.dashboard-card:nth-child(4),
+#bossDashboardSection
+.dashboard-card:nth-child(5) {
+  grid-column: span 4;
+  min-height: 150px;
+}
+
+
+/* 審査落ち・キャンセル・未入金 */
+
+#bossDashboardSection
+.dashboard-card:nth-child(6),
+#bossDashboardSection
+.dashboard-card:nth-child(7),
+#bossDashboardSection
+.dashboard-card:nth-child(8),
+#bossDashboardSection
+.dashboard-card:nth-child(9) {
+  grid-column: span 3;
+  min-height: 94px;
+  border-left:
+    1px solid
+    var(--dashboard-border);
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(6) {
+  border-top: 3px solid #dc2626;
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(7) {
+  border-top: 3px solid #f97316;
+}
+
+#bossDashboardSection
+.dashboard-card:nth-child(8),
+#bossDashboardSection
+.dashboard-card:nth-child(9) {
+  border-top: 3px solid #174f9f;
+}
+
+
+/* ==================================================
+   担当者ランキング
+================================================== */
+
+#bossDashboardSection .ranking-card {
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 18px 20px;
+  border: none;
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      160deg,
+      #041a3a,
+      #062653 58%,
+      #0b3470
+    );
+  box-shadow:
+    0 10px 24px
+    rgba(4, 26, 58, 0.22);
+}
+
+#bossDashboardSection .ranking-card h3 {
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 15px;
+}
+
+#bossDashboardSection .ranking-row {
+  min-height: 57px;
+  padding: 14px 2px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.12);
+}
+
+#bossDashboardSection .ranking-row span {
+  color:
+    rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+}
+
+#bossDashboardSection .ranking-row strong {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+
+/* ==================================================
+   入金ベース売上
+================================================== */
+
+#paymentDashboardSection {
+  display: block !important;
+  padding: 14px;
+}
+
+.payment-dashboard-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+#paymentDashboardSection .dashboard-card {
+  position: relative;
+  min-width: 0;
+  min-height: 102px;
+  margin: 0;
+  padding: 18px 14px;
+  border:
+    1px solid
+    #dce5f0;
+  border-top:
+    1px solid
+    #dce5f0;
+  border-left:
+    1px solid
+    #dce5f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px
+    rgba(8, 38, 83, 0.04);
+}
+
+#paymentDashboardSection .dashboard-card span {
+  margin-bottom: 8px;
+  color: #405571;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#paymentDashboardSection .dashboard-card strong {
+  margin: 0;
+  color: #071e43;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+#paymentDashboardSection
+.dashboard-card.warning strong {
+  color: #071e43;
+}
+
+
+/* ==================================================
+   予定確認
+================================================== */
+
+#alarmCard {
+  position: static !important;
+  top: auto !important;
+  display: block !important;
+  grid-column: auto !important;
+  padding: 18px;
+}
+
+#alarmCard .today-home-header {
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+#alarmCard .today-home-header h2 {
+  margin-bottom: 6px;
+}
+
+#alarmCard .today-home-header p {
+  color: #718096;
+  font-size: 12px;
+}
+
+#alarmCard .today-summary-grid {
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    ) !important;
+  gap: 10px;
+}
+
+#alarmCard .today-summary-card {
+  min-height: 92px;
+  padding: 14px;
+  border-radius: 9px;
+}
+
+#alarmCard .today-summary-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+#alarmCard .today-summary-content span {
+  font-size: 12px;
+}
+
+#alarmCard .today-summary-content strong {
+  font-size: 24px;
+}
+
+#alarmCard .today-detail-grid {
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    ) !important;
+  gap: 10px;
+}
+
+#alarmCard .today-detail-card {
+  border-radius: 9px;
+}
+
+#alarmCard .today-detail-header {
+  padding: 11px 13px;
+}
+
+#alarmCard .today-detail-header h3 {
+  font-size: 12px;
+}
+
+
+/* 古いステータスは表示しない */
+
+#statusDashboardSection {
+  display: none !important;
+}
+
+
+/* ==================================================
+   タブレット
+================================================== */
+
+@media (max-width: 1250px) {
+
+  .dashboard-main-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      270px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(6),
+  #bossDashboardSection
+  .dashboard-card:nth-child(7),
+  #bossDashboardSection
+  .dashboard-card:nth-child(8),
+  #bossDashboardSection
+  .dashboard-card:nth-child(9) {
+    grid-column: span 6;
+  }
+
+  .payment-dashboard-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==================================================
+   小さい画面
+================================================== */
+
+@media (max-width: 980px) {
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .main-content {
+    width: calc(100% - 200px);
+    margin-left: 200px;
+  }
+
+  .dashboard-main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #bossDashboardSection .ranking-card {
+    min-height: auto;
+  }
+
+}
+
+
+/* ==================================================
+   スマホ
+================================================== */
+
+@media (max-width: 760px) {
+
+  .sidebar {
+    position: sticky;
+    width: 100%;
+    padding: 9px 10px;
+    background:
+      linear-gradient(
+        90deg,
+        #041a3a,
+        #0b3470
+      );
+  }
+
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .main-content .container {
+    padding: 0 10px 30px;
+  }
+
+  .main-content header {
+    margin: 0 -10px 14px;
+    padding: 14px;
+  }
+
+  .month-filter.card {
+    padding: 12px;
+  }
+
+  #bossDashboardSection,
+  #paymentDashboardSection,
+  #alarmCard {
+    padding: 12px;
+  }
+
+  #bossDashboardSection .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(n) {
+    grid-column: auto;
+    min-height: 92px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(1),
+  #bossDashboardSection
+  .dashboard-card:nth-child(2) {
+    min-height: 125px;
+  }
+
+  .payment-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #alarmCard .today-summary-grid,
+  #alarmCard .today-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  #alarmCard .today-home-header {
+    display: block !important;
+  }
+
+  #alarmCard .today-home-date {
+    margin-top: 10px;
+  }
+
+}
+/* ==================================================
+   Dashboard Version 12.0
+   参考画像再現用・ホーム画面専用
+================================================== */
+
+
+/* ==================================================
+   ホーム画面の基本
+================================================== */
+
+.dashboard-v2 {
+  --v2-navy-dark: #031b45;
+  --v2-navy: #062b65;
+  --v2-blue: #1257c4;
+  --v2-light-blue: #edf4ff;
+  --v2-border: #dfe7f2;
+  --v2-text: #061d49;
+  --v2-muted: #70809b;
+
+  width: 100%;
+}
+
+.dashboard-v2 *,
+.dashboard-v2 *::before,
+.dashboard-v2 *::after {
+  box-sizing: border-box;
+}
+
+
+/* Version 11のカード指定を解除 */
+
+.dashboard-v2-section {
+  display: block !important;
+  width: 100%;
+  margin: 0 0 22px !important;
+  padding: 18px !important;
+  border: 1px solid var(--v2-border) !important;
+  border-radius: 13px !important;
+  background: #ffffff !important;
+  box-shadow:
+    0 5px 18px
+    rgba(6, 29, 73, 0.055) !important;
+  transform: none !important;
+}
+
+
+/* ==================================================
+   セクション見出し
+================================================== */
+
+.dashboard-v2-heading,
+.schedule-v2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 45px;
+  margin-bottom: 14px;
+  padding: 0 4px 13px;
+  border-bottom: 1px solid #e5ebf3;
+}
+
+.dashboard-v2-heading-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.dashboard-v2-heading-title h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  color: var(--v2-text) !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+}
+
+.dashboard-v2-heading-title h2::after {
+  display: none !important;
+}
+
+.dashboard-v2-heading-title p {
+  margin: 3px 0 0;
+  color: var(--v2-muted);
+  font-size: 11px;
+}
+
+.section-heading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #edf3ff;
+  color: #093780;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+
+/* ==================================================
+   ダッシュボード＋ランキング
+================================================== */
+
+.dashboard-overview-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    305px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.dashboard-kpi-area {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+
+/* ==================================================
+   売上ヒーローカード
+================================================== */
+
+.dashboard-sales-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sales-hero-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+  min-height: 165px;
+  padding: 22px 24px;
+  overflow: hidden;
+  border-radius: 10px;
+  color: #ffffff;
+  box-shadow:
+    0 10px 24px
+    rgba(3, 27, 69, 0.22);
+}
+
+.sales-hero-card::after {
+  position: absolute;
+  right: -35px;
+  bottom: -55px;
+  width: 170px;
+  height: 170px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  content: "";
+}
+
+.sales-forecast-card {
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      rgba(55, 126, 255, 0.34),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #031b45,
+      #07347d
+    );
+}
+
+.sales-result-card {
+  background:
+    radial-gradient(
+      circle at 87% 10%,
+      rgba(125, 170, 255, 0.35),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #12398c,
+      #1657ca
+    );
+}
+
+.sales-hero-icon {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background:
+    rgba(255, 255, 255, 0.13);
+  font-size: 31px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.sales-hero-content {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.sales-hero-label {
+  display: block;
+  margin-bottom: 8px;
+  color:
+    rgba(255, 255, 255, 0.88);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sales-hero-content strong {
+  display: block;
+  margin: 0;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.sales-hero-note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 17px;
+  color:
+    rgba(255, 255, 255, 0.79);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sales-mini-chart {
+  color: #6ab2ff;
+  font-size: 19px;
+  letter-spacing: -5px;
+}
+
+
+/* ==================================================
+   申込み・契約・成約率
+================================================== */
+
+.dashboard-main-kpi-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dashboard-kpi-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  min-height: 125px;
+  padding: 18px;
+  border: 1px solid var(--v2-border);
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfcff
+    );
+  box-shadow:
+    0 4px 13px
+    rgba(3, 27, 69, 0.045);
+}
+
+.dashboard-kpi-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  color: #082d78;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.icon-application {
+  background: #eef0ff;
+}
+
+.icon-contract {
+  background: #eef3ff;
+}
+
+.icon-rate {
+  background: #f0eeff;
+}
+
+.dashboard-kpi-content {
+  min-width: 0;
+}
+
+.dashboard-kpi-content span {
+  display: block;
+  margin-bottom: 5px;
+  color: #273b5d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-kpi-content strong {
+  display: block;
+  margin: 0;
+  color: var(--v2-text);
+  font-size: 29px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.dashboard-kpi-content small {
+  display: block;
+  margin-top: 8px;
+  color: #0a8b7a;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+
+/* ==================================================
+   審査落ち・キャンセル・未入金
+================================================== */
+
+.dashboard-sub-kpi-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dashboard-sub-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  min-height: 100px;
+  padding: 15px;
+  border: 1px solid var(--v2-border);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 11px
+    rgba(3, 27, 69, 0.04);
+}
+
+.dashboard-sub-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.sub-rejected .dashboard-sub-icon {
+  background: #f4edff;
+  color: #4424a8;
+}
+
+.sub-cancel .dashboard-sub-icon {
+  background: #fff0f0;
+  color: #e3232a;
+}
+
+.sub-unpaid .dashboard-sub-icon {
+  background: #eff2ff;
+  color: #092d7e;
+}
+
+.dashboard-sub-content {
+  min-width: 0;
+}
+
+.dashboard-sub-content span {
+  display: block;
+  margin-bottom: 5px;
+  color: #243859;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.dashboard-sub-content strong {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: var(--v2-text);
+  font-size: 21px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-unpaid-label {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: #f5f7fb;
+  color: #263959;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+
+/* ==================================================
+   ランキング
+================================================== */
+
+.dashboard-ranking-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+  padding: 20px;
+  border-radius: 11px;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      rgba(27, 95, 203, 0.4),
+      transparent 34%
+    ),
+    linear-gradient(
+      160deg,
+      #031b45,
+      #062a62
+    );
+  color: #ffffff;
+  box-shadow:
+    0 11px 25px
+    rgba(3, 27, 69, 0.24);
+}
+
+.dashboard-ranking-header {
+  padding-bottom: 14px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.16);
+}
+
+.dashboard-ranking-header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.dashboard-ranking-header > span {
+  display: block;
+  margin-top: 5px;
+  color:
+    rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+.dashboard-ranking-list {
+  flex: 1;
+}
+
+.dashboard-ranking-card .ranking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 65px;
+  padding: 14px 2px;
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+}
+
+.dashboard-ranking-card .ranking-row span {
+  min-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-ranking-card .ranking-row strong {
+  margin: 0;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.dashboard-ranking-note {
+  margin: 14px 0 0;
+  color:
+    rgba(255, 255, 255, 0.55);
+  font-size: 9px;
+}
+
+
+/* ==================================================
+   入金ベース売上
+================================================== */
+
+.payment-v2-section {
+  padding: 18px !important;
+}
+
+.payment-heading-icon {
+  border-radius: 50%;
+  background: #082756;
+  color: #ffffff;
+}
+
+.payment-v2-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.payment-v2-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+  min-height: 105px;
+  padding: 15px 13px;
+  border: 1px solid var(--v2-border);
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 10px
+    rgba(3, 27, 69, 0.035);
+}
+
+.payment-v2-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      145deg,
+      #031b45,
+      #0a3c88
+    );
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.payment-v2-content {
+  min-width: 0;
+}
+
+.payment-v2-content span {
+  display: block;
+  margin-bottom: 6px;
+  color: #283b5d;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.payment-v2-content strong {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  color: var(--v2-text);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payment-v2-content small {
+  display: block;
+  margin-top: 7px;
+  color: #ff7500;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+
+/* ==================================================
+   予定確認
+================================================== */
+
+.schedule-v2-section {
+  position: static !important;
+  top: auto !important;
+  grid-column: auto !important;
+  padding: 18px !important;
+}
+
+.schedule-heading-icon {
+  background: #eff3ff;
+  color: #0c3277;
+}
+
+.schedule-v2-header {
+  margin-bottom: 15px;
+}
+
+.schedule-v2-date {
+  margin: 0 !important;
+  padding: 7px 12px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+}
+
+.schedule-v2-content {
+  display: block;
+}
+
+
+/* JSが生成する予定カード */
+
+.schedule-v2-section .today-summary-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-bottom: 18px !important;
+}
+
+.schedule-v2-section .today-summary-card {
+  min-height: 105px !important;
+  padding: 16px !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.schedule-v2-section .today-summary-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 11px !important;
+  font-size: 22px !important;
+}
+
+.schedule-v2-section .today-summary-content strong {
+  font-size: 26px !important;
+}
+
+.schedule-v2-section .today-detail-grid {
+  display: grid !important;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.schedule-v2-section .today-detail-card {
+  border-radius: 9px !important;
+}
+
+.schedule-v2-section .today-detail-header {
+  padding: 12px 14px !important;
+}
+
+.schedule-v2-section .alarm-item {
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+
+/* ==================================================
+   旧ステータスを完全非表示
+================================================== */
+
+#statusDashboardSection {
+  display: none !important;
+}
+
+
+/* ==================================================
+   画面幅調整
+================================================== */
+
+@media (max-width: 1350px) {
+
+  .dashboard-overview-layout {
+    grid-template-columns:
+      minmax(0, 1fr)
+      265px;
+  }
+
+  .sales-hero-card {
+    padding: 19px;
+  }
+
+  .dashboard-sub-kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .payment-v2-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 1050px) {
+
+  .dashboard-overview-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-ranking-card {
+    min-height: auto;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .dashboard-sales-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-main-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-sub-kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .payment-v2-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .schedule-v2-section .today-summary-grid,
+  .schedule-v2-section .today-detail-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .dashboard-v2-section {
+    padding: 12px !important;
+  }
+
+  .dashboard-v2-heading,
+  .schedule-v2-header {
+    align-items: flex-start;
+  }
+
+  .dashboard-v2-heading-title p {
+    font-size: 10px;
+  }
+
+  .sales-hero-card {
+    min-height: 145px;
+    padding: 18px;
+  }
+
+  .sales-hero-icon {
+    width: 53px;
+    height: 53px;
+    font-size: 26px;
+  }
+
+  .sales-hero-content strong {
+    font-size: 25px;
+  }
+
+  .dashboard-sub-kpi-grid,
+  .payment-v2-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-v2-header {
+    display: block;
+  }
+
+  .schedule-v2-date {
+    display: inline-flex !important;
+    margin-top: 10px !important;
+  }
+
+}
+/* ==================================================
+   左メニュー切り替え修正
+================================================== */
+
+#bossDashboardSection[style*="display: none"],
+#paymentDashboardSection[style*="display: none"],
+#alarmCard[style*="display: none"],
+#salesFormSection[style*="display: none"],
+#salesListSection[style*="display: none"],
+#staffAnalysisSection[style*="display: none"],
+#monthlyPerformanceSection[style*="display: none"] {
+  display: none !important;
+}
+/* ==================================================
+   画面切り替え 完全修正版
+================================================== */
+
+#bossDashboardSection.system-view-hidden,
+#paymentDashboardSection.system-view-hidden,
+#alarmCard.system-view-hidden,
+#salesFormSection.system-view-hidden,
+#salesListSection.system-view-hidden,
+#staffAnalysisSection.system-view-hidden,
+#monthlyPerformanceSection.system-view-hidden {
+  display: none !important;
+}
+
+#bossDashboardSection[hidden],
+#paymentDashboardSection[hidden],
+#alarmCard[hidden],
+#salesFormSection[hidden],
+#salesListSection[hidden],
+#staffAnalysisSection[hidden],
+#monthlyPerformanceSection[hidden] {
+  display: none !important;
+}
+/* ==================================================
+   スマホ表示 最終調整
+================================================== */
+
+@media screen and (max-width: 760px) {
+
+  /* =========================
+     画面全体
+  ========================= */
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .app-layout {
+    display: block;
+    width: 100%;
+  }
+
+
+  /* =========================
+     上部メニュー
+  ========================= */
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+    min-height: 0;
+
+    padding: 8px 10px 9px;
+
+    overflow: visible;
+
+    background:
+      linear-gradient(
+        90deg,
+        #041a3a,
+        #0b3470
+      );
+
+    box-shadow:
+      0 4px 14px
+      rgba(4, 26, 58, 0.2);
+  }
+
+
+  /* ロゴ部分を小さくする */
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 7px;
+    padding: 0 3px;
+  }
+
+  .sidebar-logo {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+  }
+
+  .sidebar-brand strong {
+    color: #ffffff;
+    font-size: 13px;
+  }
+
+  .sidebar-brand span {
+    display: none;
+  }
+
+
+  /* メニューを横並び */
+
+  .sidebar-nav {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+
+    gap: 5px;
+
+    width: 100%;
+    margin: 0;
+  }
+
+  .sidebar-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+
+    padding: 5px 2px;
+
+    border-radius: 8px;
+
+    color:
+      rgba(
+        255,
+        255,
+        255,
+        0.72
+      );
+
+    font-size: 10px;
+    line-height: 1.2;
+    text-align: center;
+
+    white-space: nowrap;
+  }
+
+  .sidebar-link:hover {
+    color: #ffffff;
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.08
+      );
+
+    transform: none;
+  }
+
+  .sidebar-link.active {
+    color: #ffffff;
+
+    background:
+      rgba(
+        37,
+        99,
+        235,
+        0.95
+      );
+
+    box-shadow: none;
+  }
+
+  .sidebar-icon {
+    width: auto;
+    font-size: 17px;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+
+  /* =========================
+     メイン画面
+  ========================= */
+
+  .main-content {
+    width: 100%;
+    min-width: 0;
+
+    margin-left: 0;
+  }
+
+  .main-content .container {
+    display: block !important;
+
+    width: 100%;
+    max-width: 100%;
+
+    padding:
+      0
+      9px
+      35px;
+  }
+
+
+  /* =========================
+     上部ヘッダー
+  ========================= */
+
+  .main-content header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    min-height: auto;
+
+    margin:
+      0
+      -9px
+      12px;
+
+    padding:
+      11px
+      12px;
+
+    border-radius: 0;
+  }
+
+  .main-content header h1 {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .main-content header p {
+    display: none;
+  }
+
+  .login-user-area {
+    gap: 7px;
+  }
+
+  .login-user-area > div {
+    display: none;
+  }
+
+  #logoutButton {
+    min-width: auto;
+    min-height: 34px;
+
+    padding: 0 10px;
+
+    font-size: 11px;
+  }
+
+
+  /* =========================
+     表示月・出力ボタン
+  ========================= */
+
+  .month-filter.card {
+    display: grid;
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+    gap: 7px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+  }
+
+  .month-filter label {
+    grid-column: 1 / -1;
+
+    font-size: 12px;
+  }
+
+  .month-filter input {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    height: 40px;
+
+    font-size: 14px;
+  }
+
+  .month-filter button {
+    width: 100%;
+    min-width: 0;
+    min-height: 39px;
+
+    padding: 5px 4px;
+
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+
+  /* =========================
+     各セクション
+  ========================= */
+
+  #bossDashboardSection,
+  #paymentDashboardSection,
+  #alarmCard,
+  #salesFormSection,
+  #salesListSection,
+  #staffAnalysisSection,
+  #monthlyPerformanceSection {
+    width: 100%;
+    max-width: 100%;
+
+    margin-bottom: 12px;
+    padding: 11px;
+
+    border-radius: 10px;
+  }
+
+  #bossDashboardSection > h2,
+  #paymentDashboardSection > h2,
+  #salesFormSection > h2,
+  #salesListSection > h2,
+  #staffAnalysisSection > h2,
+  #monthlyPerformanceSection > h2,
+  #alarmCard .today-home-header h2 {
+    margin-bottom: 11px;
+    padding-bottom: 9px;
+
+    font-size: 15px;
+  }
+
+
+  /* =========================
+     ダッシュボード
+  ========================= */
+
+  .dashboard-main-layout {
+    display: block;
+  }
+
+  #bossDashboardSection .dashboard {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 7px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(n) {
+    grid-column: auto;
+
+    min-height: 82px;
+
+    padding: 11px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(1),
+  #bossDashboardSection
+  .dashboard-card:nth-child(2) {
+    grid-column: 1 / -1;
+
+    min-height: 112px;
+
+    padding: 16px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card span {
+    margin-bottom: 5px;
+
+    font-size: 10px;
+  }
+
+  #bossDashboardSection
+  .dashboard-card strong {
+    font-size: 19px;
+
+    overflow-wrap: anywhere;
+  }
+
+  #bossDashboardSection
+  .dashboard-card:nth-child(1)
+  strong,
+  #bossDashboardSection
+  .dashboard-card:nth-child(2)
+  strong {
+    font-size: 26px;
+  }
+
+  #bossDashboardSection .ranking-card {
+    min-height: auto;
+
+    margin-top: 8px;
+    padding: 13px;
+  }
+
+
+  /* =========================
+     入金ベース売上
+  ========================= */
+
+  #paymentDashboardSection.payment-dashboard-card {
+    padding: 11px;
+  }
+
+  .payment-dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 7px;
+  }
+
+  #paymentDashboardSection
+  .dashboard-card {
+    min-width: 0;
+    min-height: 80px;
+
+    padding: 10px;
+  }
+
+  #paymentDashboardSection
+  .dashboard-card span {
+    font-size: 10px;
+  }
+
+  #paymentDashboardSection
+  .dashboard-card strong {
+    font-size: 17px;
+
+    overflow-wrap: anywhere;
+  }
+
+
+  /* =========================
+     予定確認
+  ========================= */
+
+  #alarmCard .today-home-header {
+    display: block !important;
+  }
+
+  #alarmCard .today-home-date {
+    margin-top: 7px;
+
+    font-size: 11px;
+  }
+
+  #alarmCard .today-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      ) !important;
+
+    gap: 5px;
+  }
+
+  #alarmCard .today-summary-card {
+    min-width: 0;
+    min-height: 75px;
+
+    padding: 8px 5px;
+  }
+
+  #alarmCard .today-summary-icon {
+    width: 31px;
+    height: 31px;
+
+    font-size: 15px;
+  }
+
+  #alarmCard
+  .today-summary-content span {
+    font-size: 9px;
+  }
+
+  #alarmCard
+  .today-summary-content strong {
+    font-size: 18px;
+  }
+
+  #alarmCard .today-detail-grid {
+    grid-template-columns:
+      1fr !important;
+
+    gap: 7px;
+  }
+
+
+  /* =========================
+     フォーム
+  ========================= */
+
+  #salesForm {
+    display: block;
+  }
+
+  #salesForm .form-grid,
+  #salesFormSection .form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+  }
+
+  #salesForm input,
+  #salesForm select,
+  #salesForm textarea {
+    width: 100%;
+    max-width: 100%;
+
+    font-size: 16px;
+  }
+
+  #salesForm button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+
+  /* =========================
+     案件一覧
+  ========================= */
+
+  #salesListSection {
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  #salesListSection .list-header {
+    display: block;
+  }
+
+  #salesListSection
+  .list-header input {
+    width: 100%;
+    max-width: 100%;
+
+    margin-top: 9px;
+
+    font-size: 16px;
+  }
+
+  #salesListSection .table-wrap {
+    width: 100%;
+    max-height: none;
+
+    overflow-x: auto;
+    overflow-y: visible;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #salesListSection table {
+    min-width: 1250px;
+  }
+
+
+  /* =========================
+     分析画面
+  ========================= */
+
+  #staffAnalysisSection .dashboard,
+  #monthlyPerformanceSection .dashboard,
+  #staffAnalysisSection .simple-dashboard,
+  #monthlyPerformanceSection .simple-dashboard {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+  }
+
+
+  /* =========================
+     画面切り替えを維持
+  ========================= */
+
+  #bossDashboardSection.system-view-hidden,
+  #paymentDashboardSection.system-view-hidden,
+  #alarmCard.system-view-hidden,
+  #salesFormSection.system-view-hidden,
+  #salesListSection.system-view-hidden,
+  #staffAnalysisSection.system-view-hidden,
+  #monthlyPerformanceSection.system-view-hidden {
+    display: none !important;
+  }
+}
+/* =========================
+   売上カードを横3列にする
+========================= */
+
+.dashboard-sales-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.dashboard-sales-grid .sales-hero-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* 画面が狭いとき */
+@media screen and (max-width: 900px) {
+  .dashboard-sales-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================
+   契約予定・未定表示
+========================= */
+
+.contract-plan-text {
+  color: #d32f2f;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.contract-undecided-text {
+  color: #d32f2f;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.contract-date-text {
+  white-space: nowrap;
+}
+
+#contractPlan + small {
+  display: block;
+  margin-top: 5px;
+  color: #777;
+  font-size: 12px;
+}
+.contract-plan-text {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.contract-undecided-text {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.contract-date-text {
+  color: inherit;
+}
+.case-total-sales {
+    color: #1976d2;
+    font-weight: 700;
+    display: block;
+    text-align: right;
+    font-size: 16px;
+}
+/* ダッシュボード金額の省略表示を解除 */
+
+.sales-hero-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sales-hero-content strong {
+  display: block;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+  font-size: clamp(20px, 2.2vw, 28px);
+}
+.contract-plan-text {
+  color: #d32f2f;
+  font-weight: bold;
+}
+/* 合計売上 */
+.total-sales-cell {
+  font-size: 17px;
+  font-weight: 800;
+  color: #2563eb;
+  background: #eff6ff;
+}
+.table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #f9fafb;
+  box-shadow: 0 2px 0 #e5e7eb;
+}
+.table-wrap {
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-height: none !important;
+}
+
+table {
+  width: 100% !important;
+  min-width: 1400px !important;
+  border-collapse: collapse !important;
+}
+
+.table-wrap thead th {
+  position: static !important;
+  top: auto !important;
+  z-index: auto !important;
+  display: table-cell !important;
+}
+.table-wrap thead th {
+  color: #475569 !important;
+  background: #f7f9fc !important;
+}
+.inactive-row {
+  background: #f3f4f6;
+}
+
+.inactive-row td {
+  background: #f3f4f6 !important;
+  color: #6b7280;
+}
+
+.inactive-row:hover td {
+  background: #e5e7eb !important;
+}
+.case-row.status-審査落ち td,
+.case-row.status-キャンセル td {
+  background: #e5e7eb !important;
+  color: #6b7280;
+}
+
+.case-row.status-審査落ち:hover td,
+.case-row.status-キャンセル:hover td {
+  background: #d1d5db !important;
+}
+.unpaid-count {
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.unpaid-money {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+}
+.contract-undecided {
+  color: #e53935;
+  font-weight: bold;
+}
+
+.contract-plan-text {
+  color: #ff9800;
+  font-weight: bold;
+}
+/* 契約日表示 */
+.contract-undecided,
+.contract-plan-text {
+  color: #dc2626 !important;
+  font-weight: 700;
+}
+
+/* =========================================
+   契約済みの連続行・色崩れ修正
+========================================= */
+
+/*
+  契約済みの行は、
+  偶数行の色より緑色を優先する
+*/
+
+.table-wrap tbody
+.case-row.status-契約済 > td,
+.table-wrap tbody
+.case-row.status-契約済み > td {
+  background: #f0fdf4 !important;
+}
+
+
+/*
+  契約済み行にマウスを乗せたとき
+*/
+
+.table-wrap tbody
+.case-row.status-契約済:hover > td,
+.table-wrap tbody
+.case-row.status-契約済み:hover > td {
+  background: #dcfce7 !important;
+}
+
+
+/*
+  契約済みバッジの色
+*/
+
+.status-badge.status-契約済,
+.status-badge.status-契約済み {
+  background: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #166534 !important;
+}
+/* =========================================
+   案件一覧・左端2列固定
+========================================= */
+
+/*
+  stickyを安定させるため、
+  tableのborder-collapseをseparateにする
+*/
+
+.table-wrap table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+
+/*
+  1列目：担当者
+*/
+
+.table-wrap .case-fixed-staff {
+  position: sticky !important;
+  left: 0 !important;
+
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+
+  z-index: 20;
+  background: #ffffff;
+}
+
+
+/*
+  2列目：お客様名
+
+  担当者列の横幅90px分、
+  左から空けて固定する
+*/
+
+.table-wrap .case-fixed-customer {
+  position: sticky !important;
+  left: 90px !important;
+
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+
+  z-index: 19;
+  background: #ffffff;
+
+  box-shadow:
+    4px 0 7px
+    rgba(15, 23, 42, 0.08);
+}
+
+
+/*
+  ヘッダーの固定列を
+  データ行より手前に表示する
+*/
+
+.table-wrap thead
+.case-fixed-staff,
+.table-wrap thead
+.case-fixed-customer {
+  z-index: 40 !important;
+  background: #f7f9fc !important;
+}
+
+
+/*
+  偶数行の固定列にも
+  既存のしま模様を反映
+*/
+
+.table-wrap tbody
+tr:nth-child(even)
+.case-fixed-staff,
+.table-wrap tbody
+tr:nth-child(even)
+.case-fixed-customer {
+  background: #f8fafc;
+}
+
+
+/*
+  マウスを乗せた行の固定列
+*/
+
+.table-wrap tbody
+tr:hover
+.case-fixed-staff,
+.table-wrap tbody
+tr:hover
+.case-fixed-customer {
+  background: #eaf4ff;
+}
+
+
+/*
+  契約済みの固定列にも
+  緑色を確実に反映
+*/
+
+.table-wrap tbody
+.case-row.status-契約済
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-契約済み
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済み
+.case-fixed-customer {
+  background: #f0fdf4 !important;
+}
+
+
+/*
+  契約済みにマウスを乗せたとき
+*/
+
+.table-wrap tbody
+.case-row.status-契約済:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済:hover
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-契約済み:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-契約済み:hover
+.case-fixed-customer {
+  background: #dcfce7 !important;
+}
+
+
+/*
+  審査落ち・キャンセルの固定列
+*/
+
+.table-wrap tbody
+.case-row.status-審査落ち
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-審査落ち
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-キャンセル
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-キャンセル
+.case-fixed-customer {
+  background: #e5e7eb !important;
+}
+
+
+/*
+  審査落ち・キャンセルに
+  マウスを乗せたとき
+*/
+
+.table-wrap tbody
+.case-row.status-審査落ち:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-審査落ち:hover
+.case-fixed-customer,
+.table-wrap tbody
+.case-row.status-キャンセル:hover
+.case-fixed-staff,
+.table-wrap tbody
+.case-row.status-キャンセル:hover
+.case-fixed-customer {
+  background: #d1d5db !important;
+}
+/* =========================================
+   左端2列固定・最終上書き
+========================================= */
+
+/*
+  stickyを妨害している
+  tableのoverflow:hiddenを解除
+*/
+
+#salesListSection .table-wrap table {
+  overflow: visible !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+
+/*
+  スクロールするのはtable-wrapだけ
+*/
+
+#salesListSection .table-wrap {
+  position: relative !important;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  max-height: 70vh !important;
+}
+
+
+/*
+  1列目：担当
+*/
+
+#salesListSection
+.table-wrap
+thead th:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody td:nth-child(1) {
+  position: sticky !important;
+  left: 0 !important;
+
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+
+  z-index: 20 !important;
+  background: #ffffff;
+}
+
+
+/*
+  2列目：お客様
+*/
+
+#salesListSection
+.table-wrap
+thead th:nth-child(2),
+
+#salesListSection
+.table-wrap
+tbody td:nth-child(2) {
+  position: sticky !important;
+  left: 90px !important;
+
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+
+  z-index: 19 !important;
+  background: #ffffff;
+
+  box-shadow:
+    5px 0 8px
+    rgba(15, 23, 42, 0.12);
+}
+
+
+/*
+  固定ヘッダーをデータ行より前に出す
+*/
+
+#salesListSection
+.table-wrap
+thead th:nth-child(1) {
+  z-index: 42 !important;
+  background: #f7f9fc !important;
+}
+
+#salesListSection
+.table-wrap
+thead th:nth-child(2) {
+  z-index: 41 !important;
+  background: #f7f9fc !important;
+}
+
+
+/*
+  偶数行
+*/
+
+#salesListSection
+.table-wrap
+tbody tr:nth-child(even)
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody tr:nth-child(even)
+td:nth-child(2) {
+  background: #f8fafc;
+}
+
+
+/*
+  ホバー
+*/
+
+#salesListSection
+.table-wrap
+tbody tr:hover
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody tr:hover
+td:nth-child(2) {
+  background: #eaf4ff;
+}
+
+
+/*
+  契約済み
+*/
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済
+td:nth-child(2),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済み
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-契約済み
+td:nth-child(2) {
+  background: #f0fdf4 !important;
+}
+
+
+/*
+  審査落ち・キャンセル
+*/
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-審査落ち
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-審査落ち
+td:nth-child(2),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-キャンセル
+td:nth-child(1),
+
+#salesListSection
+.table-wrap
+tbody
+.case-row.status-キャンセル
+td:nth-child(2) {
+  background: #e5e7eb !important;
+}
+.sales-list-count {
+  margin: 0 0 10px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.case-number-cell {
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+}
+/* ==================================================
+   案件一覧フィルター配置調整
+   ※HTML・JavaScriptは変更しない
+================================================== */
+
+#salesListSection .list-header {
+  display: grid;
+  grid-template-columns:
+    minmax(280px, 1.35fr)
+    repeat(3, minmax(180px, 1fr));
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+/* 案件一覧タイトル */
+#salesListSection .list-header > h2 {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/*
+  中の要素を親グリッド上へ並べる
+  検索・担当者・申込月を直接配置可能にする
+*/
+#salesListSection .list-filter-area {
+  display: contents;
+}
+
+/* 1列目：検索 */
+#salesListSection .list-search-box {
+  grid-column: 1;
+  min-width: 0;
+}
+
+/* 2列目：担当者 */
+#salesListSection .list-filter-area
+  .list-staff-filter:has(#staffFilter) {
+  grid-column: 2;
+}
+
+/* 3列目：進捗 */
+#salesListSection .list-header
+  > .list-staff-filter:has(#statusFilter) {
+  grid-column: 3;
+}
+
+/* 4列目：申込月 */
+#salesListSection .list-filter-area
+  .list-staff-filter:has(#applyMonthFilter) {
+  grid-column: 4;
+}
+
+/* 担当者・進捗・申込月を同じ形式にする */
+#salesListSection .list-staff-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  min-width: 0;
+}
+
+/* ラベル */
+#salesListSection .list-staff-filter label {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  color: #123a70;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* 検索欄・選択欄の高さを統一 */
+#salesListSection .list-search-box input,
+#salesListSection .list-staff-filter select {
+  width: 100%;
+  height: 52px;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+/* タブレット */
+@media (max-width: 1100px) {
+  #salesListSection .list-header {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  #salesListSection .list-header > h2 {
+    grid-column: 1 / -1;
+  }
+
+  #salesListSection .list-search-box {
+    grid-column: 1 / -1;
+  }
+
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#staffFilter),
+  #salesListSection .list-header
+    > .list-staff-filter:has(#statusFilter),
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#applyMonthFilter) {
+    grid-column: auto;
+  }
+}
+
+/* スマホ */
+@media (max-width: 650px) {
+  #salesListSection .list-header {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  #salesListSection .list-header > h2,
+  #salesListSection .list-search-box,
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#staffFilter),
+  #salesListSection .list-header
+    > .list-staff-filter:has(#statusFilter),
+  #salesListSection .list-filter-area
+    .list-staff-filter:has(#applyMonthFilter) {
+    grid-column: 1;
+  }
+}
+/* 画面切り替え用 */
+.system-view-hidden {
+  display: none !important;
+}
+/* =========================
+   売上台帳の種別ラベル
+========================= */
+
+.ledger-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  margin-bottom: 5px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.ledger-badge.fee {
+  background-color: #16855b;
+}
+
+.ledger-badge.ad {
+  background-color: #d4af37;
+  color: #111111;
+}
+
+
+
+/* =========================
+   売上台帳 印刷・PDF用
+========================= */
+
+@media print {
+
+  @page {
+    size: A4 landscape;
+    margin: 7mm;
+  }
+
+  html,body{
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+
+  body *{visibility:hidden;}
+
+  #ledgerPrintArea,#ledgerPrintArea *{
+    visibility:visible;
+  }
+
+  #ledgerPrintArea{
+    position:absolute;
+    inset:0;
+    width:100%!important;
+    background:#fff!important;
+  }
+
+  #ledgerPrintArea .ledger-heading{
+    margin-bottom:10px!important;
+    text-align:center!important;
+  }
+
+  #ledgerPrintArea .ledger-heading h2{
+    margin:0 0 8px!important;
+    font-size:20px!important;
+    letter-spacing:2px;
+  }
+
+  #ledgerPrintArea .ledger-heading p{
+    margin:3px 0!important;
+    font-size:11px!important;
+    text-align:left!important;
+  }
+
+  #ledgerPrintArea table{
+    width:100%!important;
+    table-layout:fixed!important;
+    border-collapse:collapse!important;
+  }
+
+  #ledgerPrintArea th:nth-child(1),#ledgerPrintArea td:nth-child(1){width:15%}
+  #ledgerPrintArea th:nth-child(2),#ledgerPrintArea td:nth-child(2){width:22%}
+  #ledgerPrintArea th:nth-child(3),#ledgerPrintArea td:nth-child(3){width:43%}
+  #ledgerPrintArea th:nth-child(4),#ledgerPrintArea td:nth-child(4){width:20%;text-align:right}
+
+  #ledgerPrintArea th,#ledgerPrintArea td{
+    border:1px solid #b8bec8;
+    padding:5px 7px;
+    font-size:9.5px;
+    line-height:1.35;
+  }
+
+  #ledgerPrintArea th{
+    background:#eee!important;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+
+  #ledgerPrintArea td:nth-child(4) br{display:none}
+
+  #ledgerPrintArea .ledger-badge{
+    display:inline-block;
+    margin-right:6px;
+    padding:2px 6px;
+    border:1px solid #777;
+    border-radius:10px;
+    background:#fff!important;
+    font-size:7.5px;
+  }
+
+  #ledgerPrintArea tr:nth-last-child(-n+2) td{
+    background:#f3f4f6!important;
+    font-weight:700;
+    print-color-adjust:exact;
+    -webkit-print-color-adjust:exact;
+  }
+}
+
+
+  /* 見出しをコンパクトにする */
+  #ledgerPrintArea .ledger-heading {
+    margin: 0 0 6px !important;
+  }
+
+  #ledgerPrintArea .ledger-heading {
+  margin-bottom: 10px !important;
+  text-align: center !important;
+}
+
+#ledgerPrintArea .ledger-heading h2 {
+  margin: 0 0 8px !important;
+  font-size: 20px !important;
+  letter-spacing: 2px !important;
+}
+
+#ledgerPrintArea .ledger-heading p {
+  margin: 3px 0 !important;
+  font-size: 11px !important;
+  text-align: left !important;
+}
+
+  /* 表全体 */
+  #ledgerPrintArea table {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+  }
+
+  /* 各列の幅 */
+  #ledgerPrintArea th:nth-child(1),
+#ledgerPrintArea td:nth-child(1) {
+  width: 15% !important;
+}
+
+#ledgerPrintArea th:nth-child(2),
+#ledgerPrintArea td:nth-child(2) {
+  width: 22% !important;
+}
+
+#ledgerPrintArea th:nth-child(3),
+#ledgerPrintArea td:nth-child(3) {
+  width: 43% !important;
+}
+
+#ledgerPrintArea th:nth-child(4),
+#ledgerPrintArea td:nth-child(4) {
+  width: 20% !important;
+  text-align: right !important;
+}
+
+  #ledgerPrintArea th,
+  #ledgerPrintArea td {
+    height: auto !important;
+    padding: 5px 7px !important;
+    border: 1px solid #b8bec8 !important;
+    color: #000000 !important;
+    font-size: 9.5px !important;
+line-height: 1.35 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  #ledgerPrintArea th {
+    background: #eeeeee !important;
+    font-weight: bold !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #ledgerPrintArea tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  #ledgerPrintArea .ledger-badge {
+    display: inline-block !important;
+    margin: 0 3px 0 0 !important;
+    padding: 1px 4px !important;
+    border: 1px solid #777777 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* 合計金額 */
+  #ledgerTotalIncluded,
+  #ledgerTotalExcluded {
+    display: inline !important;
+    visibility: visible !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+  }
+
+
+/* =========================
+   売上台帳テーブル
+========================= */
+
+.ledger-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+/* 列幅 */
+.ledger-table th:nth-child(1),
+.ledger-table td:nth-child(1) {
+  width: 15%;
+}
+
+.ledger-table th:nth-child(2),
+.ledger-table td:nth-child(2) {
+  width: 22%;
+}
+
+.ledger-table th:nth-child(3),
+.ledger-table td:nth-child(3) {
+  width: 43%;
+}
+
+.ledger-table th:nth-child(4),
+.ledger-table td:nth-child(4) {
+  width: 20%;
+}
+
+/* 通常セル */
+.ledger-table th,
+.ledger-table td {
+  box-sizing: border-box;
+  padding: 12px 10px;
+  border-right: 1px solid #bcc6d3;
+  border-bottom: 1px solid #bcc6d3;
+  vertical-align: middle;
+}
+
+/* 左端 */
+.ledger-table tr > *:first-child {
+  border-left: 1px solid #bcc6d3;
+}
+
+/* 一番上 */
+.ledger-table thead tr:first-child th {
+  border-top: 1px solid #bcc6d3;
+}
+
+/* データ行を交互に色分け */
+.ledger-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+.ledger-table tbody tr:nth-child(even) {
+  background: #f4f7fb;
+}
+
+/* 金額列 */
+.ledger-table tbody td:last-child {
+  text-align: right;
+}
+
+/* 合計行 */
+.ledger-table tfoot tr {
+  background: #eef1f4;
+}
+
+.ledger-table tfoot th {
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
+/* 合計の文字 */
+.ledger-table tfoot th[colspan="3"] {
+  text-align: left;
+}
+
+/* 合計金額 */
+.ledger-table tfoot th:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* 角丸 */
+.ledger-table thead tr:first-child th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.ledger-table thead tr:first-child th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.ledger-table tfoot tr:last-child th:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.ledger-table tfoot tr:last-child th:last-child {
+  border-bottom-right-radius: 12px;
 }
