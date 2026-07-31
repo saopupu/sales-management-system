@@ -21,6 +21,10 @@ const SYSTEM_VIEW_SECTIONS = {
   analysis: [
     "staffAnalysisSection",
     "monthlyPerformanceSection"
+  ],
+
+  ledger: [
+    "salesLedgerSection"
   ]
 };
 
