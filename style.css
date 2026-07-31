@@ -8159,3 +8159,7 @@ td:nth-child(2) {
     grid-column: 1;
   }
 }
+/* 画面切り替え用 */
+.system-view-hidden {
+  display: none !important;
+}
