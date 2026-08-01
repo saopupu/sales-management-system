@@ -374,17 +374,17 @@ function renderSalesLedger() {
         ${row.property}
       </td>
 
-      <td>
-        <span class="ledger-badge ${badgeClass}">
-          ${row.paymentType}
-        </span>
+     <td class="ledger-amount-cell">
+  <span class="ledger-amount">
+    ${formatLedgerCurrency(
+      row.includedAmount
+    )}
+  </span>
 
-        <br>
-
-        ${formatLedgerCurrency(
-          row.includedAmount
-        )}
-      </td>
+  <span class="ledger-payment-type">
+    ・${row.paymentType}
+  </span>
+</td>
     `;
 
     tableBody.appendChild(tr);
