@@ -777,7 +777,7 @@ function renderBossDashboard(data) {
   */
 
   const contractScheduleData =
-    getFilteredData(true);
+    getFilteredData(false);
 
   /*
     申込日が表示月の案件
@@ -1958,6 +1958,9 @@ function editSale(
 
     contractDate:
       sale.contractDate || "",
+    
+    contractPlan:
+      sale.contractPlan || "",
 
     startDate:
       sale.startDate || "",
