@@ -134,8 +134,13 @@ function convertSaleToSupabase(
     apply_date:
       sale.applyDate || null,
 
+    contract_plan:
+     sale.contractPlan || null,
+
     contract_date:
       sale.contractDate || null,
+
+    
 
     start_date:
       sale.startDate || null,
@@ -230,6 +235,9 @@ function convertSupabaseToSale(
 
     contractDate:
       row.contract_date || "",
+
+    contractPlan:
+      row.contract_plan || "",
 
     startDate:
       row.start_date || "",

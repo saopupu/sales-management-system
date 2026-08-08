@@ -260,12 +260,8 @@ if (form) {
 
 contractPlan:
   document.getElementById(
-    "contractDate"
-  ).value
-    ? ""
-    : document.getElementById(
-        "contractPlan"
-      ).value,
+    "contractPlan"
+  ).value,
 
 startDate:
           document.getElementById(
