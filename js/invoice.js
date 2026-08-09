@@ -552,7 +552,9 @@ function openAdInvoice(
 
   openInvoicePreview({
     title:
-      "AD請求書",
+      "広告料請求書",
+
+      autoFitRecipient: true,
 
     recipient:
       addRecipientSuffix(
@@ -565,7 +567,7 @@ function openAdInvoice(
       "物件名未入力",
 
     description:
-      "広告料（AD）として",
+      "広告料として",
 
     amounts:
       amounts,
@@ -1573,6 +1575,30 @@ function openInvoicePreview(
   const taxMode =
     invoice.taxMode ||
     "taxExcluded";
+
+  const autoFitRecipient =
+  invoice.autoFitRecipient === true;  
+
+  let recipientFontSize = 18;
+
+if (autoFitRecipient) {
+  const recipientLength =
+    Array.from(
+      String(invoice.recipient || "")
+        .replace(/\s/g, "")
+    ).length;
+
+  if (recipientLength >= 24) {
+    recipientFontSize = 12;
+  } else if (recipientLength >= 20) {
+    recipientFontSize = 13;
+  } else if (recipientLength >= 17) {
+    recipientFontSize = 14;
+  } else if (recipientLength >= 14) {
+    recipientFontSize = 16;
+  }
+}
+
 const stampImageUrl =
   new URL(
     "images/stamp.png",
@@ -2343,12 +2369,16 @@ const stampImageUrl =
       <div>
 
         <div
-          class="recipient-name editable"
-          contenteditable="true"
-          spellcheck="false"
-        >
-          ${recipient}
-        </div>
+  class="recipient-name editable"
+  contenteditable="true"
+  spellcheck="false"
+  style="
+    font-size: ${recipientFontSize}pt;
+    white-space: nowrap;
+  "
+>
+  ${recipient}
+</div>
 
         <p class="recipient-message">
           下記の通り、ご請求申し上げます。
@@ -2639,6 +2669,11 @@ const stampImageUrl =
 
       const taxMode =
         ${JSON.stringify(taxMode)};
+
+        const recipientElement =
+  document.querySelector(
+    ".recipient-name"
+  );
 
 
       const amountElement =
