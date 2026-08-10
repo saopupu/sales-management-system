@@ -617,15 +617,36 @@ function openCoverLetter(index) {
   const issueDate =
     getJapaneseIssueDate();
 
-  const company =
-    invoiceEscapeHtml(
-      addRecipientSuffix(
-        sale.company,
-        "御中"
-      )
-    );
+  const companyRecipient =
+  addRecipientSuffix(
+    sale.company,
+    "御中"
+  );
 
-  const property =
+const company =
+  invoiceEscapeHtml(
+    companyRecipient
+  );
+
+let coverRecipientFontSize = 17;
+
+const coverRecipientLength =
+  Array.from(
+    String(companyRecipient || "")
+      .replace(/\s/g, "")
+  ).length;
+
+if (coverRecipientLength >= 24) {
+  coverRecipientFontSize = 11;
+} else if (coverRecipientLength >= 20) {
+  coverRecipientFontSize = 12;
+} else if (coverRecipientLength >= 17) {
+  coverRecipientFontSize = 13;
+} else if (coverRecipientLength >= 14) {
+  coverRecipientFontSize = 15;
+}
+
+const property =
     invoiceEscapeHtml(
       sale.property ||
       "物件名未入力"
@@ -1284,12 +1305,16 @@ function openCoverLetter(index) {
     <section class="cover-top">
 
       <div
-        class="cover-recipient editable"
-        contenteditable="true"
-        spellcheck="false"
-      >
-        ${company}
-      </div>
+  class="cover-recipient editable"
+  contenteditable="true"
+  spellcheck="false"
+  style="
+    font-size: ${coverRecipientFontSize}pt;
+    white-space: nowrap;
+  "
+>
+  ${company}
+</div>
 
       <div class="sender-area">
 
