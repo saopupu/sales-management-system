@@ -11920,3 +11920,81 @@ td:nth-child(1),
 td:nth-child(2) {
   background: #e5e7eb !important;
 }
+
+/* =========================================
+   案件一覧 右端3列の位置修正
+========================================= */
+
+/* メモ */
+#salesListSection th:nth-last-child(3),
+#salesListSection td:nth-last-child(3) {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+/* 書類 */
+#salesListSection th:nth-last-child(2),
+#salesListSection td:nth-last-child(2) {
+  width: 110px !important;
+  min-width: 110px !important;
+  max-width: 110px !important;
+  text-align: center !important;
+}
+
+/* 操作 */
+#salesListSection th:last-child,
+#salesListSection td:last-child {
+  width: 70px !important;
+  min-width: 70px !important;
+  max-width: 70px !important;
+  text-align: center !important;
+}
+
+/* =========================================
+   書類・操作をセル中央に固定
+========================================= */
+
+#salesListSection td:nth-last-child(2),
+#salesListSection td:last-child {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+/* 書類セル */
+#salesListSection td:nth-last-child(2) {
+  text-align: center !important;
+}
+
+/* 書類ボタン */
+#salesListSection .case-document-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
+
+  margin: 0 auto !important;
+  transform: none !important;
+}
+
+/* 操作セル */
+#salesListSection td:last-child {
+  text-align: center !important;
+}
+
+/* 操作メニュー */
+#salesListSection td:last-child .case-menu-wrap {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* ⋮ ボタン */
+#salesListSection td:last-child .case-menu-button {
+  margin: 0 auto !important;
+  transform: none !important;
+}
