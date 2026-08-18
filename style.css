@@ -12076,3 +12076,34 @@ td:nth-child(2) {
   transform: translateY(0) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
+
+/* =========================
+   基本台帳・操作 列幅修正
+========================= */
+
+/* 基本台帳 */
+#salesListSection thead th:nth-child(22),
+#salesListSection tbody td:nth-child(22) {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  text-align: center !important;
+}
+
+/* 操作 */
+#salesListSection thead th:nth-child(23),
+#salesListSection tbody td:nth-child(23) {
+  width: 70px !important;
+  min-width: 70px !important;
+  max-width: 70px !important;
+  text-align: center !important;
+}
+
+/* 基本台帳ボタン */
+#salesListSection .case-ledger-button {
+  width: 108px !important;
+  min-width: 108px !important;
+  max-width: 108px !important;
+  margin: 0 auto !important;
+  white-space: nowrap !important;
+}

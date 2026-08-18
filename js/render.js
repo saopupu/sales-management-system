@@ -1804,6 +1804,16 @@ const totalSales =
 </td>
 
 <td>
+  <button
+    type="button"
+    class="case-ledger-button"
+    onclick="openBasicLedger(${originalIndex})"
+  >
+    📋 基本台帳
+  </button>
+</td>
+
+<td>
   <div class="case-menu-wrap">
 
       <button
