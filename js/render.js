@@ -1789,7 +1789,7 @@ const totalSales =
 
   
 
-　<td>
+<td>
   ${sale.memo || ""}
 </td>
 
