@@ -11761,3 +11761,162 @@ td:nth-child(2) {
     white-space: nowrap !important;
   }
 }
+
+/* =========================================
+   案件一覧 最終レイアウト修正
+========================================= */
+
+#salesListSection .table-wrap {
+  position: relative !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  max-height: 70vh !important;
+}
+
+#salesListSection .table-wrap table {
+  width: max-content !important;
+  min-width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  overflow: visible !important;
+}
+
+/* 全セル */
+#salesListSection th,
+#salesListSection td {
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
+
+/* =========================
+   左側固定列
+========================= */
+
+/* 担当 */
+#salesListSection thead th:nth-child(1),
+#salesListSection tbody td:nth-child(1) {
+  position: sticky !important;
+  left: 0 !important;
+
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: 90px !important;
+
+  z-index: 20 !important;
+  background: #ffffff;
+}
+
+/* お客様 */
+#salesListSection thead th:nth-child(2),
+#salesListSection tbody td:nth-child(2) {
+  position: sticky !important;
+  left: 90px !important;
+
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+
+  z-index: 19 !important;
+  background: #ffffff;
+
+  box-shadow:
+    5px 0 8px
+    rgba(15, 23, 42, 0.10);
+}
+
+/* 固定ヘッダー */
+#salesListSection thead th:nth-child(1) {
+  z-index: 42 !important;
+  background: #f7f9fc !important;
+}
+
+#salesListSection thead th:nth-child(2) {
+  z-index: 41 !important;
+  background: #f7f9fc !important;
+}
+
+
+/* =========================
+   書類・操作列
+========================= */
+
+#salesListSection th:nth-last-child(2),
+#salesListSection td:nth-last-child(2) {
+  width: 110px !important;
+  min-width: 110px !important;
+  text-align: center !important;
+}
+
+#salesListSection th:last-child,
+#salesListSection td:last-child {
+  width: 70px !important;
+  min-width: 70px !important;
+  text-align: center !important;
+}
+
+
+/* 書類ボタン */
+
+#salesListSection .case-document-button {
+  min-width: 88px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+
+/* =========================
+   行カラーを固定列にも反映
+========================= */
+
+#salesListSection tbody tr:nth-child(even)
+td:nth-child(1),
+#salesListSection tbody tr:nth-child(even)
+td:nth-child(2) {
+  background: #f8fafc;
+}
+
+#salesListSection tbody tr:hover
+td:nth-child(1),
+#salesListSection tbody tr:hover
+td:nth-child(2) {
+  background: #eaf4ff;
+}
+
+#salesListSection tbody
+.case-row.status-契約済
+td:nth-child(1),
+
+#salesListSection tbody
+.case-row.status-契約済
+td:nth-child(2),
+
+#salesListSection tbody
+.case-row.status-契約済み
+td:nth-child(1),
+
+#salesListSection tbody
+.case-row.status-契約済み
+td:nth-child(2) {
+  background: #f0fdf4 !important;
+}
+
+#salesListSection tbody
+.case-row.status-審査落ち
+td:nth-child(1),
+
+#salesListSection tbody
+.case-row.status-審査落ち
+td:nth-child(2),
+
+#salesListSection tbody
+.case-row.status-キャンセル
+td:nth-child(1),
+
+#salesListSection tbody
+.case-row.status-キャンセル
+td:nth-child(2) {
+  background: #e5e7eb !important;
+}
