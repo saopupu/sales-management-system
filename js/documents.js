@@ -273,11 +273,13 @@ async function uploadCaseDocument() {
     ファイル名を安全な形にする
   */
 
-  const safeFileName =
-    file.name.replace(
-      /[^a-zA-Z0-9ぁ-んァ-ヶ一-龠._-]/g,
-      "_"
-    );
+  const extension =
+  file.name.includes(".")
+    ? file.name.split(".").pop().toLowerCase()
+    : "file";
+
+const safeFileName =
+  `document_${Date.now()}.${extension}`;
 
   const filePath =
     `${sale.supabaseId}/${Date.now()}_${safeFileName}`;
