@@ -437,11 +437,21 @@ async function loadCaseDocuments() {
           border-bottom:1px solid #eee;
         `;
 
-        const displayName =
-          file.name.replace(
-            /^\\d+_/,
-            ""
-          );
+        let displayName = file.name;
+
+if (
+  file.name.startsWith(
+    "basic_ledger_"
+  )
+) {
+  displayName = "基本台帳.pdf";
+} else {
+  displayName =
+    file.name.replace(
+      /^\\d+_/,
+      ""
+    );
+}
 
         row.innerHTML = `
           <div
