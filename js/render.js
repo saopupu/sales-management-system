@@ -1789,12 +1789,22 @@ const totalSales =
 
   
 
-  <td>
-    ${sale.memo || ""}
-  </td>
+　<td>
+  ${sale.memo || ""}
+</td>
 
-  <td>
-    <div class="case-menu-wrap">
+<td>
+  <button
+    type="button"
+    class="case-document-button"
+    onclick="openCaseDocuments(${originalIndex})"
+  >
+    📎 書類
+  </button>
+</td>
+
+<td>
+  <div class="case-menu-wrap">
 
       <button
         type="button"
