@@ -524,6 +524,8 @@ function closeBasicLedger() {
 
 async function createBasicLedgerPdf() {
 
+
+
   const sale =
     getSalesData()[
       currentBasicLedgerCaseIndex
@@ -548,16 +550,7 @@ async function createBasicLedgerPdf() {
   }
 
 
-  if (
-    typeof html2pdf ===
-    "undefined"
-  ) {
-    alert(
-      "PDF作成機能を読み込めませんでした。"
-    );
-    return;
-  }
-
+  
 
   const getValue =
     function (id) {
