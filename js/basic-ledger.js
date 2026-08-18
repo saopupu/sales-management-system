@@ -738,16 +738,17 @@ async function createBasicLedgerPdf() {
 
 
   pdfArea.style.cssText = `
-    width: 190mm;
-    padding: 8mm;
-    background: #ffffff;
-    color: #111827;
-    font-family:
-      "Yu Gothic",
-      "Meiryo",
-      sans-serif;
-    font-size: 11px;
-  `;
+  width: 185mm;
+  padding: 6mm;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #111827;
+  font-family:
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
+  font-size: 10px;
+`;
 
 
   pdfArea.innerHTML = `
@@ -776,12 +777,21 @@ async function createBasicLedgerPdf() {
 
 
     <table
-      style="
-        width:100%;
-        border-collapse:collapse;
-        table-layout:fixed;
-      "
-    >
+  style="
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    border-collapse:collapse !important;
+    table-layout:fixed !important;
+  "
+>
+
+    <colgroup>
+  <col style="width:20%;">
+  <col style="width:30%;">
+  <col style="width:20%;">
+  <col style="width:30%;">
+</colgroup>
 
       <tr>
 
@@ -1018,18 +1028,60 @@ async function createBasicLedgerPdf() {
     画面外に一時配置
   */
 
-  pdfArea.style.position =
-    "fixed";
+　/*
+  PDF生成用HTMLを一時配置
+*/
 
-  pdfArea.style.left =
-    "-10000px";
+pdfArea.style.position = "static";
+pdfArea.style.left = "";
+pdfArea.style.top = "";
+pdfArea.style.zIndex = "";
+pdfArea.style.pointerEvents = "none";
 
-  pdfArea.style.top =
-    "0";
+document.body.appendChild(
+  pdfArea
+);
 
-  document.body.appendChild(
-    pdfArea
-  );
+await new Promise(
+  resolve =>
+    requestAnimationFrame(
+      () =>
+        requestAnimationFrame(
+          resolve
+        )
+    )
+);
+
+
+/*
+  PDF生成中の画面を隠す
+*/
+
+const pdfLoading =
+  document.createElement("div");
+
+pdfLoading.id =
+  "basicLedgerPdfLoading";
+
+pdfLoading.style.cssText = `
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: rgba(255,255,255,0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #334155;
+`;
+
+pdfLoading.innerHTML =
+  "📄 基本台帳PDFを作成しています...";
+
+document.body.appendChild(
+  pdfLoading
+);
 
 
   /*
@@ -1054,54 +1106,156 @@ async function createBasicLedgerPdf() {
       PDF生成
   */
 
-    const worker =
-      html2pdf()
-        .set({
-          margin:
-            5,
+/*
+  基本台帳を画像として描画
+*/
 
-          image: {
-            type:
-              "jpeg",
-
-            quality:
-              0.98
-          },
-
-          html2canvas: {
-            scale:
-              2,
-
-            useCORS:
-              true
-          },
-
-          jsPDF: {
-            unit:
-              "mm",
-
-            format:
-              "a4",
-
-            orientation:
-              "portrait"
-          }
-        })
-        .from(
-          pdfArea
-        )
-        .toPdf();
+const canvas =
+  await html2canvas(
+    pdfArea,
+    {
+      scale: 2,
+      backgroundColor: "#ffffff",
+      useCORS: true
+    }
+  );
 
 
-    /*
-      Blobとして取得
-    */
+/*
+  jsPDFを取得
+*/
 
-    const pdfBlob =
-      await worker.outputPdf(
-        "blob"
-      );
+const {
+  jsPDF
+} = window.jspdf;
 
+
+/*
+  A4 PDF作成
+*/
+
+const pdf =
+  new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4"
+  });
+
+
+/*
+  A4サイズ
+*/
+
+const pageWidth =
+  pdf.internal.pageSize.getWidth();
+
+const pageHeight =
+  pdf.internal.pageSize.getHeight();
+
+
+/*
+  PDF余白
+*/
+
+const margin = 10;
+
+const maxWidth =
+  pageWidth - margin * 2;
+
+const maxHeight =
+  pageHeight - margin * 2;
+
+
+/*
+  Canvasの縦横比
+*/
+
+const canvasRatio =
+  canvas.height /
+  canvas.width;
+
+
+/*
+  まず横幅いっぱいに合わせる
+*/
+
+let imageWidth =
+  maxWidth;
+
+let imageHeight =
+  imageWidth *
+  canvasRatio;
+
+
+/*
+  高さがA4を超えたら
+  高さ基準で縮小
+*/
+
+if (
+  imageHeight >
+  maxHeight
+) {
+
+  imageHeight =
+    maxHeight;
+
+  imageWidth =
+    imageHeight /
+    canvasRatio;
+}
+
+
+/*
+  A4中央に配置
+*/
+
+const imageX =
+  (
+    pageWidth -
+    imageWidth
+  ) / 2;
+
+const imageY =
+  (
+    pageHeight -
+    imageHeight
+  ) / 2;
+
+
+/*
+  Canvas → JPEG
+*/
+
+const imageData =
+  canvas.toDataURL(
+    "image/jpeg",
+    0.98
+  );
+
+
+/*
+  PDFへ配置
+*/
+
+pdf.addImage(
+  imageData,
+  "JPEG",
+  imageX,
+  imageY,
+  imageWidth,
+  imageHeight
+);
+
+
+/*
+  Blob取得
+*/
+
+const pdfBlob =
+  pdf.output(
+    "blob"
+  );
 
     /*
       Supabaseへ保存
@@ -1163,9 +1317,19 @@ async function createBasicLedgerPdf() {
 
   } finally {
 
-    pdfArea.remove();
+  pdfArea.remove();
 
+  const pdfLoading =
+    document.getElementById(
+      "basicLedgerPdfLoading"
+    );
+
+  if (pdfLoading) {
+    pdfLoading.remove();
   }
+
+}
+
 }
 
 
@@ -1182,8 +1346,8 @@ function basicLedgerPdfThStyle() {
     font-weight:700;
     text-align:left;
     vertical-align:middle;
-    width:22%;
     word-break:break-word;
+    white-space:normal !important;
   `;
 }
 
@@ -1194,8 +1358,8 @@ function basicLedgerPdfTdStyle() {
     border:1px solid #64748b;
     padding:7px 8px;
     vertical-align:middle;
-    width:28%;
     word-break:break-word;
+    white-space:normal !important;
   `;
 }
 
