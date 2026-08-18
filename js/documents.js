@@ -281,8 +281,8 @@ async function uploadCaseDocument() {
 const safeFileName =
   `document_${Date.now()}.${extension}`;
 
-  const filePath =
-    `${sale.supabaseId}/${Date.now()}_${safeFileName}`;
+const filePath =
+  `${sale.supabaseId}/${safeFileName}`;
 
   if (message) {
     message.textContent =
