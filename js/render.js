@@ -1545,6 +1545,21 @@ setText(
     inquiryCount
   );
 
+  const progressCount =
+  applicationData.filter(function (sale) {
+    return (
+      isStatus(sale, "申込") ||
+      isStatus(sale, "審査中") ||
+      isStatus(sale, "契約予定")
+    );
+  }).length;
+
+const expectedContractRate =
+  calculateRate(
+    totalContractCount + progressCount,
+    inquiryCount
+  );
+
   setText(
     "monthlyTotalAssignedCount",
     totalAssignedCount + "人"
@@ -1564,6 +1579,16 @@ setText(
     "monthlyTotalContractRate",
     totalContractRate + "%"
   );
+
+  setText(
+  "monthlyProgressCount",
+  progressCount + "件"
+);
+
+setText(
+  "monthlyExpectedContractRate",
+  expectedContractRate + "%"
+);
 
   setText(
     "monthlyInquiryApplicationRate",
