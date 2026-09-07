@@ -1554,6 +1554,9 @@ setText(
     );
   }).length;
 
+  console.log("進行中件数:", progressCount);
+console.log("対象月の申込案件:", applicationData);
+
 const expectedContractRate =
   calculateRate(
     totalContractCount + progressCount,
