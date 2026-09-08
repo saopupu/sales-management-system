@@ -1554,8 +1554,28 @@ setText(
     );
   }).length;
 
-  console.log("進行中件数:", progressCount);
-console.log("対象月の申込案件:", applicationData);
+  const progressData =
+  applicationData.filter(function (sale) {
+    return (
+      isStatus(sale, "申込") ||
+      isStatus(sale, "審査中") ||
+      isStatus(sale, "契約予定")
+    );
+  });
+
+console.log("進行中件数:", progressData.length);
+
+console.table(
+  progressData.map(function (sale) {
+    return {
+      申込日: sale.applyDate,
+      担当: sale.staff,
+      お客様: sale.customer,
+      物件: sale.property,
+      ステータス: sale.status
+    };
+  })
+);
 
 const expectedContractRate =
   calculateRate(
