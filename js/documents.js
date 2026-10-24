@@ -2,6 +2,132 @@ const CASE_DOCUMENT_BUCKET = "case-documents";
 
 let currentDocumentCaseIndex = null;
 
+// SQL・権限検証後に接続する。現時点では通信・永続保存を行わない。
+let caseDocumentNameAdapter = null;
+
+async function getCaseDocumentDisplayNames(documents) {
+  if (!caseDocumentNameAdapter) return new Map();
+  return caseDocumentNameAdapter.getNames(documents);
+}
+
+async function saveCaseDocumentDisplayName(document, stem, expectedVersion) {
+  if (!caseDocumentNameAdapter) {
+    throw new Error("名前変更の保存先は未接続です。現在は保存できません。");
+  }
+  return caseDocumentNameAdapter.saveName(document, stem, expectedVersion);
+}
+
+function createStoredDocumentRow(file, sale, record, namesAvailable) {
+  const documentRef = {
+    bucket: CASE_DOCUMENT_BUCKET,
+    path: `${sale.supabaseId}/${file.name}`,
+    objectId: file.id
+  };
+  const extensionIndex = file.name.lastIndexOf(".");
+  const extension = extensionIndex >= 0 ? file.name.slice(extensionIndex) : "";
+  const fallbackName = file.name.startsWith("basic_ledger_")
+    ? "基本台帳.pdf"
+    : file.name.replace(/^\\d+_/, "");
+  let currentStem = record ? record.display_stem
+    : (extension ? fallbackName.slice(0, -extension.length) : fallbackName);
+  let version = record ? record.version : 0;
+  const canSave = Boolean(namesAvailable && caseDocumentNameAdapter && file.id &&
+    /^\.(pdf|jpg|jpeg|png|webp)$/i.test(extension));
+
+  const row = document.createElement("div");
+  row.style.cssText = "display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:12px;border-bottom:1px solid #eee;";
+  const label = document.createElement("div");
+  label.style.cssText = "min-width:0;flex:1;word-break:break-all;";
+  function updateLabel() { label.textContent = `📄 ${currentStem}${extension}`; }
+  updateLabel();
+  row.appendChild(label);
+
+  const actions = document.createElement("div");
+  actions.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;";
+  function addButton(text, handler) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = text;
+    button.addEventListener("click", handler);
+    actions.appendChild(button);
+    return button;
+  }
+  addButton("開く", () => openStoredDocument(file.name));
+  const renameButton = addButton("名前変更", () => {
+    editor.hidden = false;
+    input.value = currentStem;
+    message.textContent = canSave ? "拡張子は変更できません。"
+      : "名前変更は準備中です。保存先が未接続、取得失敗、または対象情報が不足しているため保存できません。";
+    input.focus();
+  });
+  const deleteButton = addButton("削除", () => deleteStoredDocument(file.name));
+  deleteButton.style.color = "#c00";
+  row.appendChild(actions);
+
+  const editor = document.createElement("form");
+  editor.hidden = true;
+  editor.style.cssText = "flex-basis:100%;min-width:0;";
+  const fieldLabel = document.createElement("label");
+  fieldLabel.textContent = "書類名（拡張子を除く） ";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.maxLength = 120;
+  input.required = true;
+  input.style.cssText = "max-width:100%;box-sizing:border-box;";
+  fieldLabel.appendChild(input);
+  const suffix = document.createElement("span");
+  suffix.textContent = extension;
+  fieldLabel.appendChild(suffix);
+  editor.appendChild(fieldLabel);
+  const saveButton = document.createElement("button");
+  saveButton.type = "submit";
+  saveButton.textContent = "保存";
+  saveButton.disabled = !canSave;
+  const cancelButton = document.createElement("button");
+  cancelButton.type = "button";
+  cancelButton.textContent = "キャンセル";
+  cancelButton.addEventListener("click", () => { editor.hidden = true; });
+  const message = document.createElement("p");
+  message.setAttribute("role", "status");
+  editor.append(saveButton, cancelButton, message);
+  editor.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (!canSave || saveButton.disabled) return;
+    const stem = input.value.trim();
+    if (!stem || Array.from(stem).length > 120 || stem === "." || stem === ".." ||
+        /[\/\\\u0000-\u001f\u007f-\u009f]/.test(stem)) {
+      message.textContent = "書類名は1～120文字で入力し、斜線・制御文字は使わないでください。";
+      return;
+    }
+    saveButton.disabled = true;
+    cancelButton.disabled = true;
+    renameButton.disabled = true;
+    deleteButton.disabled = true;
+    message.textContent = "保存中...";
+    try {
+      const saved = await saveCaseDocumentDisplayName(documentRef, stem, version);
+      if (!saved || saved.object_id !== documentRef.objectId ||
+          saved.object_path !== documentRef.path || saved.version !== version + 1 ||
+          saved.display_stem !== stem) {
+        throw new Error("保存結果を確認できません。書類一覧を再取得してください。");
+      }
+      currentStem = saved.display_stem;
+      version = saved.version;
+      updateLabel();
+      editor.hidden = true;
+    } catch (error) {
+      message.textContent = error.message || "名前を保存できませんでした。";
+    } finally {
+      saveButton.disabled = !canSave;
+      cancelButton.disabled = false;
+      renameButton.disabled = false;
+      deleteButton.disabled = false;
+    }
+  });
+  row.appendChild(editor);
+  return row;
+}
+
 
 /* =========================
    書類画面を開く
@@ -420,92 +546,31 @@ async function loadCaseDocuments() {
 
     listArea.innerHTML = "";
 
-    files.forEach(
-      function (file) {
-
-        const row =
-          document.createElement(
-            "div"
-          );
-
-        row.style.cssText = `
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:12px;
-          padding:12px;
-          border-bottom:1px solid #eee;
-        `;
-
-        let displayName = file.name;
-
-if (
-  file.name.startsWith(
-    "basic_ledger_"
-  )
-) {
-  displayName = "基本台帳.pdf";
-} else {
-  displayName =
-    file.name.replace(
-      /^\\d+_/,
-      ""
-    );
-}
-
-        row.innerHTML = `
-          <div
-            style="
-              min-width:0;
-              flex:1;
-              word-break:break-all;
-            "
-          >
-            📄 ${displayName}
-          </div>
-
-          <div
-            style="
-              display:flex;
-              gap:8px;
-            "
-          >
-
-            <button
-              type="button"
-              onclick='openStoredDocument(
-                ${JSON.stringify(
-                  file.name
-                )}
-              )'
-            >
-              開く
-            </button>
-
-            <button
-              type="button"
-              onclick='deleteStoredDocument(
-                ${JSON.stringify(
-                  file.name
-                )}
-              )'
-              style="
-                color:#c00;
-              "
-            >
-              削除
-            </button>
-
-          </div>
-        `;
-
-        listArea.appendChild(
-          row
-        );
-
-      }
-    );
-
+    const documents = files.map(file => ({
+      bucket: CASE_DOCUMENT_BUCKET,
+      path: `${sale.supabaseId}/${file.name}`,
+      objectId: file.id
+    }));
+    let names = new Map();
+    let namesAvailable = false;
+    const notice = document.createElement("p");
+    notice.setAttribute("role", "status");
+    try {
+      names = await getCaseDocumentDisplayNames(documents);
+      namesAvailable = Boolean(caseDocumentNameAdapter);
+      notice.textContent = namesAvailable ? ""
+        : "名前変更は準備中です。表示名の共有保存先は未接続です。";
+    } catch (error) {
+      notice.textContent = "表示名を取得できません。従来の名前で表示します。名前変更は保存できません。";
+    }
+    listArea.appendChild(notice);
+    files.forEach(file => {
+      const record = names.get(file.id);
+      const matchingRecord = record && record.object_id === file.id &&
+        record.object_path === `${sale.supabaseId}/${file.name}` &&
+        record.bucket_id === CASE_DOCUMENT_BUCKET ? record : null;
+      listArea.appendChild(createStoredDocumentRow(file, sale, matchingRecord, namesAvailable));
+    });
   } catch (error) {
 
     console.error(
