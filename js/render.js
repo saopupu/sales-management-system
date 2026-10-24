@@ -1810,6 +1810,10 @@ const totalSales =
   </td>
 
   <td>
+    ${feePaymentText}
+  </td>
+
+  <td>
     ${getTaxTypeText(
       sale.brokerageTaxType
     )}
@@ -1826,10 +1830,6 @@ const totalSales =
     totalSales
   )}
 </td>
-
-  <td>
-    ${feePaymentText}
-  </td>
 
   <td>
     ${sale.installment || "利用なし"}
