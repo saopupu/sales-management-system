@@ -536,6 +536,17 @@ function getFilteredData(showUndecided = false) {
 
       if (showUndecided) {
         if (
+          sale.status === "審査落ち" ||
+          sale.status === "キャンセル"
+        ) {
+          // 終了案件は契約月・未定判定より申込月を優先する。
+          if (
+            !sale.applyDate ||
+            sale.applyDate.slice(0, 7) !== selectedMonth
+          ) {
+            return false;
+          }
+        } else if (
           caseMonth !== selectedMonth &&
           !isUndecidedContract(sale)
         ) {
