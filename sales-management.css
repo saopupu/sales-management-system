@@ -23,6 +23,7 @@ body.sales-management-active .month-filter{display:none}
 .sm td[data-key=reviewed]{min-width:52px;white-space:nowrap}
 .sm td[data-key=installment]{min-width:90px;white-space:nowrap}
 .sm td[data-key=contracted]{min-width:90px;white-space:normal}
+.sm td[data-key=contracted].sm-status-contracted{color:#c62828;font-weight:600}
 .sm td[data-key=brokerage],.sm td[data-key=ad],.sm td[data-key=total]{min-width:120px;font-size:16px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .sm td[data-key=contract_date],.sm td[data-key=rent_date],.sm td[data-key=brokerage_date],.sm td[data-key=ad_date]{min-width:120px;white-space:nowrap}
 .sm td button{padding:3px 4px;line-height:1.35;cursor:pointer}

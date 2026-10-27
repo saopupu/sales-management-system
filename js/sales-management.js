@@ -126,6 +126,7 @@
       for(const [key] of columns){
         const td=tr.insertCell();td.dataset.key=key;td.textContent=['brokerage','ad','total'].includes(key)?money(row[key]):row[key];
         if(key==='staff')td.dataset.staff=row.staff;
+        td.classList.toggle('sm-status-contracted',key==='contracted'&&row.contracted==='契約済み');
         if(key==='contract_date')td.title=`契約予定：${row.contract_plan}／表示月：${row.month || '月未設定'}（${row.month_override?'移動による表示月':'契約日を優先'}）`;
         if(key==='brokerage'){
           const labels={taxExcluded:'税抜入力',taxIncluded:'税込入力',free:'自由入力（税反映なし）'};
