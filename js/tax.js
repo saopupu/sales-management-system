@@ -5,12 +5,12 @@ const TAX_RATE = 0.10;
 function calculateBrokerageFee(amount, taxType) {
   amount = Number(amount) || 0;
 
-  // 自由入力（税金を反映しない）
-  if (taxType === "free") {
+  // 税込入力・自由入力は登録金額をそのまま使用する
+  if (taxType === "taxIncluded" || taxType === "free") {
     return amount;
   }
 
-  // 税込入力・税抜入力はどちらも税込表示
+  // 税抜入力は10％加算して四捨五入。未設定・未知の区分の既存動作も維持する。
   return Math.round(amount * (1 + TAX_RATE));
 }
 
