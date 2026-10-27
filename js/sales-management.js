@@ -40,22 +40,23 @@
   }
   const section = document.createElement('section');
   section.id='salesManagementSection';section.className='sm system-view-hidden sm-readonly';
-  section.innerHTML=`<div class="sm-toolbar"><h2>売上管理</h2><label>表示 <select class="sm-scope"><option value="month">月別</option><option value="all">全件</option><option value="unset">月未設定</option></select></label><label>年月 <input type="month" class="sm-month" value="${month}"></label><strong>売上合計 <span class="sm-planned">—</span> 円</strong><button type="button" class="sm-refresh">再取得</button><select class="sm-paper" aria-label="印刷用紙"><option>A4</option><option>A3</option></select><button type="button" class="sm-print" disabled>PDF印刷</button><button type="button" class="sm-history" disabled>移動履歴</button></div><p class="sm-help">読み取り専用：登録・修正は案件管理で行い、この画面で再取得してください。月は契約日、未確定の場合は契約予定から表示します。賃料発生日は案件管理で入力・変更してください。仲介手数料は税区分に応じた税込表示、ADは登録値です。</p><p class="sm-status" role="status" aria-live="polite"></p><div class="sm-scroll"><table><thead></thead><tbody></tbody><tfoot></tfoot></table></div><button type="button" class="sm-add" disabled>＋行追加（案件管理で登録）</button>`;
+  section.innerHTML=`<div class="sm-toolbar"><h2>売上管理</h2><label>表示 <select class="sm-scope"><option value="month">月別</option><option value="all">全件</option><option value="unset">月未設定</option></select></label><label>年月 <input type="month" class="sm-month" value="${month}"></label><strong>売上合計 <span class="sm-planned">—</span> 円</strong><button type="button" class="sm-refresh">再取得</button><select class="sm-paper" aria-label="印刷用紙"><option>A4</option><option>A3</option></select><button type="button" class="sm-print" disabled>PDF印刷</button><button type="button" class="sm-history" disabled>移動履歴</button></div><p class="sm-help">読み取り専用：登録・修正は案件管理で行い、この画面で再取得してください。月は契約日、未確定の場合は契約予定から表示します。契約日・賃料発生日は案件管理と共有します。仲介手数料は税区分に応じた税込表示、ADは登録値です。</p><p class="sm-status" role="status" aria-live="polite"></p><div class="sm-scroll"><table><thead></thead><tbody></tbody><tfoot></tfoot></table></div><button type="button" class="sm-add" disabled>＋行追加（案件管理で登録）</button>`;
   const $ = s => section.querySelector(s);
   const count = document.createElement('p');count.className='sm-count sm-status';section.insertBefore(count,$('.sm-scroll'));
   const searchLabel=document.createElement('label');searchLabel.textContent='検索 ';
   const search=document.createElement('input');search.type='search';search.className='sm-search';search.placeholder='顧客名・物件名・担当者';searchLabel.append(search);$('.sm-toolbar').append(searchLabel);
   const dialog=document.createElement('dialog');dialog.className='sm-dialog';section.append(dialog);
-  const commonFields=[['staff','担当'],['customer','顧客名'],['property','物件名'],['company','管理会社'],['brokerage_fee','仲介手数料（登録値）'],['ad','AD'],['fee_payment_date','仲介入金日'],['ad_payment_date','AD入金日'],['memo','メモ']];
+  const commonFields=[['staff','担当'],['customer','顧客名'],['property','物件名'],['company','管理会社'],['brokerage_fee','仲介手数料（登録値）'],['ad','AD'],['contract_date','契約日'],['rent_start_date','賃料発生日'],['fee_payment_date','仲介入金日'],['ad_payment_date','AD入金日'],['memo','メモ']];
   function openEditor(row,focusField=null){
     if(!editable() || editing)return;
     editing={row,user:identity(),inputs:new Map(),original:new Map(),request:null,payload:null};dialog.replaceChildren();
     const heading=document.createElement('h3');heading.textContent='売上項目の編集（新規登録は行いません）';dialog.append(heading);
+    const note=document.createElement('p');note.textContent='契約日の変更は契約月・集計対象月に反映されます。売上管理で月移動済みの場合は指定月を維持し、それ以外は契約日、空欄なら契約予定月に表示します。賃料発生日は契約開始日とは別の日付です。';dialog.append(note);
     for(const [key,label] of [...commonFields,['brokerage_paid','仲介入金確認（入金日あり、またはチェックありで赤）'],['ad_paid','AD入金確認（入金日あり、またはチェックありで赤）']]){
       const wrapper=document.createElement('label');wrapper.style.display='block';wrapper.textContent=label;
       const input=document.createElement(key==='memo'?'textarea':'input');input.dataset.field=key;
       if(key.endsWith('_paid')){input.type='checkbox';input.checked=Boolean(row[key]);editing.original.set(key,input.checked);}
-      else{if(key!=='memo')input.type=key.endsWith('_payment_date')?'date':'text';input.value=row.source[key]??'';editing.original.set(key,input.value);}
+      else{if(key!=='memo')input.type=key.endsWith('_date')?'date':'text';input.value=row.source[key]??'';editing.original.set(key,input.value);}
       wrapper.append(input);dialog.append(wrapper);editing.inputs.set(key,input);
     }
     const message=document.createElement('p');message.className='sm-edit-status';message.setAttribute('role','status');dialog.append(message);
@@ -75,7 +76,7 @@
         if(key.endsWith('_paid'))meta[key]=value;
         else{
           if(['brokerage_fee','ad'].includes(key)){if(!/^\d+$/.test(value)||!Number.isSafeInteger(Number(value))||Number(value)>1000000000000)throw Error('金額は0〜1兆円の整数を入力してください。');value=Number(value);}
-          if(['fee_payment_date','ad_payment_date'].includes(key)){if(value!==''&&!date(value))throw Error('日付は実在するYYYY-MM-DDで入力してください。');value=value||null;}
+          if(['contract_date','rent_start_date','fee_payment_date','ad_payment_date'].includes(key)){if(value!==''&&!date(value))throw Error('日付は実在するYYYY-MM-DDで入力してください。');value=value||null;}
           if(key==='staff'&&!['吉田','矢部','米山','早坂','売買'].includes(value))throw Error('担当者を確認してください。');
           patch[key]=value;
         }
@@ -143,10 +144,10 @@
           const button=document.createElement('button');button.textContent=money(row[key]);button.className='sm-money';button.classList.toggle('sm-paid',paid);button.disabled=!editable();
           button.title='入金確認・売上項目を編集';button.onclick=()=>openEditor(row,key+'_paid');td.replaceChildren(button);
         }
-        if(['brokerage_date','ad_date'].includes(key) && extensionReady){
-          const field=key==='brokerage_date'?'fee_payment_date':'ad_payment_date';
+        if(['contract_date','rent_date','brokerage_date','ad_date'].includes(key) && extensionReady){
+          const field={contract_date:'contract_date',rent_date:'rent_start_date',brokerage_date:'fee_payment_date',ad_date:'ad_payment_date'}[key];
           const button=document.createElement('button');button.className='sm-date-value';button.textContent=row[key];button.disabled=!editable();
-          button.title='入金日を編集（空欄にして保存すると解除）';button.onclick=()=>openEditor(row,field);td.replaceChildren(button);
+          button.title='日付を編集（空欄にして保存すると解除）';button.onclick=()=>openEditor(row,field);td.replaceChildren(button);
         }
       }
       const td=tr.insertCell();td.className='sm-action';const b=document.createElement('button');b.className='sm-move';b.textContent='翌月移動';b.disabled=!editable()||!row.month;b.title='契約日等を変更せず翌月へ移動';b.onclick=()=>shift(row,'move');td.append(b);
@@ -175,7 +176,7 @@
       extensionReady=await extension()?.connect() || false;
       if(request!==token || !authorized() || identity()!==user)return;
       $('.sm-help').textContent=extensionReady?'保存機能接続済み：案件の新規登録は案件管理で行います。入金日・メモは案件管理と共通です。各金額は入金日または入金確認チェックがあれば赤文字になります。仲介手数料は税区分に応じた税込表示、ADは登録値です。':'読み取り専用：保存機能は未導入または無効です。登録・修正は案件管理で行ってください。月は契約日、なければ契約予定月です。仲介手数料は税区分に応じた税込表示、ADは登録値です。';
-      $('.sm-help').textContent+=' 賃料発生日は案件管理で入力・変更してください。';
+      $('.sm-help').textContent+=' 契約日・賃料発生日は案件管理と共有します。';
       if(extensionReady&&(!editPermission()||!extension()?.canEdit))$('.sm-help').textContent='閲覧のみ：売上管理の編集・保存・入金確認・移動・復元はできません。表示切替・検索・再取得は利用できます。仲介手数料は税区分に応じた税込表示、ADは登録値です。';
       const collected=[],pageSize=100;let expected=null;
       for(let offset=0;;offset+=pageSize){
