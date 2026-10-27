@@ -1,7 +1,7 @@
 /* sales_casesが正本。保存拡張は明示的な有効化とDB能力確認の両方が必要。 */
 (() => {
   'use strict';
-  const columns = [['staff','担当'],['property','物件名'],['customer','顧客名'],['management','管理会社'],['reviewed','審査'],['installment','分割'],['contract_date','契約日'],['rent_date','賃料発生日'],['brokerage','仲介手数料'],['brokerage_date','入金日（仲介手数料）'],['ad','AD'],['ad_date','入金日（AD）'],['total','売上合計'],['contracted','契約状況'],['memo','メモ']];
+  const columns = [['staff','担当'],['property','物件名'],['customer','顧客名'],['management','管理会社'],['installment','分割'],['contract_date','契約日'],['rent_date','賃料発生日'],['brokerage','仲介手数料'],['brokerage_date','入金日（仲介手数料）'],['ad','AD'],['ad_date','入金日（AD）'],['total','売上合計'],['contracted','契約状況'],['memo','メモ']];
   const fields = 'id,staff,property,customer,company,installment,contract_date,contract_plan,brokerage_fee,brokerage_tax_type,ad,fee_payment_date,ad_payment_date,status,memo';
   const today = new Date();
   let month = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
@@ -45,27 +45,29 @@
   const search=document.createElement('input');search.type='search';search.className='sm-search';search.placeholder='顧客名・物件名・担当者';searchLabel.append(search);$('.sm-toolbar').append(searchLabel);
   const dialog=document.createElement('dialog');dialog.className='sm-dialog';section.append(dialog);
   const commonFields=[['staff','担当'],['customer','顧客名'],['property','物件名'],['company','管理会社'],['brokerage_fee','仲介手数料（登録値）'],['ad','AD'],['fee_payment_date','仲介入金日'],['ad_payment_date','AD入金日'],['memo','メモ']];
-  function openEditor(row,toggle=null){
+  function openEditor(row,focusField=null){
     if(!editable() || editing)return;
     editing={row,user:identity(),inputs:new Map(),original:new Map(),request:null,payload:null};dialog.replaceChildren();
     const heading=document.createElement('h3');heading.textContent='売上項目の編集（新規登録は行いません）';dialog.append(heading);
-    for(const [key,label] of [...commonFields,['brokerage_paid','仲介入金確認'],['ad_paid','AD入金確認']]){
+    for(const [key,label] of [...commonFields,['brokerage_paid','仲介入金確認（入金日あり、またはチェックありで赤）'],['ad_paid','AD入金確認（入金日あり、またはチェックありで赤）']]){
       const wrapper=document.createElement('label');wrapper.style.display='block';wrapper.textContent=label;
       const input=document.createElement(key==='memo'?'textarea':'input');input.dataset.field=key;
-      if(key.endsWith('_paid')){input.type='checkbox';input.checked=Boolean(row[key]);editing.original.set(key,input.checked);if(key===toggle)input.checked=!input.checked;}
-      else{if(key!=='memo')input.type='text';input.value=row.source[key]??'';editing.original.set(key,input.value);}
+      if(key.endsWith('_paid')){input.type='checkbox';input.checked=Boolean(row[key]);editing.original.set(key,input.checked);}
+      else{if(key!=='memo')input.type=key.endsWith('_payment_date')?'date':'text';input.value=row.source[key]??'';editing.original.set(key,input.value);}
       wrapper.append(input);dialog.append(wrapper);editing.inputs.set(key,input);
     }
     const message=document.createElement('p');message.className='sm-edit-status';message.setAttribute('role','status');dialog.append(message);
     const save=document.createElement('button');save.textContent='保存';save.className='sm-save';save.onclick=saveEditor;dialog.append(save);
     const cancel=document.createElement('button');cancel.textContent='閉じる';cancel.onclick=()=>{if(!busy){editing=null;dialog.close();render();}};dialog.append(cancel);
     dialog.oncancel=e=>{if(busy)e.preventDefault();else{editing=null;render();}};dialog.showModal();render();
+    if(focusField)editing.inputs.get(focusField)?.focus();
   }
   async function saveEditor(){
     if(!editable() || !editing)return;
     const draft=editing,patch={},meta={},message=dialog.querySelector('.sm-edit-status');
     try{
       for(const [key,input] of draft.inputs){
+        if(input.validity?.badInput)throw Error('日付を正しく入力してください。');
         let value=key.endsWith('_paid')?input.checked:input.value;
         if(value===draft.original.get(key))continue;
         if(key.endsWith('_paid'))meta[key]=value;
@@ -130,12 +132,19 @@
           const label=Object.prototype.hasOwnProperty.call(labels,row.tax_type)?labels[row.tax_type]:`未設定・未対応（登録値：${row.tax_type}）`;
           td.title=`登録金額（税計算なし）／入力区分：${label}`;td.setAttribute('aria-label',`${money(row.brokerage)}円。${td.title}`);
         }
+        const paid=['brokerage','ad'].includes(key) && (Boolean(date(row.source[key==='brokerage'?'fee_payment_date':'ad_payment_date'])) || row[key+'_paid']===true);
+        td.classList.toggle('sm-paid',paid);
         if(['brokerage','ad'].includes(key) && extensionReady){
-          const button=document.createElement('button');button.textContent=money(row[key]);button.className='sm-money';button.classList.toggle('sm-paid',Boolean(row[key+'_paid']));button.disabled=!editable();
+          const button=document.createElement('button');button.textContent=money(row[key]);button.className='sm-money';button.classList.toggle('sm-paid',paid);button.disabled=!editable();
           button.title='入金確認・売上項目を編集';button.onclick=()=>openEditor(row,key+'_paid');td.replaceChildren(button);
         }
+        if(['brokerage_date','ad_date'].includes(key) && extensionReady){
+          const field=key==='brokerage_date'?'fee_payment_date':'ad_payment_date';
+          const button=document.createElement('button');button.className='sm-date-value';button.textContent=row[key];button.disabled=!editable();
+          button.title='入金日を編集（空欄にして保存すると解除）';button.onclick=()=>openEditor(row,field);td.replaceChildren(button);
+        }
       }
-      const td=tr.insertCell();td.className='sm-action';const b=document.createElement('button');b.className='sm-move';b.textContent='→';b.disabled=!editable()||!row.month;b.title='契約日等を変更せず翌月へ移動';b.onclick=()=>shift(row,'move');td.append(b);
+      const td=tr.insertCell();td.className='sm-action';const b=document.createElement('button');b.className='sm-move';b.textContent='翌月移動';b.disabled=!editable()||!row.month;b.title='契約日等を変更せず翌月へ移動';b.onclick=()=>shift(row,'move');td.append(b);
       if(extensionReady){const edit=document.createElement('button');edit.className='sm-edit';edit.textContent='編集';edit.disabled=!editable();edit.onclick=()=>openEditor(row);td.append(edit);
         const back=document.createElement('button');back.className='sm-return';back.textContent='戻す';back.disabled=!editable()||!row.can_return;back.onclick=()=>shift(row,'return');td.append(back);}
     }
@@ -160,7 +169,7 @@
       const c=client();if(!c)throw Error('接続を確認してください。');
       extensionReady=await extension()?.connect() || false;
       if(request!==token || !authorized() || identity()!==user)return;
-      $('.sm-help').textContent=extensionReady?'保存機能接続済み：案件の新規登録は案件管理で行います。確認フラグと表示月だけを補助情報へ保存します。金額は登録値（税計算なし）です。':'読み取り専用：保存機能は未導入または無効です。登録・修正は案件管理で行ってください。月は契約日、なければ契約予定月です。金額は登録値（税計算なし）です。';
+      $('.sm-help').textContent=extensionReady?'保存機能接続済み：案件の新規登録は案件管理で行います。入金日・メモは案件管理と共通です。各金額は入金日または入金確認チェックがあれば赤文字になります。金額は登録値（税計算なし）です。':'読み取り専用：保存機能は未導入または無効です。登録・修正は案件管理で行ってください。月は契約日、なければ契約予定月です。金額は登録値（税計算なし）です。';
       if(extensionReady&&(!editPermission()||!extension()?.canEdit))$('.sm-help').textContent='閲覧のみ：売上管理の編集・保存・入金確認・移動・復元はできません。表示切替・検索・再取得は利用できます。金額は登録値（税計算なし）です。';
       const collected=[],pageSize=100;let expected=null;
       for(let offset=0;;offset+=pageSize){
