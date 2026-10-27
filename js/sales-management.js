@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   const columns = [['staff','担当'],['property','物件名'],['customer','顧客名'],['management','管理会社'],['installment','分割'],['contract_date','契約日'],['rent_date','賃料発生日'],['brokerage','仲介手数料'],['brokerage_date','入金日（仲介手数料）'],['ad','AD'],['ad_date','入金日（AD）'],['total','売上合計'],['contracted','契約状況'],['memo','メモ']];
-  const fields = 'id,staff,property,customer,company,installment,contract_date,contract_plan,brokerage_fee,brokerage_tax_type,ad,fee_payment_date,ad_payment_date,status,memo';
+  const fields = 'id,staff,property,customer,company,installment,contract_date,contract_plan,rent_start_date,brokerage_fee,brokerage_tax_type,ad,fee_payment_date,ad_payment_date,status,memo';
   const today = new Date();
   let month = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
   let rows = [], token = 0, ready = false, busy = false;
@@ -31,14 +31,14 @@
     const contract = date(row.contract_date), brokerage = amount(row.brokerage_fee), ad = amount(row.ad);
     return {id,source:{...row,id},month:contract ? contract.slice(0,7) : validMonth(row.contract_plan) ? row.contract_plan : '',
       staff:text(row.staff),property:text(row.property),customer:text(row.customer),management:text(row.company),
-      reviewed:'未設定',rent_date:'未設定',installment:['利用なし','ポケットカード','スムーズ'].includes(row.installment)?row.installment:'未設定',
+      reviewed:'未設定',rent_date:date(row.rent_start_date)||'未設定',installment:['利用なし','ポケットカード','スムーズ'].includes(row.installment)?row.installment:'未設定',
       contract_date:contract || '未設定',contract_plan:text(row.contract_plan),tax_type:text(row.brokerage_tax_type),brokerage,ad,total:brokerage === null || ad === null ? null : brokerage+ad,
       brokerage_date:date(row.fee_payment_date)||'未設定',ad_date:date(row.ad_payment_date)||'未設定',
       contracted:['申込','審査中','契約予定','契約済','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
   }
   const section = document.createElement('section');
   section.id='salesManagementSection';section.className='sm system-view-hidden sm-readonly';
-  section.innerHTML=`<div class="sm-toolbar"><h2>売上管理</h2><label>表示 <select class="sm-scope"><option value="month">月別</option><option value="all">全件</option><option value="unset">月未設定</option></select></label><label>年月 <input type="month" class="sm-month" value="${month}"></label><strong>登録金額合計 <span class="sm-planned">—</span> 円</strong><button type="button" class="sm-refresh">再取得</button><select class="sm-paper" aria-label="印刷用紙"><option>A4</option><option>A3</option></select><button type="button" class="sm-print" disabled>PDF印刷</button><button type="button" class="sm-history" disabled>移動履歴</button></div><p class="sm-help">読み取り専用：登録・修正は案件管理で行い、この画面で再取得してください。月は契約日、未確定の場合は契約予定から表示します。審査確認・賃料発生日は未設定です。金額は登録値で、税計算・入金確認による補正は行いません。</p><p class="sm-status" role="status" aria-live="polite"></p><div class="sm-scroll"><table><thead></thead><tbody></tbody><tfoot></tfoot></table></div><button type="button" class="sm-add" disabled>＋行追加（案件管理で登録）</button>`;
+  section.innerHTML=`<div class="sm-toolbar"><h2>売上管理</h2><label>表示 <select class="sm-scope"><option value="month">月別</option><option value="all">全件</option><option value="unset">月未設定</option></select></label><label>年月 <input type="month" class="sm-month" value="${month}"></label><strong>登録金額合計 <span class="sm-planned">—</span> 円</strong><button type="button" class="sm-refresh">再取得</button><select class="sm-paper" aria-label="印刷用紙"><option>A4</option><option>A3</option></select><button type="button" class="sm-print" disabled>PDF印刷</button><button type="button" class="sm-history" disabled>移動履歴</button></div><p class="sm-help">読み取り専用：登録・修正は案件管理で行い、この画面で再取得してください。月は契約日、未確定の場合は契約予定から表示します。賃料発生日は案件管理で入力・変更してください。金額は登録値で、税計算・入金確認による補正は行いません。</p><p class="sm-status" role="status" aria-live="polite"></p><div class="sm-scroll"><table><thead></thead><tbody></tbody><tfoot></tfoot></table></div><button type="button" class="sm-add" disabled>＋行追加（案件管理で登録）</button>`;
   const $ = s => section.querySelector(s);
   const count = document.createElement('p');count.className='sm-count sm-status';section.insertBefore(count,$('.sm-scroll'));
   const searchLabel=document.createElement('label');searchLabel.textContent='検索 ';
@@ -170,6 +170,7 @@
       extensionReady=await extension()?.connect() || false;
       if(request!==token || !authorized() || identity()!==user)return;
       $('.sm-help').textContent=extensionReady?'保存機能接続済み：案件の新規登録は案件管理で行います。入金日・メモは案件管理と共通です。各金額は入金日または入金確認チェックがあれば赤文字になります。金額は登録値（税計算なし）です。':'読み取り専用：保存機能は未導入または無効です。登録・修正は案件管理で行ってください。月は契約日、なければ契約予定月です。金額は登録値（税計算なし）です。';
+      $('.sm-help').textContent+=' 賃料発生日は案件管理で入力・変更してください。';
       if(extensionReady&&(!editPermission()||!extension()?.canEdit))$('.sm-help').textContent='閲覧のみ：売上管理の編集・保存・入金確認・移動・復元はできません。表示切替・検索・再取得は利用できます。金額は登録値（税計算なし）です。';
       const collected=[],pageSize=100;let expected=null;
       for(let offset=0;;offset+=pageSize){

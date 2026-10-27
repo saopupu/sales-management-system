@@ -165,6 +165,8 @@ function convertSaleToSupabase(
     start_date:
       sale.startDate || null,
 
+    rent_start_date: sale.rentStartDate || null,
+
     staff:
       sale.staff || "",
 
@@ -260,6 +262,8 @@ function convertSupabaseToSale(
 
     startDate:
       row.start_date || "",
+
+    rentStartDate: row.rent_start_date || "",
 
     staff:
       row.staff || "",

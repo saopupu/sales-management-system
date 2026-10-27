@@ -2045,6 +2045,8 @@ function editSale(
     startDate:
       sale.startDate || "",
 
+    rentStartDate: sale.rentStartDate || "",
+
     staff:
       sale.staff || "",
 

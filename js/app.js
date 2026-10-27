@@ -270,6 +270,8 @@ startDate:
             "startDate"
           ).value,
 
+        rentStartDate: document.getElementById("rentStartDate").value,
+
         staff:
           document.getElementById(
             "staff"
