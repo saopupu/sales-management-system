@@ -36,7 +36,7 @@
       reviewed:'未設定',rent_date:date(row.rent_start_date)||'未設定',installment:['利用なし','ポケットカード','スムーズ'].includes(row.installment)?row.installment:'未設定',
       contract_date:contract || '未設定',contract_plan:text(row.contract_plan),tax_type:text(row.brokerage_tax_type),brokerage,ad,total:brokerage === null || ad === null ? null : brokerage+ad,
       brokerage_date:date(row.fee_payment_date)||'未設定',ad_date:date(row.ad_payment_date)||'未設定',
-      contracted:row.status==='契約済'?'契約済み':['申込','審査中','契約予定','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
+      contracted:['申込','審査中','契約予定','契約済','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
   }
   const section = document.createElement('section');
   section.id='salesManagementSection';section.className='sm system-view-hidden sm-readonly';
@@ -130,7 +130,7 @@
       for(const [key] of columns){
         const td=tr.insertCell();td.dataset.key=key;td.textContent=['brokerage','ad','total'].includes(key)?money(row[key]):row[key];
         if(key==='staff')td.dataset.staff=row.staff;
-        td.classList.toggle('sm-status-contracted',key==='contracted'&&row.contracted==='契約済み');
+        td.classList.toggle('sm-status-contracted',key==='contracted'&&row.contracted==='契約済');
         if(key==='contract_date')td.title=`契約予定：${row.contract_plan}／表示月：${row.month || '月未設定'}（${row.month_override?'移動による表示月':'契約日を優先'}）`;
         if(key==='brokerage'){
           const labels={taxExcluded:'税抜入力',taxIncluded:'税込入力',free:'自由入力（税反映なし）'};
