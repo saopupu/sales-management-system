@@ -31,9 +31,18 @@ function loadLocalSalesData() {
         ? JSON.parse(savedData)
         : [];
 
-    return Array.isArray(parsedData)
-      ? parsedData
-      : [];
+    if (!Array.isArray(parsedData)) return [];
+    return parsedData.map(sale => {
+      if (sale.supabaseId !== null && sale.supabaseId !== undefined) {
+        const id = normalizeSalesCaseId(sale.supabaseId);
+        return {...sale, id, supabaseId:id};
+      }
+      if (typeof sale.id === "number" || (typeof sale.id === "string" && /^-?\d/.test(sale.id))) {
+        normalizeSalesCaseId(sale.id);
+        throw Error("DB案件IDの対応情報が欠けています。再登録せず再取得してください。");
+      }
+      return sale;
+    });
   } catch (error) {
     console.error(
       "案件データの読み込みに失敗しました。",
@@ -106,7 +115,17 @@ function saveLocalData() {
 ========================= */
 
 function getSalesData() {
-  return salesData;
+  return hasSalesAppPermission() ? salesData : [];
+}
+
+function hasSalesAppPermission() {
+  return typeof canUseSalesApp === "function" && canUseSalesApp();
+}
+
+function requireSalesAppPermission() {
+  if (hasSalesAppPermission()) return true;
+  alert("ログイン済みの利用者4名だけが操作できます。");
+  return false;
 }
 
 
@@ -124,7 +143,8 @@ function isSupabaseAvailable() {
 
 
 /* =========================
-   Supabase保存形式へ変換
+   フォームで扱う項目だけをSupabase保存形式へ変換
+   phoneなど画面外の列は送信せず、DBの既存値を保持する。
 ========================= */
 
 function convertSaleToSupabase(
@@ -150,9 +170,6 @@ function convertSaleToSupabase(
 
     customer:
       sale.customer || "",
-
-    phone:
-      sale.phone || "",
 
     property:
       sale.property || "",
@@ -209,26 +226,28 @@ function convertSaleToSupabase(
    画面表示形式へ変換
 ========================= */
 
+function rememberSaleSnapshot(sale, row) {
+  // 比較用の原値をGoogle同期やlocalStorageのJSONへ混入させない。
+  Object.defineProperty(sale, "_dbOriginal", {value: {...row}, writable: true, configurable: true, enumerable: false});
+  return sale;
+}
+
 function convertSupabaseToSale(
   row
 ) {
-  return {
+  const caseId = normalizeSalesCaseId(row.id);
+  return rememberSaleSnapshot({
     /*
       画面側で使用するID
     */
 
-    id:
-      row.id !== undefined &&
-      row.id !== null
-        ? String(row.id)
-        : createLocalCaseId(),
+    id: caseId,
 
     /*
       Supabase編集・削除用ID
     */
 
-    supabaseId:
-      row.id,
+    supabaseId: caseId,
 
     applyDate:
       row.apply_date || "",
@@ -293,7 +312,7 @@ function convertSupabaseToSale(
 
     installment:
       row.installment || ""
-  };
+  }, row);
 }
 
 
@@ -302,6 +321,11 @@ function convertSupabaseToSale(
 ========================= */
 
 async function loadSalesData() {
+  if (!hasSalesAppPermission()) {
+    salesData = [];
+    return [];
+  }
+  const loadingUser = typeof currentLoginUser !== "undefined" ? currentLoginUser : null;
   /*
     Supabaseが読み込まれていない場合は
     localStorageを使用します。
@@ -339,6 +363,7 @@ async function loadSalesData() {
       throw error;
     }
 
+    if (!hasSalesAppPermission() || (loadingUser && currentLoginUser !== loadingUser)) return [];
     salesData =
       (data || []).map(
         convertSupabaseToSale
@@ -358,6 +383,12 @@ async function loadSalesData() {
 
     return salesData;
   } catch (error) {
+    if (!hasSalesAppPermission() || (loadingUser && currentLoginUser !== loadingUser)) return [];
+    if (error.code === "INVALID_SALES_CASE_ID") {
+      salesData = [];
+      alert("案件IDの精度・形式を確認できないため読み込みを中止しました。再登録や更新を行わず確認してください。");
+      return [];
+    }
     console.error(
       "Supabase読み込みエラー",
       error
@@ -380,6 +411,7 @@ async function loadSalesData() {
 ========================= */
 
 async function addSale(sale) {
+  if (!requireSalesAppPermission()) return false;
   if (
     !sale ||
     typeof sale !== "object"
@@ -429,11 +461,15 @@ async function addSale(sale) {
         SupabaseのIDを保存
       */
 
-      sale.supabaseId =
-        data.id;
+      if (data?.id === null || data?.id === undefined) {
+        throw new Error("登録した案件を確認できませんでした。");
+      }
 
-      sale.id =
-        String(data.id);
+      sale.supabaseId = normalizeSalesCaseId(data.id);
+
+      rememberSaleSnapshot(sale, data);
+
+      sale.id = sale.supabaseId;
 
       salesData.unshift(
         sale
@@ -455,29 +491,11 @@ async function addSale(sale) {
         error
       );
 
-      /*
-        Supabaseで失敗した場合は
-        このパソコンへ保存します。
-      */
-
-      salesData.unshift(
-        sale
-      );
-
-      const localSaved =
-        saveLocalData();
-
-      if (!localSaved) {
-        salesData.shift();
-
-        return false;
-      }
-
       alert(
-        "案件はこのパソコンに保存されましたが、Supabaseへの保存には失敗しました。"
+        "Supabaseへの保存に失敗しました。入力内容はそのまま残っています。接続状況を確認してください。"
       );
 
-      return true;
+      return false;
     }
   }
 
@@ -485,11 +503,8 @@ async function addSale(sale) {
     Supabaseがない場合
   */
 
-  salesData.unshift(
-    sale
-  );
-
-  return saveLocalData();
+  alert("Supabaseに接続できないため保存できません。入力内容はそのまま残っています。");
+  return false;
 }
 
 
@@ -501,6 +516,7 @@ async function updateSale(
   index,
   sale
 ) {
+  if (!requireSalesAppPermission()) return false;
   const targetIndex =
     Number(index);
 
@@ -525,12 +541,25 @@ async function updateSale(
       targetIndex
     ];
 
+  if (oldSale.supabaseId == null && (typeof oldSale.id === "number" || (typeof oldSale.id === "string" && /^-?\d/.test(oldSale.id)))) {
+    alert("DB案件IDの対応情報がないため編集を中止しました。再登録せず再取得してください。");
+    return false;
+  }
+
+  if (!isSupabaseAvailable()) {
+    alert("Supabaseに接続できないため更新できません。入力内容はそのまま残っています。");
+    return false;
+  }
+
+  // フォームにない項目はローカル表示でも保持する。DBへの送信は上記の項目だけ。
+  sale = { ...oldSale, ...sale };
+
   sale.id =
     oldSale.id ||
     createLocalCaseId();
 
   sale.supabaseId =
-    oldSale.supabaseId ||
+    oldSale.supabaseId ??
     null;
 
   /*
@@ -544,29 +573,31 @@ async function updateSale(
       undefined
   ) {
     try {
-      const supabaseSale =
-        convertSaleToSupabase(
-          sale
-        );
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from(
-            "sales_cases"
-          )
-          .update(
-            supabaseSale
-          )
-          .eq(
-            "id",
-            sale.supabaseId
-          );
+      sale.supabaseId = normalizeSalesCaseId(sale.supabaseId);
+      sale.id = sale.supabaseId;
+      const proposed = convertSaleToSupabase(sale);
+      const baseline = oldSale._dbOriginal || convertSaleToSupabase(oldSale);
+      const previousForm = convertSaleToSupabase(oldSale);
+      const supabaseSale = Object.fromEntries(Object.entries(proposed)
+        .filter(([key, value]) => JSON.stringify(value) !== JSON.stringify(previousForm[key])));
+      if (!Object.keys(supabaseSale).length) return true;
+      let query = supabaseClient.from("sales_cases").update(supabaseSale);
+      // 同一項目の更新をDB側の条件で検知。0件はSTEP 20と同様に失敗扱い。
+      for (const key of Object.keys(supabaseSale)) {
+        const previous = baseline[key] ?? null;
+        query = previous === null ? query.is(key, null) : query.eq(key, previous);
+      }
+      const {data, error} = await query.eq("id", sale.supabaseId).select("id");
 
       if (error) {
         throw error;
       }
+
+      if (!Array.isArray(data) || data.length !== 1 || normalizeSalesCaseId(data[0].id) !== sale.supabaseId) {
+        throw new Error("更新対象を1件確認できませんでした。");
+      }
+
+      rememberSaleSnapshot(sale, { ...baseline, ...supabaseSale });
 
       salesData[
         targetIndex
@@ -589,7 +620,7 @@ async function updateSale(
       );
 
       alert(
-        "案件を更新できませんでした。インターネット接続をご確認ください。"
+        "案件を更新できませんでした。更新競合、対象の削除、権限・通信の問題が考えられます。入力内容はそのまま残っています。"
       );
 
       return false;
@@ -628,11 +659,13 @@ async function updateSale(
         throw error;
       }
 
-      sale.supabaseId =
-        data.id;
+      if (data?.id === null || data?.id === undefined) {
+        throw new Error("登録した案件を確認できませんでした。");
+      }
 
-      sale.id =
-        String(data.id);
+      sale.supabaseId = normalizeSalesCaseId(data.id);
+
+      sale.id = sale.supabaseId;
 
       salesData[
         targetIndex
@@ -677,6 +710,7 @@ async function updateSale(
 async function deleteSaleData(
   index
 ) {
+  if (!requireSalesAppPermission()) return false;
   const targetIndex =
     Number(index);
 
@@ -701,6 +735,16 @@ async function deleteSaleData(
       targetIndex
     ];
 
+  if (targetSale.supabaseId == null && (typeof targetSale.id === "number" || (typeof targetSale.id === "string" && /^-?\d/.test(targetSale.id)))) {
+    alert("DB案件IDの対応情報がないため削除を中止しました。再取得してください。");
+    return false;
+  }
+
+  if (!isSupabaseAvailable()) {
+    alert("Supabaseに接続できないため削除できません。");
+    return false;
+  }
+
   /*
     Supabaseの案件を削除
   */
@@ -713,7 +757,9 @@ async function deleteSaleData(
       undefined
   ) {
     try {
+      const caseId = normalizeSalesCaseId(targetSale.supabaseId);
       const {
+        data,
         error
       } =
         await supabaseClient
@@ -723,11 +769,15 @@ async function deleteSaleData(
           .delete()
           .eq(
             "id",
-            targetSale.supabaseId
-          );
+            caseId
+          )
+          .select("id");
 
       if (error) {
         throw error;
+      }
+      if (!Array.isArray(data) || data.length !== 1 || normalizeSalesCaseId(data[0].id) !== caseId) {
+        throw new Error("削除対象を1件確認できませんでした。");
       }
     } catch (error) {
       console.error(
@@ -736,7 +786,7 @@ async function deleteSaleData(
       );
 
       alert(
-        "Supabaseから案件を削除できませんでした。"
+        "Supabaseから案件を削除できませんでした。対象の有無、権限・通信状況を確認してください。"
       );
 
       return false;
@@ -765,6 +815,7 @@ async function deleteSaleData(
 ========================= */
 
 function syncToGoogleSheet() {
+  if (!hasSalesAppPermission()) return;
   const contractedSales =
     salesData.filter(
       function (sale) {
@@ -821,6 +872,7 @@ function saveMonthlyPerformanceData(
   inquiryCount,
   assignedCounts
 ) {
+  if (!requireSalesAppPermission()) return false;
   if (!month) {
     alert(
       "表示月を選択してください。"
@@ -912,3 +964,15 @@ function saveMonthlyPerformanceData(
     return false;
   }
 }
+
+document.addEventListener("sales-permissions-changed", async () => {
+  salesData = [];
+  if (hasSalesAppPermission()) await loadSalesData();
+  if (typeof render === "function") render();
+});
+
+document.addEventListener("sales-case-saved", async () => {
+  if (!hasSalesAppPermission()) return;
+  await loadSalesData();
+  if (typeof render === "function") render();
+});

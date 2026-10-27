@@ -1981,6 +1981,7 @@ const totalSales =
 function editSale(
   index
 ) {
+  if (!requireSalesAppPermission()) return;
   const sale =
     getSalesData()[index];
 

@@ -5,26 +5,26 @@
 const USER_SETTINGS = {
   "yoshida@ysr-rs.co.jp": {
     name: "吉田",
-    role: "admin",
-    roleLabel: "管理者"
+    role: "member",
+    roleLabel: "スタッフ"
   },
 
   "yabe@ysr-rs.co.jp": {
     name: "矢部",
-    role: "admin",
-    roleLabel: "管理者"
+    role: "member",
+    roleLabel: "スタッフ"
   },
 
   "hayasaka@ysr-rs.co.jp": {
     name: "早坂",
-    role: "viewer",
-    roleLabel: "閲覧"
+    role: "member",
+    roleLabel: "スタッフ"
   },
 
   "yoneyama@ysr-rs.co.jp": {
     name: "米山",
-    role: "viewer",
-    roleLabel: "閲覧"
+    role: "member",
+    roleLabel: "スタッフ"
   }
 };
 
@@ -46,25 +46,34 @@ function getUserSetting(
       .toLowerCase();
 
   return (
-    USER_SETTINGS[
-      normalizedEmail
-    ] || null
+    Object.prototype.hasOwnProperty.call(USER_SETTINGS, normalizedEmail)
+      ? USER_SETTINGS[normalizedEmail] : null
   );
 }
 
 
 /* =========================
-   管理者判定
+   許可された4名のログイン判定
 ========================= */
 
-function isAdminUser() {
+function canUseSalesApp() {
   return Boolean(
     currentLoginUser &&
-    currentLoginUser.role ===
-      "admin"
+    currentLoginUser.id &&
+    getUserSetting(currentLoginUser.email)
   );
 }
 
+
+// 既存の呼び出しとの互換用。管理者・閲覧者の区別は行わない。
+function isAdminUser() { return canUseSalesApp(); }
+
+// 売上管理だけの編集権限。既存案件管理の共通権限は変更しない。
+function canEditSalesManagement() {
+  if (!canUseSalesApp()) return false;
+  const email = String(currentLoginUser.email || "").trim().toLowerCase();
+  return ["yoshida@ysr-rs.co.jp", "yabe@ysr-rs.co.jp", "yoneyama@ysr-rs.co.jp"].includes(email);
+}
 
 /* =========================
    ログイン画面を表示
@@ -90,6 +99,7 @@ function showLoginScreen() {
   }
 
   currentLoginUser = null;
+  applyUserPermissions();
 }
 
 
@@ -100,7 +110,7 @@ function showLoginScreen() {
 function showAppScreen(
   user
 ) {
-  if (!user) {
+  if (!user?.id) {
     showLoginScreen();
     return;
   }
@@ -220,13 +230,15 @@ function applyUserPermissions() {
   adminOnlyElements.forEach(
     function (element) {
       element.hidden =
-        !isAdminUser();
+        !canUseSalesApp();
     }
   );
 
+  document.dispatchEvent(new Event("sales-permissions-changed"));
+
   document.body.classList.toggle(
     "viewer-mode",
-    !isAdminUser()
+    !canUseSalesApp()
   );
 }
 

@@ -3,6 +3,7 @@
 ========================= */
 
 const SYSTEM_VIEW_SECTIONS = {
+  salesManagement: ["salesManagementSection"],
   home: [
     "alarmCard",
     "bossDashboardSection",
@@ -51,6 +52,7 @@ function getAllSystemViewIds() {
 function showSystemView(
   viewName
 ) {
+  if (typeof canUseSalesApp !== "function" || !canUseSalesApp()) return;
   const selectedView =
     SYSTEM_VIEW_SECTIONS[
       viewName
@@ -59,6 +61,7 @@ function showSystemView(
   if (!selectedView) {
     return;
   }
+  document.body.classList.toggle("sales-management-active", viewName === "salesManagement");
 
   /*
     すべての画面を一度非表示
@@ -163,15 +166,15 @@ function initializeSystemNavigation() {
             button.dataset.view;
 
           /*
-            閲覧ユーザーが
+            未ログインユーザーが
             入力画面を開かないようにする
           */
 
           if (
             viewName === "form" &&
-            typeof isAdminUser ===
+            typeof canUseSalesApp ===
               "function" &&
-            !isAdminUser()
+            !canUseSalesApp()
           ) {
             return;
           }
@@ -210,15 +213,15 @@ function initializeSystemNavigation() {
   }
 
   /*
-    閲覧ユーザーが前回
+    未ログインユーザーが前回
     入力画面を開いていた場合
   */
 
   if (
     initialView === "form" &&
-    typeof isAdminUser ===
+    typeof canUseSalesApp ===
       "function" &&
-    !isAdminUser()
+    !canUseSalesApp()
   ) {
     initialView = "home";
   }
@@ -250,9 +253,9 @@ function refreshSystemNavigation() {
 
   if (
     currentView === "form" &&
-    typeof isAdminUser ===
+    typeof canUseSalesApp ===
       "function" &&
-    !isAdminUser()
+    !canUseSalesApp()
   ) {
     currentView = "home";
   }

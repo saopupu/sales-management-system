@@ -241,6 +241,8 @@ if (form) {
     ) {
       event.preventDefault();
 
+      if (!requireSalesAppPermission()) return;
+
       submitButton.disabled =
         true;
 
