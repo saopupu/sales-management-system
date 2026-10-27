@@ -123,6 +123,7 @@
     for(const [,label] of [...columns,['action','操作']]){const th=document.createElement('th');th.textContent=label;head.append(th);}
     $('tbody').replaceChildren();
     for(const row of shown){
+      const isPaid=key=>Boolean(date(row.source[key==='brokerage'?'fee_payment_date':'ad_payment_date']))||row[key+'_paid']===true;
       const tr=$('tbody').insertRow();tr.dataset.id=row.id;
       tr.classList.toggle('sm-contracted',['契約済','契約済み'].includes(row.contracted));
       for(const [key] of columns){
@@ -135,7 +136,8 @@
           const label=Object.prototype.hasOwnProperty.call(labels,row.tax_type)?labels[row.tax_type]:`未設定・未対応（登録値：${row.tax_type}）`;
           td.title=`仲介手数料（税込・自由入力は登録値、未対応区分は換算なし）／入力区分：${label}`;td.setAttribute('aria-label',`${money(row.brokerage)}円。${td.title}`);
         }
-        const paid=['brokerage','ad'].includes(key) && (Boolean(date(row.source[key==='brokerage'?'fee_payment_date':'ad_payment_date'])) || row[key+'_paid']===true);
+        const paid=key==='total' ? row.total!==null&&['brokerage','ad'].every(item=>row[item]===0||isPaid(item))
+          : ['brokerage','ad'].includes(key)&&isPaid(key);
         td.classList.toggle('sm-paid',paid);
         if(['brokerage','ad'].includes(key) && extensionReady){
           const button=document.createElement('button');button.textContent=money(row[key]);button.className='sm-money';button.classList.toggle('sm-paid',paid);button.disabled=!editable();
