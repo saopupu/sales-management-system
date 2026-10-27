@@ -36,7 +36,7 @@
       reviewed:'未設定',rent_date:date(row.rent_start_date)||'未設定',installment:['利用なし','ポケットカード','スムーズ'].includes(row.installment)?row.installment:'未設定',
       contract_date:contract || '未設定',contract_plan:text(row.contract_plan),tax_type:text(row.brokerage_tax_type),brokerage,ad,total:brokerage === null || ad === null ? null : brokerage+ad,
       brokerage_date:date(row.fee_payment_date)||'未設定',ad_date:date(row.ad_payment_date)||'未設定',
-      contracted:['申込','審査中','契約予定','契約済','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
+      contracted:row.status==='契約済'?'契約済み':['申込','審査中','契約予定','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
   }
   const section = document.createElement('section');
   section.id='salesManagementSection';section.className='sm system-view-hidden sm-readonly';
