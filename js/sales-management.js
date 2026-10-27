@@ -1,7 +1,7 @@
 /* sales_casesが正本。保存拡張は明示的な有効化とDB能力確認の両方が必要。 */
 (() => {
   'use strict';
-  const columns = [['staff','担当'],['property','物件名'],['customer','顧客名'],['management','管理会社'],['installment','分割'],['contract_date','契約日'],['rent_date','賃料発生日'],['brokerage','仲介手数料'],['brokerage_date','入金日（仲介手数料）'],['ad','AD'],['ad_date','入金日（AD）'],['total','売上合計'],['contracted','契約状況'],['memo','メモ']];
+  const columns = [['staff','担当'],['property','物件名'],['customer','顧客名'],['management','管理会社'],['contracted','契約状況'],['installment','分割'],['contract_date','契約日'],['rent_date','賃料発生日'],['brokerage','仲介手数料'],['brokerage_date','入金日（仲介手数料）'],['ad','AD'],['ad_date','入金日（AD）'],['total','売上合計'],['memo','メモ']];
   const fields = 'id,staff,property,customer,company,installment,contract_date,contract_plan,rent_start_date,brokerage_fee,brokerage_tax_type,ad,fee_payment_date,ad_payment_date,status,memo';
   const today = new Date();
   let month = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
