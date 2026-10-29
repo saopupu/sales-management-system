@@ -212,10 +212,34 @@
     if(!authorized() || !ready || busy)return;
     const w=window.open('','_blank');if(!w){status('印刷画面を開けませんでした。',true);return;}
     w.document.title='売上管理（読み取り専用）';
-    const style=w.document.createElement('style');style.textContent=`@page{size:${$('.sm-paper').value} landscape;margin:8mm}body{font:8pt sans-serif}table{border-collapse:collapse;width:100%}td,th{border:1px solid #aaa;padding:4px;white-space:pre-wrap;overflow-wrap:anywhere}.sm-action,th:last-child,td:last-child{display:none}thead{display:table-header-group}tr{break-inside:avoid}`;w.document.head.append(style);
-    const h=w.document.createElement('h2');h.textContent='売上管理（読み取り専用） '+$('.sm-scope').selectedOptions[0].textContent+($('.sm-scope').value==='month'?' '+month:'');w.document.body.append(h);
-    const note=w.document.createElement('p');note.textContent=$('.sm-help').textContent;w.document.body.append(note);
-    w.document.body.append($('table').cloneNode(true));w.focus();w.print();
+    // 印刷専用。通常画面の列・表示対象・計算済み金額には変更を加えない。
+    const printColumns=[['property','物件名',12],['customer','お客様名',9],['management','管理会社名',11],['contract_date','契約日',8],['brokerage','仲介手数料',10],['brokerage_date','仲介手数料入金日',8],['ad','AD金額',9],['ad_date','AD入金日',8],['total','売上合計額',10],['memo','メモ',15]];
+    const style=w.document.createElement('style');style.textContent=`@page{size:${$('.sm-paper').value} landscape;margin:8mm}body{margin:0;color:#222;font:9pt/1.45 sans-serif}h2{font-size:14pt;margin:0 0 3mm;break-after:avoid;page-break-after:avoid}table{border-collapse:collapse;table-layout:fixed;width:100%}td,th{border:1px solid #999;padding:1.5mm 1mm;vertical-align:top;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal}th{background:#eee;text-align:left;font-weight:bold}td.money{text-align:right;font-variant-numeric:tabular-nums}thead{display:table-header-group}tfoot{display:table-row-group;font-weight:bold;background:#f3f3f3}tr{break-inside:avoid;page-break-inside:avoid}tfoot td{padding-top:3mm;padding-bottom:3mm}tfoot .label{display:block;text-align:left}tfoot .value{display:block;text-align:right}`;w.document.head.append(style);
+    const h=w.document.createElement('h2');h.textContent='売上管理 '+$('.sm-scope').selectedOptions[0].textContent+($('.sm-scope').value==='month'?' '+month:'');w.document.body.append(h);
+    const table=w.document.createElement('table'),colgroup=w.document.createElement('colgroup');
+    for(const [,,width] of printColumns){const col=w.document.createElement('col');col.style.width=width+'%';colgroup.append(col);}table.append(colgroup);
+    const head=table.createTHead().insertRow();
+    for(const [,label] of printColumns){const th=w.document.createElement('th');th.scope='col';th.textContent=label;head.append(th);}
+    const body=table.createTBody();
+    for(const source of $('tbody').rows){
+      const tr=body.insertRow();
+      for(const [key] of printColumns){
+        const td=tr.insertCell(),value=source.querySelector('[data-key="'+key+'"]').textContent;
+        td.textContent=value;
+        if(['brokerage','ad','total'].includes(key)){td.className='money';if(value!=='未設定')td.textContent=value+'円';}
+        else if(['contract_date','brokerage_date','ad_date'].includes(key))td.textContent=value.replace(/-/g,'/');
+      }
+    }
+    const foot=table.createTFoot().insertRow();
+    const label=foot.insertCell();label.colSpan=4;label.textContent='合計';
+    for(const [key,title] of [['brokerage','仲介手数料合計'],['ad','AD金額合計'],['total','売上総合計']]){
+      const td=foot.insertCell();td.colSpan=2;
+      const name=w.document.createElement('span');name.className='label';name.textContent=title;
+      const value=w.document.createElement('span');value.className='value';
+      const amount=$('tfoot tr').cells[columns.findIndex(([column])=>column===key)].textContent;
+      value.textContent=amount==='未設定'?amount:amount+'円';td.append(name,value);
+    }
+    w.document.body.append(table);w.focus();w.print();
   }
   document.addEventListener('DOMContentLoaded',()=>{
     const host=document.querySelector('.main-content .container') || (document.body.dataset.salesPreview==='true'?document.body:null);if(!host)return;
