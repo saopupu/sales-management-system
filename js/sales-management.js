@@ -129,6 +129,7 @@
       tr.classList.toggle('sm-contracted',['契約済','契約済み'].includes(row.contracted));
       for(const [key] of columns){
         const td=tr.insertCell();td.dataset.key=key;td.textContent=['brokerage','ad','total'].includes(key)?money(row[key]):row[key];
+        if(key==='memo' && row.memo==='未設定')td.textContent='';
         if(key==='staff')td.dataset.staff=row.staff;
         td.classList.toggle('sm-status-contracted',key==='contracted'&&row.contracted==='契約済');
         if(key==='contract_date')td.title=`契約予定：${row.contract_plan}／表示月：${row.month || '月未設定'}（${row.month_override?'移動による表示月':'契約日を優先'}）`;
