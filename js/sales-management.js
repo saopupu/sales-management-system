@@ -36,7 +36,7 @@
       reviewed:'未設定',rent_date:date(row.rent_start_date)||'未設定',installment:['利用なし','ポケットカード','スムーズ'].includes(row.installment)?row.installment:'未設定',
       contract_date:contract || '未設定',contract_plan:text(row.contract_plan),tax_type:text(row.brokerage_tax_type),brokerage,ad,total:brokerage === null || ad === null ? null : brokerage+ad,
       brokerage_date:date(row.fee_payment_date)||'未設定',ad_date:date(row.ad_payment_date)||'未設定',
-      contracted:['申込','審査中','契約予定','契約済','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
+      contracted:['申込','審査中','審査通過','契約予定','契約済','契約済み','審査落ち','キャンセル'].includes(row.status)?row.status:'未設定',memo:text(row.memo)};
   }
   const section = document.createElement('section');
   section.id='salesManagementSection';section.className='sm system-view-hidden sm-readonly';
@@ -109,17 +109,21 @@
     finally{busy=false;render();}
   }
   function status(message,error=false){$('.sm-status').textContent=message;$('.sm-status').classList.toggle('sm-error',error);}
+  // 審査落ち・キャンセルは表示・合計・PDF印刷から除外する。データは削除せず、取得のたびに最新ステータスで判定する。
+  const excludedStatuses=new Set(['審査落ち','キャンセル']);
+  const isExcluded=r=>excludedStatuses.has(String(r.source?.status??'').trim());
   function visibleRows(){
     if(!authorized() || !ready) return [];
     const scope=$('.sm-scope').value;
     const keyword=search.value.trim().toLocaleLowerCase('ja-JP');
-    return rows.filter(r=>(scope==='all' || (scope==='unset' ? !r.month : r.month===month)) &&
+    return rows.filter(r=>!isExcluded(r) && (scope==='all' || (scope==='unset' ? !r.month : r.month===month)) &&
       (!keyword || [r.staff,r.customer,r.property,r.management,r.memo].some(value=>String(value).toLocaleLowerCase('ja-JP').includes(keyword))));
   }
   function render(){
     const shown=visibleRows();
     section.classList.toggle('sm-extension-enabled',Boolean(extensionReady));
-    count.textContent=ready && authorized()?`表示 ${shown.length}件 / 取得 ${rows.length}件`:'表示データなし';
+    const excludedCount=rows.filter(isExcluded).length;
+    count.textContent=ready && authorized()?`表示 ${shown.length}件 / 取得 ${rows.length}件`+(excludedCount?`（審査落ち・キャンセル ${excludedCount}件は除外）`:''):'表示データなし';
     $('thead').replaceChildren();const head=$('thead').insertRow();
     for(const [,label] of [...columns,['action','操作']]){const th=document.createElement('th');th.textContent=label;head.append(th);}
     $('tbody').replaceChildren();
