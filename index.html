@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" href="style.css?v=2" />
   <link rel="stylesheet" href="sales-management.css" />
+  <link rel="stylesheet" href="installment-management.css" />
 </head>
 
 <body>
@@ -1407,6 +1408,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
 <script src="js/auth.js"></script>
+<!-- DB導入・認可検証後にのみ有効化する。本番反映は別途承認。 -->
+<script>window.HimenaviInstallmentEnabled = true;</script>
+<script src="js/installment-management-api.js"></script>
+<script src="js/installment-management.js"></script>
 
 <!-- 自作JavaScript -->
 <script src="js/storage.js"></script>

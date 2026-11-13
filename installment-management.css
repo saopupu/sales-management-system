@@ -1,0 +1,5 @@
+.im .im-toolbar,.im .im-tabs,.im .im-month-total,.im .im-category-total{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.im .im-tabs button[aria-selected="true"]{background:#164e63;color:white}
+.im .im-scroll{overflow:auto}.im table{width:100%;border-collapse:collapse}.im th,.im td{padding:10px;border-bottom:1px solid #ddd;text-align:left;white-space:pre-wrap;overflow-wrap:anywhere;min-width:90px}
+.im dialog{width:min(600px,90vw);max-height:85vh;overflow:auto;border:1px solid #ccc;border-radius:12px}.im dialog::backdrop{background:#0006}
+.im .im-fields{display:grid;gap:12px}.im .im-fields label{display:grid;gap:4px}.im .im-fields input,.im .im-fields select,.im .im-fields textarea{width:100%;box-sizing:border-box;padding:8px}.im .im-form-status{color:#a11}.im button{cursor:pointer}.im button:disabled{cursor:default;opacity:.5}
